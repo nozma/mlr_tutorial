@@ -1,24 +1,13 @@
----
-date: "`r Sys.Date()`"
-output: github_document
----
+2018-02-19
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE,
-  collpse = TRUE,
-  comment = "$>"
-  )
-library(mlr)
-```
-
-# 学習器の訓練
+学習器の訓練
+============
 
 学習機の訓練というのはモデルをデータセットに適合させることを指す。`mlr`パッケージでは、`train`関数を学習器と適切なタスクに対し呼び出すことで実行できる。
 
 まずは分類問題の例として、irisデータセットで線形判別分析を行ってみよう。
 
-```{r}
+``` r
 ## タスクの作成
 task = makeClassifTask(data = iris, target = "Species")
 
@@ -30,34 +19,49 @@ mod = train(lrn, task)
 mod
 ```
 
+    $> Model for learner.id=classif.lda; learner.class=classif.lda
+    $> Trained on: task.id = iris; obs = 150; features = 4
+    $> Hyperparameters:
+
 上記の例では実際には明示的に学習器を作成する必要はない。学習器のデフォルト値(ハイパーパラメータや予測タイプなど)を変更したい場合には、明示的に学習器を作成する必要がある。そうでなければ、`train`や他の多くの関数にはLernerのクラス名を指定すればよい。そうすればデフォルトの設定で`makeLearner`が呼び出され、学習器に指定される。
 
-```{r}
+``` r
 mod = train("classif.lda", task)
 mod
 ```
 
+    $> Model for learner.id=classif.lda; learner.class=classif.lda
+    $> Trained on: task.id = iris; obs = 150; features = 4
+    $> Hyperparameters:
+
 どのようなタイプの問題でも、学習器の訓練の仕方は同じだ。生存時間分析の例として、コックス比例ハザードモデルを`lung`データセットに適用する例を示す(タスクとして`mlr`パッケージに予め用意されている`lung.task`を使用している点に注意してもらいたい)。
 
-```{r}
+``` r
 mod = train("surv.coxph", lung.task)
 mod
 ```
 
-## 学習器モデルへのアクセス
+    $> Model for learner.id=surv.coxph; learner.class=surv.coxph
+    $> Trained on: task.id = lung-example; obs = 167; features = 8
+    $> Hyperparameters:
+
+学習器モデルへのアクセス
+------------------------
 
 `train`関数は`WrappedModel`クラスのオブジェクトを返す。このオブジェクトはフィット済みのモデル、すなわち基礎となるRの学習メソッドの出力をカプセル化している。加えて、オブジェクトには学習器、タスク、訓練に使った特徴量と観測値、訓練にかかった時間なども含まれている。`WrappedModel`は続けて新しい観測値を使った予測に使用することができる。
 
 フィット済みモデルは`$learner.model`スロットに入っており、`getLearnerModel`関数でアクセスできる。
 
-以下に`ruspini`データセット(これは4つのグループと2つの特徴量を持つ)を$K$=4の$K$-means法でクラスタ化する例を示すとともに、基本となる`kmeans`関数から出力を抽出する。
+以下に`ruspini`データセット(これは4つのグループと2つの特徴量を持つ)を*K*=4の*K*-means法でクラスタ化する例を示すとともに、基本となる`kmeans`関数から出力を抽出する。
 
-```{r}
+``` r
 data(ruspini, package = "cluster")
 plot(y~x, ruspini)
 ```
 
-```{r}
+![](04_Train_files/figure-markdown_github/unnamed-chunk-4-1.png)
+
+``` r
 ## タスクの作成
 ruspini.task = makeClusterTask(data = ruspini)
 ## 学習器の作成
@@ -67,37 +71,6 @@ mod = train(lrn, ruspini.task)
 mod
 ```
 
-```{r}
-## モデルの中身を覗いてみる
-names(mod)
-mod$features
-mod$time
-```
-
-```{r}
-## フィット済みモデルの抽出
-getLearnerModel(mod)
-```
-
-## その他のオプションとコメント
-
-デフォルトではタスクに含まれる全てのデータが訓練に使用される。`subset`引数に論理型または整数ベクトルを与えることで、どのデータを訓練に使用するのかを指定できる。これは例えば、データを訓練データとテストデータに分割したい場合や、データの部分ごとに異なるモデルを適用したい場合などに活用できる。
-
-ランダムに選んだ1/3のデータを訓練データとして、`BostonHousing`データに線形回帰モデルを適用する例を示そう。
-
-```{r}
-## 観測値の例数を取得
-n = getTaskSize(bh.task) 
-
-##  1:nからランダムにn/3個非復元抽出
-train.set = sample(n, size = n/3)
-
-## 学習器を訓練する
-mod = train("regr.lm", bh.task, subset = train.set)
-mod
-```
-
-ところであとで見るように、標準的なリサンプリング手法はサポートされている。したがって、基本的には自分でデータのサブセットを指定する必要はない。
-
-また、学習器がサポートしている場合には、`weights`引数にこれを指定することで訓練に観測値の重みを反映させることができる。重みは観測値の信頼性や、外れ値の影響の低減、(長期間に渡ってデータを採取する場合)最近取得したデータの重要性を高めるなど、様々な目的で使用できる。教師あり分類においては、誤分類コストを組み込んだり、クラス間の不均衡を反映したりできる。
-
+    $> Model for learner.id=cluster.kmeans; learner.class=cluster.kmeans
+    $> Trained on: task.id = ruspini; obs = 75; features = 2
+    $> Hyperparameters: centers=4
