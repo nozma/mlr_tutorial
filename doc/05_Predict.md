@@ -1,4 +1,4 @@
-2018-02-19
+2018-02-20
 
 予測
 ====
@@ -35,12 +35,12 @@ task.pred
     $> threshold: 
     $> time: 0.00
     $>    id truth response
-    $> 2   2  21.6 22.26995
-    $> 4   4  33.4 23.38155
-    $> 6   6  28.7 22.40136
-    $> 8   8  27.1 22.13382
-    $> 10 10  18.9 22.13382
-    $> 12 12  18.9 22.14428
+    $> 2   2  21.6 22.23119
+    $> 4   4  33.4 23.28268
+    $> 6   6  28.7 22.42051
+    $> 8   8  27.1 22.13074
+    $> 10 10  18.9 22.13074
+    $> 12 12  18.9 22.13074
     $> ... (253 rows, 3 cols)
 
 2つめの方法は予測したいデータが`Task`オブジェクトに含まれていない場合に使える。
@@ -63,12 +63,12 @@ newdata.pred
     $> threshold: 
     $> time: 0.00
     $>    response
-    $> 2         1
-    $> 4         1
-    $> 6         1
-    $> 8         1
-    $> 10        1
-    $> 12        1
+    $> 2         2
+    $> 4         2
+    $> 6         2
+    $> 8         2
+    $> 10        2
+    $> 12        2
     $> ... (75 rows, 1 cols)
 
 なお、教師あり学習の場合はデータセットから目的変数列を削除する必要はない。これは`predict`を呼び出す際に自動的に削除される。
@@ -84,12 +84,12 @@ head(as.data.frame(task.pred))
 ```
 
     $>    id truth response
-    $> 2   2  21.6 22.26995
-    $> 4   4  33.4 23.38155
-    $> 6   6  28.7 22.40136
-    $> 8   8  27.1 22.13382
-    $> 10 10  18.9 22.13382
-    $> 12 12  18.9 22.14428
+    $> 2   2  21.6 22.23119
+    $> 4   4  33.4 23.28268
+    $> 6   6  28.7 22.42051
+    $> 8   8  27.1 22.13074
+    $> 10 10  18.9 22.13074
+    $> 12 12  18.9 22.13074
 
 ``` r
 ## newdata引数を通じてデータを渡した場合の結果
@@ -97,12 +97,12 @@ head(as.data.frame(newdata.pred))
 ```
 
     $>    response
-    $> 2         1
-    $> 4         1
-    $> 6         1
-    $> 8         1
-    $> 10        1
-    $> 12        1
+    $> 2         2
+    $> 4         2
+    $> 6         2
+    $> 8         2
+    $> 10        2
+    $> 12        2
 
 `Task`オブジェクトを通じてデータを渡した例の結果を見るとわかるように、結果のdata.frameには`id`列が追加されている。これは、予測値が元のデータセットのどの値に対応しているのかを示している。
 
@@ -118,7 +118,7 @@ head(getPredictionTruth(task.pred))
 head(getPredictionResponse(task.pred))
 ```
 
-    $> [1] 22.26995 23.38155 22.40136 22.13382 22.13382 22.14428
+    $> [1] 22.23119 23.28268 22.42051 22.13074 22.13074 22.13074
 
 回帰: 標準誤差を取得する
 ------------------------
@@ -161,7 +161,7 @@ task.pred.lm
     $> Prediction: 253 observations
     $> predict.type: se
     $> threshold: 
-    $> time: 0.00
+    $> time: 0.01
     $>    id truth response        se
     $> 2   2  21.6 24.83734 0.7501615
     $> 4   4  33.4 28.38206 0.8742590
@@ -193,12 +193,12 @@ head(getPredictionProbabilities(pred))
 ```
 
     $>                            1           2
-    $> Mazda RX4         0.97959860 0.020401403
-    $> Mazda RX4 Wag     0.97963881 0.020361186
-    $> Datsun 710        0.99265893 0.007341069
-    $> Hornet 4 Drive    0.54294487 0.457055126
-    $> Hornet Sportabout 0.01870854 0.981291464
-    $> Valiant           0.75748343 0.242516570
+    $> Mazda RX4         0.97959869 0.020401314
+    $> Mazda RX4 Wag     0.97963890 0.020361098
+    $> Datsun 710        0.99265890 0.007341096
+    $> Hornet 4 Drive    0.54294546 0.457054541
+    $> Hornet Sportabout 0.01870859 0.981291408
+    $> Valiant           0.75748387 0.242516126
 
 分類問題においては、注目すべきものがいくつかあるが、デフォルトではクラスラベルが予測される。
 
@@ -311,7 +311,7 @@ conf.matrix$relative.row
     $> versicolor      0       0.98      0.02  0.02
     $> virginica       0       0.10      0.90  0.10
 
-最後に、予測値および真値について、各クラスに振り分けられた要素数を`sums=TRUE`を指定することで結果に追加できる。これは相対混同行列と絶対混同行列の両方に追加される(相対と絶対で行列が入れ替わっているのはなぜだ…？)。
+最後に、予測値および真値について、各クラスに振り分けられた要素数を`sums=TRUE`を指定することで結果に追加できる。これは相対混同行列と絶対混同行列の両方に追加される(訳注: 相対と絶対で行列が入れ替わっているのはなぜだ…？)。
 
 ``` r
 calculateConfusionMatrix(pred, relative = TRUE, sums = TRUE)
@@ -337,3 +337,139 @@ calculateConfusionMatrix(pred, relative = TRUE, sums = TRUE)
 
 分類: 決定閾値の調整
 --------------------
+
+事後確率をクラスラベルに割り当てるために用いる閾値は調整することができる。閾値を調整するためには、そもそも確率を予測する学習器を使用する必要があるという点に注意しよう。2クラス分類では、閾値は**positive**クラスに分類するための基準となる。デフォルトは0.5だ。例として閾値を0.9にしてみよう。つまり、事後確率が0.9を上回った時に**positive**に分類するということだ。2つのクラスのどちらが**positive**になっているかは(以前確認したとおり)`Task`オブジェクトを通じて確認できる。今回は2クラス分類の例として`mlbench`パッケージの`Sonar`データを使おう。
+
+``` r
+## 学習器の作成と訓練。タスクは用意されているものを使う。
+lrn = makeLearner("classif.rpart", predict.type = "prob")
+mod = train(lrn, task = sonar.task)
+
+## positiveクラスのラベルを確認する
+getTaskDesc(sonar.task)$positive
+```
+
+    $> [1] "M"
+
+``` r
+## デフォルトの閾値で予測する
+pred1 = predict(mod, sonar.task)
+pred1$threshold
+```
+
+    $>   M   R 
+    $> 0.5 0.5
+
+``` r
+## positiveクラスに分類する閾値を変更する
+pred2 = setThreshold(pred1, threshold = 0.9)
+pred2$threshold
+```
+
+    $>   M   R 
+    $> 0.9 0.1
+
+``` r
+pred2
+```
+
+    $> Prediction: 208 observations
+    $> predict.type: prob
+    $> threshold: M=0.90,R=0.10
+    $> time: 0.01
+    $>   id truth    prob.M    prob.R response
+    $> 1  1     R 0.1060606 0.8939394        R
+    $> 2  2     R 0.7333333 0.2666667        R
+    $> 3  3     R 0.0000000 1.0000000        R
+    $> 4  4     R 0.1060606 0.8939394        R
+    $> 5  5     R 0.9250000 0.0750000        M
+    $> 6  6     R 0.0000000 1.0000000        R
+    $> ... (208 rows, 5 cols)
+
+閾値の変更は混同行列に対しても影響する。
+
+``` r
+calculateConfusionMatrix(pred1)
+```
+
+    $>         predicted
+    $> true      M  R -err.-
+    $>   M      95 16     16
+    $>   R      10 87     10
+    $>   -err.- 10 16     26
+
+``` r
+calculateConfusionMatrix(pred2)
+```
+
+    $>         predicted
+    $> true      M  R -err.-
+    $>   M      84 27     27
+    $>   R       6 91      6
+    $>   -err.-  6 27     33
+
+`getPredictionProbabilities`はデフォルトでは**positive**クラスの事後確率しか返さない事に注意しよう。
+
+``` r
+head(getPredictionProbabilities(pred1))
+```
+
+    $> [1] 0.1060606 0.7333333 0.0000000 0.1060606 0.9250000 0.0000000
+
+次のようにすると全ての事例について確率を得ることができる。
+
+``` r
+head(getPredictionProbabilities(pred1, cl = c("M", "R")))
+```
+
+    $>           M         R
+    $> 1 0.1060606 0.8939394
+    $> 2 0.7333333 0.2666667
+    $> 3 0.0000000 1.0000000
+    $> 4 0.1060606 0.8939394
+    $> 5 0.9250000 0.0750000
+    $> 6 0.0000000 1.0000000
+
+多クラス分類の場合は、閾値は名前付き数値ベクトルとして与える。予測結果の確率は与えた数値で除算された後に比較され、最大値を持つクラスが予測クラスとして選択される。
+
+``` r
+lrn = makeLearner("classif.rpart", predict.type = "prob")
+mod = train(lrn, iris.task)
+pred = predict(mod, newdata = iris)
+pred$threshold # デフォルトの閾値
+```
+
+    $>     setosa versicolor  virginica 
+    $>  0.3333333  0.3333333  0.3333333
+
+``` r
+## 閾値の変更 大きな値を指定するほど予測されにくくなる
+pred = setThreshold(pred, c(setosa = 0.01, versicolor = 50, virginica = 1))
+pred$threshold
+```
+
+    $>     setosa versicolor  virginica 
+    $>       0.01      50.00       1.00
+
+``` r
+table(as.data.frame(pred)$response)
+```
+
+    $> 
+    $>     setosa versicolor  virginica 
+    $>         50          0        100
+
+予測の可視化
+------------
+
+モデルの説明や教育目的で予測を可視化したければ、`plotLearnerPrediction`関数を使うことができる。この関数は学習器から1つないし2つの特徴量を選んで訓練したのち、その結果を`ggplot2`パッケージを用いてプロットする。
+
+分類では、2つの特徴量(デフォルトではデータセットのはじめの2つが選ばれる)を選んで散布図を作成する。シンボルの形状は真のクラスラベルに対応する。誤分類されたシンボルは、周囲が白色の線で囲われることで強調される。学習器がサポートしていれば、事後確率は背景色の彩度により表現され、事後確率が高い部分ほど高彩度となる。
+
+``` r
+set.seed(777)
+lrn = makeLearner("classif.rpart", id = "CART")
+plotLearnerPrediction(lrn, task = iris.task)
+```
+
+![](05_Predict_files/figure-markdown_github/unnamed-chunk-29-1.png)

@@ -170,10 +170,90 @@ conf.matrix
 conf.matrix$relative.row
 ```
 
-最後に、予測値および真値について、各クラスに振り分けられた要素数を`sums=TRUE`を指定することで結果に追加できる。これは相対混同行列と絶対混同行列の両方に追加される(相対と絶対で行列が入れ替わっているのはなぜだ…？)。
+最後に、予測値および真値について、各クラスに振り分けられた要素数を`sums=TRUE`を指定することで結果に追加できる。これは相対混同行列と絶対混同行列の両方に追加される(訳注: 相対と絶対で行列が入れ替わっているのはなぜだ…？)。
 
 ```{r}
 calculateConfusionMatrix(pred, relative = TRUE, sums = TRUE)
 ```
 
 ## 分類: 決定閾値の調整
+
+事後確率をクラスラベルに割り当てるために用いる閾値は調整することができる。閾値を調整するためには、そもそも確率を予測する学習器を使用する必要があるという点に注意しよう。2クラス分類では、閾値は**positive**クラスに分類するための基準となる。デフォルトは0.5だ。例として閾値を0.9にしてみよう。つまり、事後確率が0.9を上回った時に**positive**に分類するということだ。2つのクラスのどちらが**positive**になっているかは(以前確認したとおり)`Task`オブジェクトを通じて確認できる。今回は2クラス分類の例として`mlbench`パッケージの`Sonar`データを使おう。
+
+```{r}
+## 学習器の作成と訓練。タスクは用意されているものを使う。
+lrn = makeLearner("classif.rpart", predict.type = "prob")
+mod = train(lrn, task = sonar.task)
+
+## positiveクラスのラベルを確認する
+getTaskDesc(sonar.task)$positive
+```
+
+```{r}
+## デフォルトの閾値で予測する
+pred1 = predict(mod, sonar.task)
+pred1$threshold
+```
+
+```{r}
+## positiveクラスに分類する閾値を変更する
+pred2 = setThreshold(pred1, threshold = 0.9)
+pred2$threshold
+```
+
+```{r}
+pred2
+```
+
+閾値の変更は混同行列に対しても影響する。
+
+```{r}
+calculateConfusionMatrix(pred1)
+```
+
+```{r}
+calculateConfusionMatrix(pred2)
+```
+
+`getPredictionProbabilities`はデフォルトでは**positive**クラスの事後確率しか返さない事に注意しよう。
+
+```{r}
+head(getPredictionProbabilities(pred1))
+```
+次のようにすると全ての事例について確率を得ることができる。
+
+```{r}
+head(getPredictionProbabilities(pred1, cl = c("M", "R")))
+```
+
+多クラス分類の場合は、閾値は名前付き数値ベクトルとして与える。予測結果の確率は与えた数値で除算された後に比較され、最大値を持つクラスが予測クラスとして選択される。
+
+```{r}
+lrn = makeLearner("classif.rpart", predict.type = "prob")
+mod = train(lrn, iris.task)
+pred = predict(mod, newdata = iris)
+pred$threshold # デフォルトの閾値
+```
+
+```{r}
+## 閾値の変更 大きな値を指定するほど予測されにくくなる
+pred = setThreshold(pred, c(setosa = 0.01, versicolor = 50, virginica = 1))
+pred$threshold
+```
+
+```{r}
+table(as.data.frame(pred)$response)
+```
+
+## 予測の可視化
+
+モデルの説明や教育目的で予測を可視化したければ、`plotLearnerPrediction`関数を使うことができる。この関数は学習器から1つないし2つの特徴量を選んで訓練したのち、その結果を`ggplot2`パッケージを用いてプロットする。
+
+分類では、2つの特徴量(デフォルトではデータセットのはじめの2つが選ばれる)を選んで散布図を作成する。シンボルの形状は真のクラスラベルに対応する。誤分類されたシンボルは、周囲が白色の線で囲われることで強調される。学習器がサポートしていれば、事後確率は背景色の彩度により表現され、事後確率が高い部分ほど高彩度となる。
+
+```{r}
+set.seed(777)
+lrn = makeLearner("classif.rpart", id = "CART")
+plotLearnerPrediction(lrn, task = iris.task)
+```
+
