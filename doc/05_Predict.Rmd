@@ -1,0 +1,179 @@
+---
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collpse = TRUE,
+  comment = "$>"
+  )
+library(mlr)
+```
+
+# 予測
+
+## 新しいデータに対する結果を予測する
+
+新しい観測値に対する目的変数の予測は、Rの他の予測手法と同じように実装されている。一般的には、`predict`を`train`が返すオブジェクトに対して呼び出し、予測したいデータを渡すだけだ。
+
+データを渡す方法は2種類ある。
+
+- `task`引数を通じて`Task`オブジェクトを渡す。
+- `newdata`引数を通じて`data.frame`を渡す。
+
+最初の方法は、予測したいデータが既に`Task`オブジェクトに含まれている場合に適している。
+
+`train`と同様に、`predict`も`subset`引数を備えている。したがって、`Task`オブジェクトに含まれるデータの異なる部分を訓練と予測に割り当てることができる(より進んだデータ分割の方法はリサンプリングのセクションであらためて解説する)。
+
+以下に、`BostonHousing`データに対し、1つおきの観測値に勾配ブースティングマシンによるフィットを行い、残った観測値に対して予測を行う例を示す。データは`bh.task`に予め入っているものを使用する。
+
+```{r}
+n = getTaskSize(bh.task)
+train.set = seq(1, n, by = 2)
+test.set = seq(2, n, by = 2)
+lrn = makeLearner("regr.gbm", n.trees = 100)
+mod = train(lrn, bh.task, subset = train.set)
+
+task.pred = predict(mod, task = bh.task, subset = test.set)
+task.pred
+```
+
+2つめの方法は予測したいデータが`Task`オブジェクトに含まれていない場合に使える。
+
+目的変数を除外した`iris`を使ってクラスター分析を行う例を示そう。奇数インデックスの要素を`Task`オブジェクトに含めて訓練を行い、残ったオブジェクトに対して予測を行う。
+
+```{r}
+n = nrow(iris)
+iris.train = iris[seq(1, n, by = 2), -5]
+iris.test = iris[seq(2, n, by = 2), -5]
+task = makeClusterTask(data = iris.train)
+mod = train("cluster.kmeans", task)
+
+newdata.pred = predict(mod, newdata = iris.test)
+newdata.pred
+```
+
+なお、教師あり学習の場合はデータセットから目的変数列を削除する必要はない。これは`predict`を呼び出す際に自動的に削除される。
+
+## 予測へのアクセス
+
+`predict`関数は`Prediction`クラスの名前付きリストを返す。もっとも重要な要素は`$data`であり、このdata.frameは目的変数の真値と予測値の列を含む(教師あり学習の場合)。`as.data.frame`を使うとこれに直接アクセスできる。
+
+```{r}
+## task引数を通じてデータを渡した例の結果
+head(as.data.frame(task.pred))
+```
+
+```{r}
+## newdata引数を通じてデータを渡した場合の結果
+head(as.data.frame(newdata.pred))
+```
+
+`Task`オブジェクトを通じてデータを渡した例の結果を見るとわかるように、結果のdata.frameには`id`列が追加されている。これは、予測値が元のデータセットのどの値に対応しているのかを示している。
+
+真値と予測値に直接アクセスするための関数として`getPredictionTruth`関数と`getPredictionResponse`関数が用意されている。
+
+```{r}
+head(getPredictionTruth(task.pred))
+```
+
+```{r}
+head(getPredictionResponse(task.pred))
+```
+
+## 回帰: 標準誤差を取得する
+
+学習器のなかには標準誤差の出力に対応しているものがあるが、これも`mlr`からアクセスできる。対応している学習器の一覧は、`listLearners`関数に引数`properties = "se"`を指定して呼び出すことで取得できる。このとき、`check.packages = FALSE`を指定することで、他のパッケージ由来の学習器で当該パッケージをまだインストールしていないものについても一覧に含めることができる。
+
+```{r}
+listLearners("regr", properties = "se", check.packages = FALSE)[c("class", "name")]
+```
+
+標準誤差出力の例として、`BostonHousing`に線形回帰モデルを適用する場合を示そう。標準誤差を計算するためには、`predict.type`に`"se"`を指定する。
+
+```{r}
+lrn.lm = makeLearner("regr.lm", predict.type = "se")
+mod.lm = train(lrn.lm, bh.task, subset = train.set)
+task.pred.lm = predict(mod.lm, task = bh.task, subset = test.set)
+task.pred.lm
+```
+
+標準誤差だけが欲しければ、`getPredictionSE`関数を使用する。
+
+```{r}
+head(getPredictionSE(task.pred.lm))
+```
+
+## 分類とクラスタリング: 確率を取得する
+
+予測値に対する確率は`Prediction`オブジェクトに`getPredictionProbabilities`関数を使うことで取得できる。以下にクラスタ分析の別の例を示そう。ここではファジイc-means法によりmtcarsデータセットをクラスタリングしている。
+
+```{r}
+lrn = makeLearner("cluster.cmeans", predict.type = "prob")
+mod = train(lrn, mtcars.task)
+
+pred = predict(mod, task = mtcars.task)
+head(getPredictionProbabilities(pred))
+```
+
+分類問題においては、注目すべきものがいくつかあるが、デフォルトではクラスラベルが予測される。
+
+```{r}
+mod = train("classif.lda", task = iris.task)
+
+pred = predict(mod, task = iris.task)
+pred
+```
+
+事後確率を得たければ、学習器を作成する際に`predict.type`引数に適当な値を指定する必要がある。
+
+```{r}
+lrn = makeLearner("classif.rpart", predict.type = "prob")
+mod = train(lrn, iris.task)
+
+pred = predict(mod, newdata = iris)
+head(as.data.frame(pred))
+```
+
+クラスラベルは確率が最大のものが選択され、確率がタイの要素があればアトランダムに選択される。
+
+もし事後確率だけがほしければ`getPredictionProbabilities`関数を使う。
+
+```{r}
+head(getPredictionProbabilities(pred))
+```
+
+## 分類: 混同行列を取得する
+
+混同行列は`calculateConfusionMatrix`関数により得ることが出来る。列は予測したクラス、行は真のクラスのラベルを表す。
+
+```{r}
+calculateConfusionMatrix(pred)
+```
+
+対角成分には正しく分類された要素の数が、それ以外の部分には誤分類された要素の数が現れる。また、`-err.-`の行および列には誤分類された要素の合計数が表示される。
+
+`relative=TRUE`を指定することで、相対頻度を得ることも出来る。
+
+```{r}
+conf.matrix = calculateConfusionMatrix(pred, relative = TRUE)
+conf.matrix
+```
+
+相対頻度を計算する際、行方向と列方向の2通りの正規化の仕方があるため、上記相対混同行列の中には各要素ごとに2つの値が現れている。セットになった2つの値の1つめは行方向、つまり真のラベルについてグループ化した値で、2つめは予測値についてグループ化した値である。
+
+相対値は`$relative.row`および`$relative.col`を通して直接アクセスすることもできる。詳しくは`ConfusionMatrix`のドキュメント([ConfusionMatrix function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/ConfusionMatrix))を参照してもらいたい。
+
+```{r}
+conf.matrix$relative.row
+```
+
+最後に、予測値および真値について、各クラスに振り分けられた要素数を`sums=TRUE`を指定することで結果に追加できる。これは相対混同行列と絶対混同行列の両方に追加される(相対と絶対で行列が入れ替わっているのはなぜだ…？)。
+
+```{r}
+calculateConfusionMatrix(pred, relative = TRUE, sums = TRUE)
+```
+
+## 分類: 決定閾値の調整
