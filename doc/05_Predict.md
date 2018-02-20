@@ -35,12 +35,12 @@ task.pred
     $> threshold: 
     $> time: 0.00
     $>    id truth response
-    $> 2   2  21.6 22.23119
-    $> 4   4  33.4 23.28268
-    $> 6   6  28.7 22.42051
-    $> 8   8  27.1 22.13074
-    $> 10 10  18.9 22.13074
-    $> 12 12  18.9 22.13074
+    $> 2   2  21.6 22.21070
+    $> 4   4  33.4 23.25389
+    $> 6   6  28.7 22.30314
+    $> 8   8  27.1 22.14860
+    $> 10 10  18.9 22.14860
+    $> 12 12  18.9 22.14860
     $> ... (253 rows, 3 cols)
 
 2つめの方法は予測したいデータが`Task`オブジェクトに含まれていない場合に使える。
@@ -63,12 +63,12 @@ newdata.pred
     $> threshold: 
     $> time: 0.00
     $>    response
-    $> 2         2
-    $> 4         2
-    $> 6         2
-    $> 8         2
-    $> 10        2
-    $> 12        2
+    $> 2         1
+    $> 4         1
+    $> 6         1
+    $> 8         1
+    $> 10        1
+    $> 12        1
     $> ... (75 rows, 1 cols)
 
 なお、教師あり学習の場合はデータセットから目的変数列を削除する必要はない。これは`predict`を呼び出す際に自動的に削除される。
@@ -84,12 +84,12 @@ head(as.data.frame(task.pred))
 ```
 
     $>    id truth response
-    $> 2   2  21.6 22.23119
-    $> 4   4  33.4 23.28268
-    $> 6   6  28.7 22.42051
-    $> 8   8  27.1 22.13074
-    $> 10 10  18.9 22.13074
-    $> 12 12  18.9 22.13074
+    $> 2   2  21.6 22.21070
+    $> 4   4  33.4 23.25389
+    $> 6   6  28.7 22.30314
+    $> 8   8  27.1 22.14860
+    $> 10 10  18.9 22.14860
+    $> 12 12  18.9 22.14860
 
 ``` r
 ## newdata引数を通じてデータを渡した場合の結果
@@ -97,12 +97,12 @@ head(as.data.frame(newdata.pred))
 ```
 
     $>    response
-    $> 2         2
-    $> 4         2
-    $> 6         2
-    $> 8         2
-    $> 10        2
-    $> 12        2
+    $> 2         1
+    $> 4         1
+    $> 6         1
+    $> 8         1
+    $> 10        1
+    $> 12        1
 
 `Task`オブジェクトを通じてデータを渡した例の結果を見るとわかるように、結果のdata.frameには`id`列が追加されている。これは、予測値が元のデータセットのどの値に対応しているのかを示している。
 
@@ -118,7 +118,7 @@ head(getPredictionTruth(task.pred))
 head(getPredictionResponse(task.pred))
 ```
 
-    $> [1] 22.23119 23.28268 22.42051 22.13074 22.13074 22.13074
+    $> [1] 22.21070 23.25389 22.30314 22.14860 22.14860 22.14860
 
 回帰: 標準誤差を取得する
 ------------------------
@@ -161,7 +161,7 @@ task.pred.lm
     $> Prediction: 253 observations
     $> predict.type: se
     $> threshold: 
-    $> time: 0.01
+    $> time: 0.00
     $>    id truth response        se
     $> 2   2  21.6 24.83734 0.7501615
     $> 4   4  33.4 28.38206 0.8742590
@@ -193,12 +193,12 @@ head(getPredictionProbabilities(pred))
 ```
 
     $>                            1           2
-    $> Mazda RX4         0.97959869 0.020401314
-    $> Mazda RX4 Wag     0.97963890 0.020361098
-    $> Datsun 710        0.99265890 0.007341096
-    $> Hornet 4 Drive    0.54294546 0.457054541
-    $> Hornet Sportabout 0.01870859 0.981291408
-    $> Valiant           0.75748387 0.242516126
+    $> Mazda RX4         0.97959897 0.020401030
+    $> Mazda RX4 Wag     0.97963919 0.020360814
+    $> Datsun 710        0.99265882 0.007341184
+    $> Hornet 4 Drive    0.54294733 0.457052672
+    $> Hornet Sportabout 0.01870877 0.981291228
+    $> Valiant           0.75748529 0.242514707
 
 分類問題においては、注目すべきものがいくつかあるが、デフォルトではクラスラベルが予測される。
 
@@ -376,7 +376,7 @@ pred2
     $> Prediction: 208 observations
     $> predict.type: prob
     $> threshold: M=0.90,R=0.10
-    $> time: 0.01
+    $> time: 0.00
     $>   id truth    prob.M    prob.R response
     $> 1  1     R 0.1060606 0.8939394        R
     $> 2  2     R 0.7333333 0.2666667        R
@@ -473,3 +473,32 @@ plotLearnerPrediction(lrn, task = iris.task)
 ```
 
 ![](05_Predict_files/figure-markdown_github/unnamed-chunk-29-1.png)
+
+クラスター分析も2つの特徴量による散布図を作成する。この場合はシンボルの色がクラスターに対応する。
+
+``` r
+lrn = makeLearner("cluster.kmeans")
+plotLearnerPrediction(lrn, mtcars.task, features = c("disp", "drat"), cv = 0)
+```
+
+    $> 
+    $> This is package 'modeest' written by P. PONCET.
+    $> For a complete list of functions, use 'library(help = "modeest")' or 'help.start()'.
+
+![](05_Predict_files/figure-markdown_github/unnamed-chunk-30-1.png)
+
+回帰に対してはプロットが2種類ある。1Dプロットでは一つの特徴量と目的変数の関係が示される。このとき、回帰曲線と(学習器がサポートしていれば)推定標準誤差が示される。
+
+``` r
+plotLearnerPrediction("regr.lm", features = "lstat", task = bh.task)
+```
+
+![](05_Predict_files/figure-markdown_github/unnamed-chunk-31-1.png)
+
+2Dプロットでは分類の場合と同様に2つの特徴量による散布図が作成される。この場合シンボルの塗りつぶし色が目的変数の値に対応し、予測値は背景色として示される。標準誤差は示すことができない。
+
+``` r
+plotLearnerPrediction("regr.lm", features = c("lstat", "rm"), task = bh.task)
+```
+
+![](05_Predict_files/figure-markdown_github/unnamed-chunk-32-1.png)

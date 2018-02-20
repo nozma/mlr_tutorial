@@ -257,3 +257,22 @@ lrn = makeLearner("classif.rpart", id = "CART")
 plotLearnerPrediction(lrn, task = iris.task)
 ```
 
+クラスター分析も2つの特徴量による散布図を作成する。この場合はシンボルの色がクラスターに対応する。
+
+```{r}
+lrn = makeLearner("cluster.kmeans")
+plotLearnerPrediction(lrn, mtcars.task, features = c("disp", "drat"), cv = 0)
+```
+
+回帰に対してはプロットが2種類ある。1Dプロットでは一つの特徴量と目的変数の関係が示される。このとき、回帰曲線と(学習器がサポートしていれば)推定標準誤差が示される。
+
+```{r}
+plotLearnerPrediction("regr.lm", features = "lstat", task = bh.task)
+```
+
+2Dプロットでは分類の場合と同様に2つの特徴量による散布図が作成される。この場合シンボルの塗りつぶし色が目的変数の値に対応し、予測値は背景色として示される。標準誤差は示すことができない。
+
+```{r}
+plotLearnerPrediction("regr.lm", features = c("lstat", "rm"), task = bh.task)
+```
+
