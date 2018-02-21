@@ -1,39 +1,28 @@
----
-date: "`r Sys.Date()`"
-output: github_document
----
+2018-02-21
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE,
-  collpse = TRUE,
-  comment = "$>"
-  )
-library(mlr)
-set.seed(123)
-```
-
-# データの前処理
+データの前処理
+==============
 
 データの前処理というのは、学習アルゴリズムを適用する前にデータに施すあらゆる種類の変換のことだ。例えば、データの矛盾の発見と解決、欠損値への代入、外れ値の特定・除去・置換、数値データの離散化、カテゴリカルデータからのダミー変数の生成、標準化やBox-Cox変換などのあらゆる種類の変換、次元削減、特徴量の抽出・選択などが含まれる。
 
 `mlr`は前処理に関して幾つかの選択肢を用意している。以下に示すようなタスク(あるいはデータフレーム)を変更する単純な手法の中には、タスクについての説明で既に触れたものもある。
 
-- `capLargeValues`: 大きな値や無限大の値の変換。
-- `createDummyFeature`: 因子型特徴量からのダミー変数の生成。
-- `dropFeatures`: 特徴量の削除。
-- `joinClassLevels`: (分類のみ)複数のクラスを併合して、大きな1つのクラスにする。
-- `mergeSmallFactorLevels`: 因子型特徴量において、例数の少ない水準を併合する。
-- `normalizeFeatures`: 正規化には複数の異なったやり方がある。標準化や特定の範囲への再スケールなど。
-- `removeConstantFeatures`: 1つの値しか持っていない特徴量(=定数)を除去する。
-- `subsetTask`: 観測値や特徴量をタスクから除去する。
+-   `capLargeValues`: 大きな値や無限大の値の変換。
+-   `createDummyFeature`: 因子型特徴量からのダミー変数の生成。
+-   `dropFeatures`: 特徴量の削除。
+-   `joinClassLevels`: (分類のみ)複数のクラスを併合して、大きな1つのクラスにする。
+-   `mergeSmallFactorLevels`: 因子型特徴量において、例数の少ない水準を併合する。
+-   `normalizeFeatures`: 正規化には複数の異なったやり方がある。標準化や特定の範囲への再スケールなど。
+-   `removeConstantFeatures`: 1つの値しか持っていない特徴量(=定数)を除去する。
+-   `subsetTask`: 観測値や特徴量をタスクから除去する。
 
 また、以下のものについてはチュートリアルを用意してある。
 
-- 特徴量選択
-- 欠損値への代入
+-   特徴量選択
+-   欠損値への代入
 
-## 前処理と学習器を融合する
+前処理と学習器を融合する
+------------------------
 
 `mlr`のラッパー機能により、学習器と前処理を組み合わせることができる。これは、前処理が学習器に属し、訓練や予測の度に実行されるということを意味する。
 
@@ -49,35 +38,36 @@ set.seed(123)
 
 この目的のために、`mlr`パッケージは2つのラッパーを用意している。
 
-- `makePreprocWrapperCaret`は`caret`パッケージの`preProcess`関数に対するインターフェースを提供するラッパー。
-- `makePreprocWrapper`を使えば、訓練と予測の前の動作を定義することで独自の前処理を作成できる。
+-   `makePreprocWrapperCaret`は`caret`パッケージの`preProcess`関数に対するインターフェースを提供するラッパー。
+-   `makePreprocWrapper`を使えば、訓練と予測の前の動作を定義することで独自の前処理を作成できる。
 
 これらを使用する前処理は、`normalizeFeatures`などを使う前処理とは異なり、ラップされた学習器に組み込まれる。
 
-- タスクそのものは変更されない。
-- 前処理はデータ全体に対して予め行われるのではなく、リサンプリングなど、訓練とテストの対が発生する毎に実行される。
-- 前処理に関わる制御可能なパラメータは、学習器のパラメータと一緒に調整できる。
+-   タスクそのものは変更されない。
+-   前処理はデータ全体に対して予め行われるのではなく、リサンプリングなど、訓練とテストの対が発生する毎に実行される。
+-   前処理に関わる制御可能なパラメータは、学習器のパラメータと一緒に調整できる。
 
 まずは`makePreprocWrapperCaret`の例から見ていこう。
 
-## `makePreprocWrapperCaret`を使用した前処理
+`makePreprocWrapperCaret`を使用した前処理
+-----------------------------------------
 
 `makePreprocWrapperCaret`は`caret`パッケージの`preProcess`関数へのインターフェースだ。`PreProcess`関数は、欠損値への代入やスケール変換やBox-Cox変換、独立主成分分析による次元削減など、様々な手法を提供する関数だ。具体的に何が可能かは`preProcess`関数のヘルプページ([preProcess function | R Documentation](https://www.rdocumentation.org/packages/caret/versions/6.0-78/topics/preProcess))を確認してもらいたい。
 
 まず、`makePreprocWrapperCaret`と`preProcess`の違いを確認しておこう。
 
-- `makePreprocWrapperCaret`は`preProcess`とほぼ同じ仮引数を持つが、仮引数名に`ppc.`というプレフィックスが付く。
-- 上記の例外は`method`引数だ。この引数は`makePreprocWrapperCaret`には無い。その代わりに、本来`method`に渡す前処理に関するオプションは、対応する仮引数に論理値を指定することで制御する。
+-   `makePreprocWrapperCaret`は`preProcess`とほぼ同じ仮引数を持つが、仮引数名に`ppc.`というプレフィックスが付く。
+-   上記の例外は`method`引数だ。この引数は`makePreprocWrapperCaret`には無い。その代わりに、本来`method`に渡す前処理に関するオプションは、対応する仮引数に論理値を指定することで制御する。
 
 例を見よう。`preProcess`では行列またはデータフレーム`x`に対して、次のように前処理を行う。
 
-```r
+``` r
 preProcess(x, method= c("knnInpute", "pca"), pcaComp = 10)
 ```
 
 一方、`makePreporcWrapperCaret`では、`Learner`クラスのオブジェクトまたはクラスの名前(`"classif.lda"`など)を引数にとって、次のように前処理を指定する。
 
-```r
+``` r
 makePreprocWrapperCaret(learner, ppc.knnImpute = TRUE, ppc.pca = TRUE, ppc.pcaComp = 10)
 ```
 
@@ -87,57 +77,161 @@ makePreprocWrapperCaret(learner, ppc.knnImpute = TRUE, ppc.pca = TRUE, ppc.pcaCo
 
 例では`soner.task`を用いる。これは208の観測値と60の特徴量を持つ。
 
-```{r}
+``` r
 sonar.task
 ```
 
+    $> Supervised task: Sonar-example
+    $> Type: classif
+    $> Target: Class
+    $> Observations: 208
+    $> Features:
+    $> numerics  factors  ordered 
+    $>       60        0        0 
+    $> Missings: FALSE
+    $> Has weights: FALSE
+    $> Has blocking: FALSE
+    $> Classes: 2
+    $>   M   R 
+    $> 111  97 
+    $> Positive class: M
+
 今回は、`MASS`パッケージによる二次判別分析と、主成分分析による前処理を組み合わせる。また、閾値として0.9を設定する。これはつまり、主成分が累積寄与率90%を保持しなければならないという指示になる。データは主成分分析の前に自動的に標準化される。
 
-```{r}
+``` r
 lrn = makePreprocWrapperCaret("classif.qda", ppc.pca = TRUE, ppc.thresh = 0.9)
 lrn
 ```
 
+    $> Learner classif.qda.preproc from package MASS
+    $> Type: classif
+    $> Name: ; Short name: 
+    $> Class: PreprocWrapperCaret
+    $> Properties: twoclass,multiclass,numerics,factors,prob
+    $> Predict-Type: response
+    $> Hyperparameters: ppc.BoxCox=FALSE,ppc.YeoJohnson=FALSE,ppc.expoTrans=FALSE,ppc.center=TRUE,ppc.scale=TRUE,ppc.range=FALSE,ppc.knnImpute=FALSE,ppc.bagImpute=FALSE,ppc.medianImpute=FALSE,ppc.pca=TRUE,ppc.ica=FALSE,ppc.spatialSign=FALSE,ppc.thresh=0.9,ppc.na.remove=TRUE,ppc.k=5,ppc.fudge=0.2,ppc.numUnique=3
+
 ラップされた学習器を`soner.task`によって訓練する。訓練したモデルを確認することで、22の主成分が訓練に使われたことがわかるだろう。
 
-```{r}
+``` r
 mod = train(lrn, sonar.task)
 mod
 ```
 
-```{r}
+    $> Model for learner.id=classif.qda.preproc; learner.class=PreprocWrapperCaret
+    $> Trained on: task.id = Sonar-example; obs = 208; features = 60
+    $> Hyperparameters: ppc.BoxCox=FALSE,ppc.YeoJohnson=FALSE,ppc.expoTrans=FALSE,ppc.center=TRUE,ppc.scale=TRUE,ppc.range=FALSE,ppc.knnImpute=FALSE,ppc.bagImpute=FALSE,ppc.medianImpute=FALSE,ppc.pca=TRUE,ppc.ica=FALSE,ppc.spatialSign=FALSE,ppc.thresh=0.9,ppc.na.remove=TRUE,ppc.k=5,ppc.fudge=0.2,ppc.numUnique=3
+
+``` r
 getLearnerModel(mod)
 ```
 
-```{r}
+    $> Model for learner.id=classif.qda; learner.class=classif.qda
+    $> Trained on: task.id = Sonar-example; obs = 208; features = 22
+    $> Hyperparameters:
+
+``` r
 getLearnerModel(mod, more.unwrap = TRUE)
 ```
 
+    $> Call:
+    $> qda(f, data = getTaskData(.task, .subset, recode.target = "drop.levels"))
+    $> 
+    $> Prior probabilities of groups:
+    $>         M         R 
+    $> 0.5336538 0.4663462 
+    $> 
+    $> Group means:
+    $>          PC1        PC2        PC3         PC4         PC5         PC6
+    $> M  0.5976122 -0.8058235  0.9773518  0.03794232 -0.04568166 -0.06721702
+    $> R -0.6838655  0.9221279 -1.1184128 -0.04341853  0.05227489  0.07691845
+    $>          PC7         PC8        PC9       PC10        PC11          PC12
+    $> M  0.2278162 -0.01034406 -0.2530606 -0.1793157 -0.04084466 -0.0004789888
+    $> R -0.2606969  0.01183702  0.2895848  0.2051963  0.04673977  0.0005481212
+    $>          PC13       PC14        PC15        PC16        PC17        PC18
+    $> M -0.06138758 -0.1057137  0.02808048  0.05215865 -0.07453265  0.03869042
+    $> R  0.07024765  0.1209713 -0.03213333 -0.05968671  0.08528994 -0.04427460
+    $>          PC19         PC20        PC21         PC22
+    $> M -0.01192247  0.006098658  0.01263492 -0.001224809
+    $> R  0.01364323 -0.006978877 -0.01445851  0.001401586
+
 二次判別分析について、主成分分析を使う場合と使わない場合をベンチマーク試験により比較してみよう。今回の例では各クラスの例数が少ないので、二次判別分析の際のエラーを防ぐためにリサンプリングにおいて層別サンプリングを行っている。
 
-```{r}
+``` r
 rin = makeResampleInstance("CV", iters = 3, stratify = TRUE, task = sonar.task)
 res = benchmark(list("classif.qda", lrn), sonar.task, rin, show.info = FALSE)
 res
 ```
 
+    $>         task.id          learner.id mmce.test.mean
+    $> 1 Sonar-example         classif.qda      0.3505176
+    $> 2 Sonar-example classif.qda.preproc      0.2213251
+
 今回の場合では、二次判別分析に対して主成分分析による前処理が効果的だったことがわかる。
 
-## 前処理オプションと学習器パラメータの連結チューニング
+前処理オプションと学習器パラメータの連結チューニング
+----------------------------------------------------
 
 今の例をもう少し最適化できないか考えてみよう。今回、任意に設定した0.9という閾値によって、主成分は22になった。しかし、主成分の数はもっと多いほうが良いかもしれないし、少ないほうが良いかもしれない。また、`qda`関数にはクラス共分散行列やクラス確率の推定方法を制御するためのいくつかのオプションがある。
 
 学習機と前処理のパラメータは、連結してチューニングすることができる。まずは、ラップされた学習器の全てのパラメータを`getParamSet`関数で確認してみよう。
 
-```{r}
+``` r
 getParamSet(lrn)
 ```
+
+    $>                      Type len     Def                      Constr Req
+    $> ppc.BoxCox        logical   -   FALSE                           -   -
+    $> ppc.YeoJohnson    logical   -   FALSE                           -   -
+    $> ppc.expoTrans     logical   -   FALSE                           -   -
+    $> ppc.center        logical   -    TRUE                           -   -
+    $> ppc.scale         logical   -    TRUE                           -   -
+    $> ppc.range         logical   -   FALSE                           -   -
+    $> ppc.knnImpute     logical   -   FALSE                           -   -
+    $> ppc.bagImpute     logical   -   FALSE                           -   -
+    $> ppc.medianImpute  logical   -   FALSE                           -   -
+    $> ppc.pca           logical   -   FALSE                           -   -
+    $> ppc.ica           logical   -   FALSE                           -   -
+    $> ppc.spatialSign   logical   -   FALSE                           -   -
+    $> ppc.thresh        numeric   -    0.95                    0 to Inf   -
+    $> ppc.pcaComp       integer   -       -                    1 to Inf   -
+    $> ppc.na.remove     logical   -    TRUE                           -   -
+    $> ppc.k             integer   -       5                    1 to Inf   -
+    $> ppc.fudge         numeric   -     0.2                    0 to Inf   -
+    $> ppc.numUnique     integer   -       3                    1 to Inf   -
+    $> ppc.n.comp        integer   -       -                    1 to Inf   -
+    $> method           discrete   -  moment            moment,mle,mve,t   -
+    $> nu                numeric   -       5                    2 to Inf   Y
+    $> predict.method   discrete   - plug-in plug-in,predictive,debiased   -
+    $>                  Tunable Trafo
+    $> ppc.BoxCox          TRUE     -
+    $> ppc.YeoJohnson      TRUE     -
+    $> ppc.expoTrans       TRUE     -
+    $> ppc.center          TRUE     -
+    $> ppc.scale           TRUE     -
+    $> ppc.range           TRUE     -
+    $> ppc.knnImpute       TRUE     -
+    $> ppc.bagImpute       TRUE     -
+    $> ppc.medianImpute    TRUE     -
+    $> ppc.pca             TRUE     -
+    $> ppc.ica             TRUE     -
+    $> ppc.spatialSign     TRUE     -
+    $> ppc.thresh          TRUE     -
+    $> ppc.pcaComp         TRUE     -
+    $> ppc.na.remove       TRUE     -
+    $> ppc.k               TRUE     -
+    $> ppc.fudge           TRUE     -
+    $> ppc.numUnique       TRUE     -
+    $> ppc.n.comp          TRUE     -
+    $> method              TRUE     -
+    $> nu                  TRUE     -
+    $> predict.method      TRUE     -
 
 `ppc.`というプレフィックスのついたものが前処理のパラメータで、他が`qda`関数のパラメータだ。主成分分析の閾値を`ppc.thresh`を使って調整する代わりに、主成分の数そのものを`ppc.pcaComp`を使って調整できる。さらに、`qda`関数に対しては、2種類の事後確率推定法(通常のプラグイン推定と不偏推定)を試してみよう。
 
 今回は解像度10でグリッドサーチを行ってみよう。もっと解像度を高くしたくなるかもしれないが、今回はあくまでデモだ。
 
-```{r}
+``` r
 ps = makeParamSet(
   makeIntegerParam("ppc.pcaComp", lower = 1, upper = getTaskNFeats(sonar.task)),
   makeDiscreteParam("predict.method", values = c("plug-in", "debiased"))
@@ -147,13 +241,40 @@ res = tuneParams(lrn, sonar.task, rin, par.set = ps, control = ctrl, show.info =
 res
 ```
 
-```{r}
+    $> Tune result:
+    $> Op. pars: ppc.pcaComp=21; predict.method=plug-in
+    $> mmce.test.mean=0.212
+
+``` r
 as.data.frame(res$opt.path)[1:3]
 ```
 
+    $>    ppc.pcaComp predict.method mmce.test.mean
+    $> 1            1        plug-in      0.5284334
+    $> 2            8        plug-in      0.2311939
+    $> 3           14        plug-in      0.2118703
+    $> 4           21        plug-in      0.2116632
+    $> 5           27        plug-in      0.2309869
+    $> 6           34        plug-in      0.2739821
+    $> 7           40        plug-in      0.2933057
+    $> 8           47        plug-in      0.3029676
+    $> 9           53        plug-in      0.3222912
+    $> 10          60        plug-in      0.3505176
+    $> 11           1       debiased      0.5579020
+    $> 12           8       debiased      0.2502415
+    $> 13          14       debiased      0.2503796
+    $> 14          21       debiased      0.2550725
+    $> 15          27       debiased      0.2792271
+    $> 16          34       debiased      0.3128364
+    $> 17          40       debiased      0.2982747
+    $> 18          47       debiased      0.2839199
+    $> 19          53       debiased      0.3224983
+    $> 20          60       debiased      0.3799172
+
 `"plug-in"`と`"debiased"`のいずれでも少なめ(27以下)の主成分が有効で、`"plug-in"`の方が若干エラー率が低いようだ。
 
-## 独自の前処理ラッパーを書く
+独自の前処理ラッパーを書く
+--------------------------
 
 `makePreprocWrapperCaret`で不満があれば、`makePreprocWrapper`関数で独自の前処理ラッパーを作成できる。
 
@@ -167,9 +288,9 @@ as.data.frame(res$opt.path)[1:3]
 
 **訓練**(ステップで使う)関数は以下の引数を持つ関数でなければならない。
 
-- `data`: 全ての特徴量と目的変数を列として含むデータフレーム。
-- `target`: `data`に含まれる目的変数の名前。
-- `args`: 前処理に関わるその他の引数とパラメータのリスト。
+-   `data`: 全ての特徴量と目的変数を列として含むデータフレーム。
+-   `target`: `data`に含まれる目的変数の名前。
+-   `args`: 前処理に関わるその他の引数とパラメータのリスト。
 
 この関数は`$data`と`$control`を要素として持つリストを返す必要がある。`$data`は前処理されたデータセットを、`$control`には予測のために必要な全ての情報を格納する。
 
@@ -177,7 +298,7 @@ as.data.frame(res$opt.path)[1:3]
 
 `args`は`scale`関数の引数である`center`と`scale`引数を含み、予測で使用するためにこれを`$control`スロットに保持する。これらの引数は、論理値または数値型の列の数に等しい長さの数値型ベクトルで指定する必要がある。`center`引数は数値を渡された場合にはその値を各データから引くが、`TRUE`が指定された場合には平均値を引く。`scale`引数は数値を渡されるとその値で各データを割るが、`TRUE`の場合は標準偏差か二乗平均平方根を引く(いずれになるかは`center`引数に依存する)。2つの引数のいずれかor両方に`TRUE`が指定された場合には、この値を予測の段階で使用するためには返り値の`$control`スロットに保持しておく必要があるという点に注意しよう。
 
-```{r}
+``` r
 trainfun = function(data, target, args = list(center, scale)){
   ## 数値特徴量を特定する
   cns = colnames(data)
@@ -204,16 +325,16 @@ trainfun = function(data, target, args = list(center, scale)){
 
 **予測**(ステップで使う)関数は以下の引数を持つ必要がある。
 
-- `data`: 特徴量のみをもつデータフレーム。(予測ステップでは目的変数の値は未知なのが普通だ。)
-- `target`: 目的変数の名前。
-- `args`: 訓練関数に渡された`args`。
-- `control`: 訓練関数が返したもの。
+-   `data`: 特徴量のみをもつデータフレーム。(予測ステップでは目的変数の値は未知なのが普通だ。)
+-   `target`: 目的変数の名前。
+-   `args`: 訓練関数に渡された`args`。
+-   `control`: 訓練関数が返したもの。
 
 この関数は前処理済みのデータを返す。
 
 今回の例では、予測関数は数値特徴量を訓練ステージで`control`に保持されたパラメータを使ってスケーリングする。
 
-```{r}
+``` r
 predictfun = function(data, target, args, control){
   ## 数値特徴量の特定
   cns = colnames(data)
@@ -234,7 +355,7 @@ predictfun = function(data, target, args, control){
 
 先に定義した**訓練**および**予測**関数を`makePreprocWrapper`関数の`train`と`predict`引数に渡す。`par.vals`には、訓練関数の`args`に渡すパラメータをリストとして渡す。
 
-```{r}
+``` r
 lrn = makeLearner("regr.nnet", trace = FALSE, decay = 1e-02)
 lrn = makePreprocWrapper(lrn, train = trainfun, predict = predictfun,
                          par.vals = list(center = TRUE, scale = TRUE))
@@ -242,7 +363,7 @@ lrn = makePreprocWrapper(lrn, train = trainfun, predict = predictfun,
 
 データセット`BostonHousing`を対象にして、スケーリングの有無による平均二乗誤差の違いを確認してみよう。
 
-```{r}
+``` r
 rdesc = makeResampleDesc("CV", iters = 3)
 
 ## スケーリングあり(上で前処理を指定した)
@@ -250,12 +371,24 @@ r = resample(lrn, bh.task, resampling = rdesc, show.info = FALSE)
 r
 ```
 
-```{r}
+    $> Resample Result
+    $> Task: BostonHousing-example
+    $> Learner: regr.nnet.preproc
+    $> Aggr perf: mse.test.mean=  18
+    $> Runtime: 0.137429
+
+``` r
 ## 前処理無しの学習器を再度作る
 lrn = makeLearner("regr.nnet", trace = FALSE, decay = 1e-02)
 r = resample(lrn, bh.task, resampling = rdesc, show.info = FALSE)
 r
 ```
+
+    $> Resample Result
+    $> Task: BostonHousing-example
+    $> Learner: regr.nnet
+    $> Aggr perf: mse.test.mean=41.5
+    $> Runtime: 0.101203
 
 ### 前処理と学習器のパラメータを連結してチューニングする
 
@@ -265,7 +398,7 @@ r
 
 前述のように、`center`と`scale`には数値型か論理値型のいずれかを指定できるが、今回は論理値型のパラメータとしてチューニングしよう。
 
-```{r}
+``` r
 lrn = makeLearner("regr.nnet", trace = FALSE)
 lrn = makePreprocWrapper(lrn, train = trainfun, predict = predictfun,
                          par.set = makeParamSet(
@@ -276,9 +409,17 @@ lrn = makePreprocWrapper(lrn, train = trainfun, predict = predictfun,
 lrn
 ```
 
+    $> Learner regr.nnet.preproc from package nnet
+    $> Type: regr
+    $> Name: ; Short name: 
+    $> Class: PreprocWrapper
+    $> Properties: numerics,factors,weights
+    $> Predict-Type: response
+    $> Hyperparameters: size=3,trace=FALSE,center=TRUE,scale=TRUE
+
 今回はグリッドサーチで`nnet`の`decay`パラメータと`scale`の`center`と`scale`パラメータをチューニングする。
 
-```{r}
+``` r
 rdesc = makeResampleDesc("Holdout")
 ps = makeParamSet(
   makeDiscreteLearnerParam("decay", c(0, 0.05, 0.1)),
@@ -290,15 +431,33 @@ res = tuneParams(lrn, bh.task, rdesc, par.set = ps, control = ctrl, show.info = 
 res
 ```
 
-```{r}
+    $> Tune result:
+    $> Op. pars: decay=0.05; center=TRUE; scale=TRUE
+    $> mse.test.mean=11.2
+
+``` r
 as.data.frame(res$opt.path)
 ```
+
+    $>    decay center scale mse.test.mean dob eol error.message exec.time
+    $> 1      0   TRUE  TRUE      57.95746   1  NA          <NA>     0.039
+    $> 2   0.05   TRUE  TRUE      11.23583   2  NA          <NA>     0.042
+    $> 3    0.1   TRUE  TRUE      15.44886   3  NA          <NA>     0.043
+    $> 4      0  FALSE  TRUE      84.89302   4  NA          <NA>     0.019
+    $> 5   0.05  FALSE  TRUE      16.63278   5  NA          <NA>     0.041
+    $> 6    0.1  FALSE  TRUE      13.80628   6  NA          <NA>     0.043
+    $> 7      0   TRUE FALSE      64.98619   7  NA          <NA>     0.029
+    $> 8   0.05   TRUE FALSE      55.94930   8  NA          <NA>     0.040
+    $> 9    0.1   TRUE FALSE      26.67453   9  NA          <NA>     0.048
+    $> 10     0  FALSE FALSE      63.27422  10  NA          <NA>     0.023
+    $> 11  0.05  FALSE FALSE      34.35454  11  NA          <NA>     0.044
+    $> 12   0.1  FALSE FALSE      42.57609  12  NA          <NA>     0.043
 
 ### 前処理ラッパー関数
 
 よい前処理ラッパーを作成したのであれば、それを関数としてカプセル化するのは良いアイデアだ。他の人も使えると便利だろうから`mlr`に追加して欲しい、というのであれば[Issues · mlr-org/mlr](https://github.com/mlr-org/mlr/issues)からコンタクトして欲しい。
 
-```{r}
+``` r
 makePreprocWrapperScale = function(learner, center = TRUE, scale = TRUE) {
   trainfun = function(data, target, args = list(center, scale)) {
     cns = colnames(data)
@@ -339,3 +498,6 @@ lrn = makePreprocWrapperScale("classif.lda")
 train(lrn, iris.task)
 ```
 
+    $> Model for learner.id=classif.lda.preproc; learner.class=PreprocWrapper
+    $> Trained on: task.id = iris-example; obs = 150; features = 4
+    $> Hyperparameters: center=TRUE,scale=TRUE
