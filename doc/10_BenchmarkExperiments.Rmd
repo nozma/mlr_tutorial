@@ -141,4 +141,146 @@ getBMRMeasureIds(bmr)
 getBMRModels(bmr)
 ```
 
-### 学習器
+### 学習器と性能指標
+
+使用された学習器は`getBMRLearners`で、性能指標は`getBMRMeasures`でそれぞれ抽出できる。
+
+```{r}
+getBMRLearners(bmr)
+```
+
+```{r}
+getBMRMeasures(bmr)
+```
+
+## ベンチマーク結果のマージ
+
+ベンチマーク試験が終わった後で、他の学習器やタスクを追加したくなったらどうすればよいだろうか。このような場合は、`mergeBenchmarkResults`関数を使えば、複数の`BenchmarkResutl`オブジェクトをマージすることができる。
+
+先程行った線形判別分析と決定木のベンチマーク試験結果に対し、ランダムフォレストと二次判別分析の結果を追加してみよう。
+
+まず、ランダムフォレストと二次判別分析のベンチマーク試験を行う。
+
+```{r}
+lrns2 = list(makeLearner("classif.randomForest"), makeLearner("classif.qda"))
+bmr2 = benchmark(lrns2, sonar.task, rdesc, show.info = FALSE)
+bmr2
+```
+
+次に、`bmr`と`bmr2`をマージする。`BenchmarkResult`オブジェクトはリストで渡す。
+
+```{r}
+mergeBenchmarkResults(list(bmr, bmr2))
+```
+
+上記の例ではリサンプルdescriptionを`benchmark`関数に指定していることに注意してもらいたい。つまり、`lda`と`rpart`は`randamForest`および`qda`とは異なる訓練/テストセットを用いて評価された可能性が高い。
+
+異なる訓練/テストセットを用いて評価を行うと、学習器間の正確な性能比較が難しくなる。もし、他の学習器を使った試験を後から追加する見込みがあるのなら、最初から`ResampleInstances`を使用したほうが良い。リサンプルをインスタンス化しておけば、同じ訓練/テストセットを後の試験でも使用することができるからだ。
+
+あるいは、`BenchmarkResult`オブジェクトから`ResampleInstance`を抽出し、これを他の試験に使用しても良い。例を示そう。
+
+```{r}
+# インスタンスの抽出
+rin = getBMRPredictions(bmr)[[1]][[1]]$instance
+
+# インスタンスを用いてベンチマーク試験を行う
+bmr3 = benchmark(lrns2, sonar.task, rin, show.info = FALSE)
+
+# 結果をマージする
+mergeBenchmarkResults(list(bmr, bmr3))
+```
+
+## ベンチマークの分析と可視化
+
+`mlr`はベンチマーク試験を分析する機能も備えている。これには、可視化、アルゴリズムの順位付け、パフォーマンスの差に対する仮説検定が含まれる。
+
+今回はこの機能を紹介するために、5つの分類タスクと3つの学習アルゴリズムを使用する、やや大きなベンチマーク試験を実施する。
+
+### 例：線形判別分析と分類木、ランダムフォレストの比較
+
+**3つのアルゴリズム**は線形判別分析、決定木、ランダムフォレストである。これらのデフォルトの学習器IDはやや長いので、以下の例ではもう少し短い別名を設定した。
+
+**5つの分類タスク**と言ったが、3つは既に紹介したものだ。これに加えて、`mlbench`パッケージに含まれるデータを`convertMLBenchObjToTask`関数でタスクに変換したものを用いる。
+
+全てのタスクは10分割クロスバリデーションによりリサンプリングを行う。これは、一つのresample descriptionを`benchmark`関数に渡すことで行う。これにより、それぞれのタスクに対するリサンプリングのインスタンス化が自動的に実行される。この方法では、一つのタスク内で全ての学習器に対して同じインスタンスが使用されることになる。
+
+タスクの数と同じ長さのリストでリサンプリング手法を指定すれば、それぞれのタスクに異なるリサンプリング手法を適用することもできる。この際渡すのはresample descriptionsでも良いし、インスタンスでも良い。
+
+評価手法は平均誤分類率を主とするが、合わせてbalanced error rate(ber)と訓練時間(timetrain)も算出する。
+
+```{r}
+## 学習器リストの作成
+lrns = list(
+  makeLearner("classif.lda", id = "lda"),
+  makeLearner("classif.rpart", id = "rpart"),
+  makeLearner("classif.randomForest", id = "randomForest")
+)
+
+## mlbenchパッケージから追加タスクを生成する
+ring.task = convertMLBenchObjToTask("mlbench.ringnorm", n = 600)
+wave.task = convertMLBenchObjToTask("mlbench.waveform", n = 600)
+
+## タスクリストの作成
+tasks = list(iris.task, sonar.task, pid.task, ring.task, wave.task)
+## リサンプリング手法の指定
+rdesc = makeResampleDesc("CV", iters = 10)
+## 評価指標の指定
+meas = list(mmce, ber, timetrain)
+## ベンチマーク試験の実行
+bmr = benchmark(lrns, tasks, rdesc, meas, show.info = FALSE)
+bmr
+```
+
+iris-exampleとPimaIndiansDiabetes-exampleでは線形判別分析が優れいているが、他のタスクではランダムフォレストが良い成績を出しているようだ。一方、訓練時間を見るとランダムフォレストは他の学習器よりも長い時間がかかっている。
+
+パフォーマンスの平均値から何らかの結論を言いたければ、値の変動も考慮に入れる必要がある。リサンプリングの繰り返し全体で値がどのように分布しているかも考慮できれば尚良い。
+
+10分割クロスバリデーションにより、各タスクは10回評価されていることになるが、これは以下の様にして詳細を確認できる。
+
+```{r}
+perf = getBMRPerformances(bmr, as.df = TRUE)
+head(perf)
+```
+
+結果を詳しく確認すると、ランダムフォレストは全てのインスタンスで分類木より優れており、線形判別分析は時間の面でほとんどどの場合も優れている事が分かる。また、線形判別分析は時々ランダムフォレストより優れた結果を出している。このサイズの試験結果ならまだ「詳しく確認する」は可能であるが、これよりももっと大きなスケールのベンチマーク試験では、このような判断はずっと難しくなる。
+
+`mlr`には可視化と仮説検定の仕組みがあるので、より大きなスケールの試験に対してはそれを使おう。
+
+### 可視化
+
+プロットには`ggplot2`パッケージが使用される。したがって、要素のリネームや配色変更などのカスタマイズは容易に行える。
+
+#### パフォーマンスの可視化
+
+`plotBMRBoxplot`は箱ひげ図またはバイオリンプロットによって、リサンプリングの繰り返しの間に指標がどのような値をとったのかを可視化する。これはつまり`getBMRPerformances`の可視化である。
+
+以下に箱ひげ図で`mmce`の分布を示す。
+
+```{r}
+plotBMRBoxplots(bmr, measure = mmce)
+```
+
+次にバイオリンプロットの例を示す。
+
+```{r}
+# aes, theme, element_textをggplot2::なしで呼び出すためには
+# ライブラリのロードが必要
+library(ggplot2) 
+plotBMRBoxplots(bmr, measure = ber, style = "violin",
+                pretty.names = FALSE) +
+  aes(color = learner.id) +
+  theme(strip.text.x = element_text(size = 6))
+```
+
+ここでは、指標として`ber`を使用するとともに、`learner.id`に基づく色の塗り分けも行っている。また、`theme`はグラフのラベル(strip)のフォントサイズを調整している。
+
+`pretty.names=FALSE`は何かというと、性能指標や学習器のラベルとしてidを使ってくれという指定である。これを指定しなかったときにどのような名前が使われるかは、性能指標であれば`指標名$name`、学習器では`getBMRLEarnerShortName`で確認できる。
+
+```{r}
+mmce$name
+```
+
+```{r}
+getBMRLearnerShortNames(bmr)
+```
+
