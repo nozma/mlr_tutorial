@@ -284,3 +284,4 @@ mmce$name
 getBMRLearnerShortNames(bmr)
 ```
 
+プロットに関してよくある質問は、「パネルのヘッダと学習器の名前はどうやったら変更できるのか」といったものだ。
