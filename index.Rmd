@@ -8,4 +8,6 @@ documentclass: book
 
 # {-}
 
-mlrのチュートリアルの訳です。
+mlrのチュートリアル([mlr tutorial](https://mlr-org.github.io/mlr-tutorial/devel/html/index.html))の訳です(未完)。
+
+内容は開発版に基づいています。
