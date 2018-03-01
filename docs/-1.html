@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>mlrパッケージチュートリアル</title>
+  <meta name="description" content="mlrパッケージチュートリアル">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="mlrパッケージチュートリアル" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="mlrパッケージチュートリアル" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="section-4.html">
+<link rel="next" href="section-6.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="1" data-path="quick-start.html"><a href="quick-start.html"><i class="fa fa-check"></i><b>1</b> Quick start</a><ul>
+<li class="chapter" data-level="1.1" data-path="quick-start.html"><a href="quick-start.html#section-1.1"><i class="fa fa-check"></i><b>1.1</b> タスクの定義</a></li>
+<li class="chapter" data-level="1.2" data-path="quick-start.html"><a href="quick-start.html#section-1.2"><i class="fa fa-check"></i><b>1.2</b> 学習器の定義</a></li>
+<li class="chapter" data-level="1.3" data-path="quick-start.html"><a href="quick-start.html#section-1.3"><i class="fa fa-check"></i><b>1.3</b> (データを訓練セットとテストセットに分割する)</a></li>
+<li class="chapter" data-level="1.4" data-path="quick-start.html"><a href="quick-start.html#section-1.4"><i class="fa fa-check"></i><b>1.4</b> 訓練</a></li>
+<li class="chapter" data-level="1.5" data-path="quick-start.html"><a href="quick-start.html#section-1.5"><i class="fa fa-check"></i><b>1.5</b> 予測</a></li>
+<li class="chapter" data-level="1.6" data-path="quick-start.html"><a href="quick-start.html#section-1.6"><i class="fa fa-check"></i><b>1.6</b> 評価</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="section-2.html"><a href="section-2.html"><i class="fa fa-check"></i><b>2</b> タスク</a><ul>
+<li class="chapter" data-level="2.1" data-path="section-2.html"><a href="section-2.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> タスクの種類と作成</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="section-2.html"><a href="section-2.html#section-2.1.1"><i class="fa fa-check"></i><b>2.1.1</b> 回帰</a></li>
+<li class="chapter" data-level="2.1.2" data-path="section-2.html"><a href="section-2.html#section-2.1.2"><i class="fa fa-check"></i><b>2.1.2</b> 分類</a></li>
+<li class="chapter" data-level="2.1.3" data-path="section-2.html"><a href="section-2.html#section-2.1.3"><i class="fa fa-check"></i><b>2.1.3</b> 生存時間分析</a></li>
+<li class="chapter" data-level="2.1.4" data-path="section-2.html"><a href="section-2.html#section-2.1.4"><i class="fa fa-check"></i><b>2.1.4</b> マルチラベル分類</a></li>
+<li class="chapter" data-level="2.1.5" data-path="section-2.html"><a href="section-2.html#section-2.1.5"><i class="fa fa-check"></i><b>2.1.5</b> クラスター分析</a></li>
+<li class="chapter" data-level="2.1.6" data-path="section-2.html"><a href="section-2.html#section-2.1.6"><i class="fa fa-check"></i><b>2.1.6</b> コスト考慮型分類</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="section-2.html"><a href="section-2.html#section-2.2"><i class="fa fa-check"></i><b>2.2</b> その他の設定</a></li>
+<li class="chapter" data-level="2.3" data-path="section-2.html"><a href="section-2.html#section-2.3"><i class="fa fa-check"></i><b>2.3</b> タスクへのアクセス</a></li>
+<li class="chapter" data-level="2.4" data-path="section-2.html"><a href="section-2.html#section-2.4"><i class="fa fa-check"></i><b>2.4</b> タスクの編集</a></li>
+<li class="chapter" data-level="2.5" data-path="section-2.html"><a href="section-2.html#section-2.5"><i class="fa fa-check"></i><b>2.5</b> タスクの例と便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="section-3.html"><a href="section-3.html"><i class="fa fa-check"></i><b>3</b> 学習器</a><ul>
+<li class="chapter" data-level="3.1" data-path="section-3.html"><a href="section-3.html#section-3.1"><i class="fa fa-check"></i><b>3.1</b> 学習器を構築する</a></li>
+<li class="chapter" data-level="3.2" data-path="section-3.html"><a href="section-3.html#section-3.2"><i class="fa fa-check"></i><b>3.2</b> 学習器へアクセスする</a></li>
+<li class="chapter" data-level="3.3" data-path="section-3.html"><a href="section-3.html#section-3.3"><i class="fa fa-check"></i><b>3.3</b> 学習器の編集</a></li>
+<li class="chapter" data-level="3.4" data-path="section-3.html"><a href="section-3.html#section-3.4"><i class="fa fa-check"></i><b>3.4</b> 学習器一覧</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="section-4.html"><a href="section-4.html"><i class="fa fa-check"></i><b>4</b> 学習器の訓練</a><ul>
+<li class="chapter" data-level="4.1" data-path="section-4.html"><a href="section-4.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 学習器モデルへのアクセス</a></li>
+<li class="chapter" data-level="4.2" data-path="section-4.html"><a href="section-4.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> その他のオプションとコメント</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="-1.html"><a href="-1.html"><i class="fa fa-check"></i><b>5</b> 予測</a><ul>
+<li class="chapter" data-level="5.1" data-path="-1.html"><a href="-1.html#section-5.1"><i class="fa fa-check"></i><b>5.1</b> 新しいデータに対する結果を予測する</a></li>
+<li class="chapter" data-level="5.2" data-path="-1.html"><a href="-1.html#section-5.2"><i class="fa fa-check"></i><b>5.2</b> 予測へのアクセス</a></li>
+<li class="chapter" data-level="5.3" data-path="-1.html"><a href="-1.html#-"><i class="fa fa-check"></i><b>5.3</b> 回帰: 標準誤差を取得する</a></li>
+<li class="chapter" data-level="5.4" data-path="-1.html"><a href="-1.html#-"><i class="fa fa-check"></i><b>5.4</b> 分類とクラスタリング: 確率を取得する</a></li>
+<li class="chapter" data-level="5.5" data-path="-1.html"><a href="-1.html#-"><i class="fa fa-check"></i><b>5.5</b> 分類: 混同行列を取得する</a></li>
+<li class="chapter" data-level="5.6" data-path="-1.html"><a href="-1.html#-"><i class="fa fa-check"></i><b>5.6</b> 分類: 決定閾値の調整</a></li>
+<li class="chapter" data-level="5.7" data-path="-1.html"><a href="-1.html#section-5.7"><i class="fa fa-check"></i><b>5.7</b> 予測の可視化</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="section-6.html"><a href="section-6.html"><i class="fa fa-check"></i><b>6</b> データの前処理</a><ul>
+<li class="chapter" data-level="6.1" data-path="section-6.html"><a href="section-6.html#section-6.1"><i class="fa fa-check"></i><b>6.1</b> 前処理と学習器を融合する</a></li>
+<li class="chapter" data-level="6.2" data-path="section-6.html"><a href="section-6.html#makepreprocwrappercaret"><i class="fa fa-check"></i><b>6.2</b> <code>makePreprocWrapperCaret</code>を使用した前処理</a></li>
+<li class="chapter" data-level="6.3" data-path="section-6.html"><a href="section-6.html#section-6.3"><i class="fa fa-check"></i><b>6.3</b> 前処理オプションと学習器パラメータの連結チューニング</a></li>
+<li class="chapter" data-level="6.4" data-path="section-6.html"><a href="section-6.html#section-6.4"><i class="fa fa-check"></i><b>6.4</b> 独自の前処理ラッパーを書く</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="section-6.html"><a href="section-6.html#section-6.4.1"><i class="fa fa-check"></i><b>6.4.1</b> 訓練関数の指定</a></li>
+<li class="chapter" data-level="6.4.2" data-path="section-6.html"><a href="section-6.html#section-6.4.2"><i class="fa fa-check"></i><b>6.4.2</b> 予測関数の指定</a></li>
+<li class="chapter" data-level="6.4.3" data-path="section-6.html"><a href="section-6.html#section-6.4.3"><i class="fa fa-check"></i><b>6.4.3</b> 前処理ラッパーの作成</a></li>
+<li class="chapter" data-level="6.4.4" data-path="section-6.html"><a href="section-6.html#section-6.4.4"><i class="fa fa-check"></i><b>6.4.4</b> 前処理と学習器のパラメータを連結してチューニングする</a></li>
+<li class="chapter" data-level="6.4.5" data-path="section-6.html"><a href="section-6.html#section-6.4.5"><i class="fa fa-check"></i><b>6.4.5</b> 前処理ラッパー関数</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="section-7.html"><a href="section-7.html"><i class="fa fa-check"></i><b>7</b> 学習器の性能を評価する</a><ul>
+<li class="chapter" data-level="7.1" data-path="section-7.html"><a href="section-7.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 利用可能な性能指標</a></li>
+<li class="chapter" data-level="7.2" data-path="section-7.html"><a href="section-7.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 指標の一覧</a></li>
+<li class="chapter" data-level="7.3" data-path="section-7.html"><a href="section-7.html#section-7.3"><i class="fa fa-check"></i><b>7.3</b> 性能指標を計算する</a></li>
+<li class="chapter" data-level="7.4" data-path="section-7.html"><a href="section-7.html#section-7.4"><i class="fa fa-check"></i><b>7.4</b> 指標計算に必要な情報</a></li>
+<li class="chapter" data-level="7.5" data-path="section-7.html"><a href="section-7.html#section-7.5"><i class="fa fa-check"></i><b>7.5</b> 性能指標へのアクセス</a></li>
+<li class="chapter" data-level="7.6" data-path="section-7.html"><a href="section-7.html#section-7.6"><i class="fa fa-check"></i><b>7.6</b> 2クラス分類</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="section-7.html"><a href="section-7.html#section-7.6.1"><i class="fa fa-check"></i><b>7.6.1</b> 性能と閾値の関係をプロットする</a></li>
+<li class="chapter" data-level="7.6.2" data-path="section-7.html"><a href="section-7.html#roc"><i class="fa fa-check"></i><b>7.6.2</b> ROC</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="section-8.html"><a href="section-8.html"><i class="fa fa-check"></i><b>8</b> リサンプリング</a><ul>
+<li class="chapter" data-level="8.1" data-path="section-8.html"><a href="section-8.html#section-8.1"><i class="fa fa-check"></i><b>8.1</b> リサンプリング手法を決める</a></li>
+<li class="chapter" data-level="8.2" data-path="section-8.html"><a href="section-8.html#section-8.2"><i class="fa fa-check"></i><b>8.2</b> リサンプリングを実行する</a></li>
+<li class="chapter" data-level="8.3" data-path="section-8.html"><a href="section-8.html#section-8.3"><i class="fa fa-check"></i><b>8.3</b> リサンプル結果へのアクセス</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="section-8.html"><a href="section-8.html#section-8.3.1"><i class="fa fa-check"></i><b>8.3.1</b> 予測値</a></li>
+<li class="chapter" data-level="8.3.2" data-path="section-8.html"><a href="section-8.html#section-8.3.2"><i class="fa fa-check"></i><b>8.3.2</b> 訓練済みモデルの抽出</a></li>
+<li class="chapter" data-level="8.3.3" data-path="section-8.html"><a href="section-8.html#section-8.3.3"><i class="fa fa-check"></i><b>8.3.3</b> 他の抽出方法</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="section-8.html"><a href="section-8.html#section-8.4"><i class="fa fa-check"></i><b>8.4</b> 階層化とブロック化</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="section-8.html"><a href="section-8.html#section-8.4.1"><i class="fa fa-check"></i><b>8.4.1</b> 目的変数の階層化</a></li>
+<li class="chapter" data-level="8.4.2" data-path="section-8.html"><a href="section-8.html#section-8.4.2"><i class="fa fa-check"></i><b>8.4.2</b> 説明変数の階層化</a></li>
+<li class="chapter" data-level="8.4.3" data-path="section-8.html"><a href="section-8.html#section-8.4.3"><i class="fa fa-check"></i><b>8.4.3</b> ブロック化</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="section-8.html"><a href="section-8.html#section-8.5"><i class="fa fa-check"></i><b>8.5</b> リサンプリングの詳細とリサンプルのインスタンス</a></li>
+<li class="chapter" data-level="8.6" data-path="section-8.html"><a href="section-8.html#section-8.6"><i class="fa fa-check"></i><b>8.6</b> 性能指標の集約</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="-1.html"><a href="-1.html#-"><i class="fa fa-check"></i><b>8.6.1</b> 例: 一つの指標に複数の集約方法</a></li>
+<li class="chapter" data-level="8.6.2" data-path="-1.html"><a href="-1.html#-"><i class="fa fa-check"></i><b>8.6.2</b> 例: 訓練セットの誤差を計算する</a></li>
+<li class="chapter" data-level="8.6.3" data-path="-1.html"><a href="-1.html#-"><i class="fa fa-check"></i><b>8.6.3</b> 例: ブートストラップ</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="section-8.html"><a href="section-8.html#section-8.7"><i class="fa fa-check"></i><b>8.7</b> 便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="section-9.html"><a href="section-9.html"><i class="fa fa-check"></i><b>9</b> ハイパーパラメータのチューニング</a><ul>
+<li class="chapter" data-level="9.1" data-path="section-9.html"><a href="section-9.html#section-9.1"><i class="fa fa-check"></i><b>9.1</b> パラメータ探索空間の指定</a></li>
+<li class="chapter" data-level="9.2" data-path="section-9.html"><a href="section-9.html#section-9.2"><i class="fa fa-check"></i><b>9.2</b> 最適化アルゴリズムの指定</a></li>
+<li class="chapter" data-level="9.3" data-path="section-9.html"><a href="section-9.html#section-9.3"><i class="fa fa-check"></i><b>9.3</b> チューニングの実行</a></li>
+<li class="chapter" data-level="9.4" data-path="section-9.html"><a href="section-9.html#section-9.4"><i class="fa fa-check"></i><b>9.4</b> チューニング結果へのアクセス</a></li>
+<li class="chapter" data-level="9.5" data-path="section-9.html"><a href="section-9.html#section-9.5"><i class="fa fa-check"></i><b>9.5</b> ハイパーパラメータチューニングの影響を調査する</a></li>
+<li class="chapter" data-level="9.6" data-path="section-9.html"><a href="section-9.html#section-9.6"><i class="fa fa-check"></i><b>9.6</b> その他いろいろ</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="section-10.html"><a href="section-10.html"><i class="fa fa-check"></i><b>10</b> ベンチマーク試験</a><ul>
+<li class="chapter" data-level="10.1" data-path="section-10.html"><a href="section-10.html#section-10.1"><i class="fa fa-check"></i><b>10.1</b> ベンチマーク試験の実施</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="section-10.html"><a href="section-10.html#section-10.1.1"><i class="fa fa-check"></i><b>10.1.1</b> 実験を再現可能にする</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="section-10.html"><a href="section-10.html#section-10.2"><i class="fa fa-check"></i><b>10.2</b> ベンチマーク結果へのアクセス</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="section-10.html"><a href="section-10.html#section-10.2.1"><i class="fa fa-check"></i><b>10.2.1</b> 学習器の性能</a></li>
+<li class="chapter" data-level="10.2.2" data-path="section-10.html"><a href="section-10.html#-2"><i class="fa fa-check"></i><b>10.2.2</b> 予測</a></li>
+<li class="chapter" data-level="10.2.3" data-path="section-10.html"><a href="section-10.html#id"><i class="fa fa-check"></i><b>10.2.3</b> ID</a></li>
+<li class="chapter" data-level="10.2.4" data-path="section-10.html"><a href="section-10.html#section-10.2.4"><i class="fa fa-check"></i><b>10.2.4</b> フィット済みモデル</a></li>
+<li class="chapter" data-level="10.2.5" data-path="section-10.html"><a href="section-10.html#section-10.2.5"><i class="fa fa-check"></i><b>10.2.5</b> 学習器と性能指標</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="section-10.html"><a href="section-10.html#section-10.3"><i class="fa fa-check"></i><b>10.3</b> ベンチマーク結果のマージ</a></li>
+<li class="chapter" data-level="10.4" data-path="section-10.html"><a href="section-10.html#section-10.4"><i class="fa fa-check"></i><b>10.4</b> ベンチマークの分析と可視化</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="section-10.html"><a href="section-10.html#section-10.4.1"><i class="fa fa-check"></i><b>10.4.1</b> 例：線形判別分析と分類木、ランダムフォレストの比較</a></li>
+<li class="chapter" data-level="10.4.2" data-path="section-10.html"><a href="section-10.html#section-10.4.2"><i class="fa fa-check"></i><b>10.4.2</b> 可視化</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlrパッケージチュートリアル</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="-1" class="section level1">
+<h1><span class="header-section-number">Section 5</span> 予測</h1>
+<div id="section-5.1" class="section level2">
+<h2><span class="header-section-number">5.1</span> 新しいデータに対する結果を予測する</h2>
+<p>新しい観測値に対する目的変数の予測は、Rの他の予測手法と同じように実装されている。一般的には、<code>predict</code>を<code>train</code>が返すオブジェクトに対して呼び出し、予測したいデータを渡すだけだ。</p>
+<p>データを渡す方法は2種類ある。</p>
+<ul>
+<li><code>task</code>引数を通じて<code>Task</code>オブジェクトを渡す。</li>
+<li><code>newdata</code>引数を通じて<code>data.frame</code>を渡す。</li>
+</ul>
+<p>最初の方法は、予測したいデータが既に<code>Task</code>オブジェクトに含まれている場合に適している。</p>
+<p><code>train</code>と同様に、<code>predict</code>も<code>subset</code>引数を備えている。したがって、<code>Task</code>オブジェクトに含まれるデータの異なる部分を訓練と予測に割り当てることができる(より進んだデータ分割の方法はリサンプリングのセクションであらためて解説する)。</p>
+<p>以下に、<code>BostonHousing</code>データに対し、1つおきの観測値に勾配ブースティングマシンによるフィットを行い、残った観測値に対して予測を行う例を示す。データは<code>bh.task</code>に予め入っているものを使用する。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n =<span class="st"> </span><span class="kw">getTaskSize</span>(bh.task)
+train.set =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, n, <span class="dt">by =</span> <span class="dv">2</span>)
+test.set =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">2</span>, n, <span class="dt">by =</span> <span class="dv">2</span>)
+lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;regr.gbm&quot;</span>, <span class="dt">n.trees =</span> <span class="dv">100</span>)
+mod =<span class="st"> </span><span class="kw">train</span>(lrn, bh.task, <span class="dt">subset =</span> train.set)
+
+task.pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">task =</span> bh.task, <span class="dt">subset =</span> test.set)
+task.pred</code></pre></div>
+<pre><code>$&gt; Prediction: 253 observations
+$&gt; predict.type: response
+$&gt; threshold: 
+$&gt; time: 0.00
+$&gt;    id truth response
+$&gt; 2   2  21.6 22.19745
+$&gt; 4   4  33.4 23.25992
+$&gt; 6   6  28.7 22.38456
+$&gt; 8   8  27.1 22.13503
+$&gt; 10 10  18.9 22.13503
+$&gt; 12 12  18.9 22.13503
+$&gt; ... (253 rows, 3 cols)</code></pre>
+<p>2つめの方法は予測したいデータが<code>Task</code>オブジェクトに含まれていない場合に使える。</p>
+<p>目的変数を除外した<code>iris</code>を使ってクラスター分析を行う例を示そう。奇数インデックスの要素を<code>Task</code>オブジェクトに含めて訓練を行い、残ったオブジェクトに対して予測を行う。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n =<span class="st"> </span><span class="kw">nrow</span>(iris)
+iris.train =<span class="st"> </span>iris[<span class="kw">seq</span>(<span class="dv">1</span>, n, <span class="dt">by =</span> <span class="dv">2</span>), <span class="op">-</span><span class="dv">5</span>]
+iris.test =<span class="st"> </span>iris[<span class="kw">seq</span>(<span class="dv">2</span>, n, <span class="dt">by =</span> <span class="dv">2</span>), <span class="op">-</span><span class="dv">5</span>]
+task =<span class="st"> </span><span class="kw">makeClusterTask</span>(<span class="dt">data =</span> iris.train)
+mod =<span class="st"> </span><span class="kw">train</span>(<span class="st">&quot;cluster.kmeans&quot;</span>, task)
+
+newdata.pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> iris.test)
+newdata.pred</code></pre></div>
+<pre><code>$&gt; Prediction: 75 observations
+$&gt; predict.type: response
+$&gt; threshold: 
+$&gt; time: 0.00
+$&gt;    response
+$&gt; 2         1
+$&gt; 4         1
+$&gt; 6         1
+$&gt; 8         1
+$&gt; 10        1
+$&gt; 12        1
+$&gt; ... (75 rows, 1 cols)</code></pre>
+<p>なお、教師あり学習の場合はデータセットから目的変数列を削除する必要はない。これは<code>predict</code>を呼び出す際に自動的に削除される。</p>
+</div>
+<div id="section-5.2" class="section level2">
+<h2><span class="header-section-number">5.2</span> 予測へのアクセス</h2>
+<p><code>predict</code>関数は<code>Prediction</code>クラスの名前付きリストを返す。もっとも重要な要素は<code>$data</code>であり、このdata.frameは目的変数の真値と予測値の列を含む(教師あり学習の場合)。<code>as.data.frame</code>を使うとこれに直接アクセスできる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## task引数を通じてデータを渡した例の結果
+<span class="kw">head</span>(<span class="kw">as.data.frame</span>(task.pred))</code></pre></div>
+<pre><code>$&gt;    id truth response
+$&gt; 2   2  21.6 22.19745
+$&gt; 4   4  33.4 23.25992
+$&gt; 6   6  28.7 22.38456
+$&gt; 8   8  27.1 22.13503
+$&gt; 10 10  18.9 22.13503
+$&gt; 12 12  18.9 22.13503</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## newdata引数を通じてデータを渡した場合の結果
+<span class="kw">head</span>(<span class="kw">as.data.frame</span>(newdata.pred))</code></pre></div>
+<pre><code>$&gt;    response
+$&gt; 2         1
+$&gt; 4         1
+$&gt; 6         1
+$&gt; 8         1
+$&gt; 10        1
+$&gt; 12        1</code></pre>
+<p><code>Task</code>オブジェクトを通じてデータを渡した例の結果を見るとわかるように、結果のdata.frameには<code>id</code>列が追加されている。これは、予測値が元のデータセットのどの値に対応しているのかを示している。</p>
+<p>真値と予測値に直接アクセスするための関数として<code>getPredictionTruth</code>関数と<code>getPredictionResponse</code>関数が用意されている。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">getPredictionTruth</span>(task.pred))</code></pre></div>
+<pre><code>$&gt; [1] 21.6 33.4 28.7 27.1 18.9 18.9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">getPredictionResponse</span>(task.pred))</code></pre></div>
+<pre><code>$&gt; [1] 22.19745 23.25992 22.38456 22.13503 22.13503 22.13503</code></pre>
+</div>
+<div id="-" class="section level2">
+<h2><span class="header-section-number">5.3</span> 回帰: 標準誤差を取得する</h2>
+<p>学習器のなかには標準誤差の出力に対応しているものがあるが、これも<code>mlr</code>からアクセスできる。対応している学習器の一覧は、<code>listLearners</code>関数に引数<code>properties = &quot;se&quot;</code>を指定して呼び出すことで取得できる。このとき、<code>check.packages = FALSE</code>を指定することで、他のパッケージ由来の学習器で当該パッケージをまだインストールしていないものについても一覧に含めることができる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">listLearners</span>(<span class="st">&quot;regr&quot;</span>, <span class="dt">properties =</span> <span class="st">&quot;se&quot;</span>, <span class="dt">check.packages =</span> <span class="ot">FALSE</span>)[<span class="kw">c</span>(<span class="st">&quot;class&quot;</span>, <span class="st">&quot;name&quot;</span>)]</code></pre></div>
+<pre><code>$&gt;          class
+$&gt; 1   regr.bcart
+$&gt; 2     regr.bgp
+$&gt; 3  regr.bgpllm
+$&gt; 4     regr.blm
+$&gt; 5    regr.btgp
+$&gt; 6 regr.btgpllm
+$&gt;                                                                      name
+$&gt; 1                                                           Bayesian CART
+$&gt; 2                                               Bayesian Gaussian Process
+$&gt; 3       Bayesian Gaussian Process with jumps to the Limiting Linear Model
+$&gt; 4                                                   Bayesian Linear Model
+$&gt; 5                                         Bayesian Treed Gaussian Process
+$&gt; 6 Bayesian Treed Gaussian Process with jumps to the Limiting Linear Model
+$&gt; ... (15 rows, 2 cols)</code></pre>
+<p>標準誤差出力の例として、<code>BostonHousing</code>に線形回帰モデルを適用する場合を示そう。標準誤差を計算するためには、<code>predict.type</code>に<code>&quot;se&quot;</code>を指定する。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn.lm =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;regr.lm&quot;</span>, <span class="dt">predict.type =</span> <span class="st">&quot;se&quot;</span>)
+mod.lm =<span class="st"> </span><span class="kw">train</span>(lrn.lm, bh.task, <span class="dt">subset =</span> train.set)
+task.pred.lm =<span class="st"> </span><span class="kw">predict</span>(mod.lm, <span class="dt">task =</span> bh.task, <span class="dt">subset =</span> test.set)
+task.pred.lm</code></pre></div>
+<pre><code>$&gt; Prediction: 253 observations
+$&gt; predict.type: se
+$&gt; threshold: 
+$&gt; time: 0.01
+$&gt;    id truth response        se
+$&gt; 2   2  21.6 24.83734 0.7501615
+$&gt; 4   4  33.4 28.38206 0.8742590
+$&gt; 6   6  28.7 25.16725 0.8652139
+$&gt; 8   8  27.1 19.38145 1.1963265
+$&gt; 10 10  18.9 18.66449 1.1793944
+$&gt; 12 12  18.9 21.25802 1.0727918
+$&gt; ... (253 rows, 4 cols)</code></pre>
+<p>標準誤差だけが欲しければ、<code>getPredictionSE</code>関数を使用する。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">getPredictionSE</span>(task.pred.lm))</code></pre></div>
+<pre><code>$&gt; [1] 0.7501615 0.8742590 0.8652139 1.1963265 1.1793944 1.0727918</code></pre>
+</div>
+<div id="-" class="section level2">
+<h2><span class="header-section-number">5.4</span> 分類とクラスタリング: 確率を取得する</h2>
+<p>予測値に対する確率は<code>Prediction</code>オブジェクトに<code>getPredictionProbabilities</code>関数を使うことで取得できる。以下にクラスタ分析の別の例を示そう。ここではファジイc-means法によりmtcarsデータセットをクラスタリングしている。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;cluster.cmeans&quot;</span>, <span class="dt">predict.type =</span> <span class="st">&quot;prob&quot;</span>)
+mod =<span class="st"> </span><span class="kw">train</span>(lrn, mtcars.task)
+
+pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">task =</span> mtcars.task)
+<span class="kw">head</span>(<span class="kw">getPredictionProbabilities</span>(pred))</code></pre></div>
+<pre><code>$&gt;                            1           2
+$&gt; Mazda RX4         0.97959380 0.020406201
+$&gt; Mazda RX4 Wag     0.97963402 0.020365983
+$&gt; Datsun 710        0.99266041 0.007339591
+$&gt; Hornet 4 Drive    0.54291331 0.457086691
+$&gt; Hornet Sportabout 0.01870551 0.981294490
+$&gt; Valiant           0.75745946 0.242540537</code></pre>
+<p>分類問題においては、注目すべきものがいくつかあるが、デフォルトではクラスラベルが予測される。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod =<span class="st"> </span><span class="kw">train</span>(<span class="st">&quot;classif.lda&quot;</span>, <span class="dt">task =</span> iris.task)
+
+pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">task =</span> iris.task)
+pred</code></pre></div>
+<pre><code>$&gt; Prediction: 150 observations
+$&gt; predict.type: response
+$&gt; threshold: 
+$&gt; time: 0.00
+$&gt;   id  truth response
+$&gt; 1  1 setosa   setosa
+$&gt; 2  2 setosa   setosa
+$&gt; 3  3 setosa   setosa
+$&gt; 4  4 setosa   setosa
+$&gt; 5  5 setosa   setosa
+$&gt; 6  6 setosa   setosa
+$&gt; ... (150 rows, 3 cols)</code></pre>
+<p>事後確率を得たければ、学習器を作成する際に<code>predict.type</code>引数に適当な値を指定する必要がある。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;classif.rpart&quot;</span>, <span class="dt">predict.type =</span> <span class="st">&quot;prob&quot;</span>)
+mod =<span class="st"> </span><span class="kw">train</span>(lrn, iris.task)
+
+pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> iris)
+<span class="kw">head</span>(<span class="kw">as.data.frame</span>(pred))</code></pre></div>
+<pre><code>$&gt;    truth prob.setosa prob.versicolor prob.virginica response
+$&gt; 1 setosa           1               0              0   setosa
+$&gt; 2 setosa           1               0              0   setosa
+$&gt; 3 setosa           1               0              0   setosa
+$&gt; 4 setosa           1               0              0   setosa
+$&gt; 5 setosa           1               0              0   setosa
+$&gt; 6 setosa           1               0              0   setosa</code></pre>
+<p>クラスラベルは確率が最大のものが選択され、確率がタイの要素があればアトランダムに選択される。</p>
+<p>もし事後確率だけがほしければ<code>getPredictionProbabilities</code>関数を使う。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">getPredictionProbabilities</span>(pred))</code></pre></div>
+<pre><code>$&gt;   setosa versicolor virginica
+$&gt; 1      1          0         0
+$&gt; 2      1          0         0
+$&gt; 3      1          0         0
+$&gt; 4      1          0         0
+$&gt; 5      1          0         0
+$&gt; 6      1          0         0</code></pre>
+</div>
+<div id="-" class="section level2">
+<h2><span class="header-section-number">5.5</span> 分類: 混同行列を取得する</h2>
+<p>混同行列は<code>calculateConfusionMatrix</code>関数により得ることが出来る。列は予測したクラス、行は真のクラスのラベルを表す。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">calculateConfusionMatrix</span>(pred)</code></pre></div>
+<pre><code>$&gt;             predicted
+$&gt; true         setosa versicolor virginica -err.-
+$&gt;   setosa         50          0         0      0
+$&gt;   versicolor      0         49         1      1
+$&gt;   virginica       0          5        45      5
+$&gt;   -err.-          0          5         1      6</code></pre>
+<p>対角成分には正しく分類された要素の数が、それ以外の部分には誤分類された要素の数が現れる。また、<code>-err.-</code>の行および列には誤分類された要素の合計数が表示される。</p>
+<p><code>relative=TRUE</code>を指定することで、相対頻度を得ることも出来る。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conf.matrix =<span class="st"> </span><span class="kw">calculateConfusionMatrix</span>(pred, <span class="dt">relative =</span> <span class="ot">TRUE</span>)
+conf.matrix</code></pre></div>
+<pre><code>$&gt; Relative confusion matrix (normalized by row/column):
+$&gt;             predicted
+$&gt; true         setosa    versicolor virginica -err.-   
+$&gt;   setosa     1.00/1.00 0.00/0.00  0.00/0.00 0.00     
+$&gt;   versicolor 0.00/0.00 0.98/0.91  0.02/0.02 0.02     
+$&gt;   virginica  0.00/0.00 0.10/0.09  0.90/0.98 0.10     
+$&gt;   -err.-          0.00      0.09       0.02 0.04     
+$&gt; 
+$&gt; 
+$&gt; Absolute confusion matrix:
+$&gt;             predicted
+$&gt; true         setosa versicolor virginica -err.-
+$&gt;   setosa         50          0         0      0
+$&gt;   versicolor      0         49         1      1
+$&gt;   virginica       0          5        45      5
+$&gt;   -err.-          0          5         1      6</code></pre>
+<p>相対頻度を計算する際、行方向と列方向の2通りの正規化の仕方があるため、上記相対混同行列の中には各要素ごとに2つの値が現れている。セットになった2つの値の1つめは行方向、つまり真のラベルについてグループ化した値で、2つめは予測値についてグループ化した値である。</p>
+<p>相対値は<code>$relative.row</code>および<code>$relative.col</code>を通して直接アクセスすることもできる。詳しくは<code>ConfusionMatrix</code>のドキュメント(<a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/ConfusionMatrix">ConfusionMatrix function | R Documentation</a>)を参照してもらいたい。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conf.matrix<span class="op">$</span>relative.row</code></pre></div>
+<pre><code>$&gt;            setosa versicolor virginica -err-
+$&gt; setosa          1       0.00      0.00  0.00
+$&gt; versicolor      0       0.98      0.02  0.02
+$&gt; virginica       0       0.10      0.90  0.10</code></pre>
+<p>最後に、予測値および真値について、各クラスに振り分けられた要素数を<code>sums=TRUE</code>を指定することで結果に追加できる。これは相対混同行列と絶対混同行列の両方に追加される(訳注: 相対と絶対で行列が入れ替わっているのはなぜだ…？)。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">calculateConfusionMatrix</span>(pred, <span class="dt">relative =</span> <span class="ot">TRUE</span>, <span class="dt">sums =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>$&gt; Relative confusion matrix (normalized by row/column):
+$&gt;             predicted
+$&gt; true         setosa    versicolor virginica -err.-    -n- 
+$&gt;   setosa     1.00/1.00 0.00/0.00  0.00/0.00 0.00      50  
+$&gt;   versicolor 0.00/0.00 0.98/0.91  0.02/0.02 0.02      54  
+$&gt;   virginica  0.00/0.00 0.10/0.09  0.90/0.98 0.10      46  
+$&gt;   -err.-          0.00      0.09       0.02 0.04      &lt;NA&gt;
+$&gt;   -n-        50        50         50        &lt;NA&gt;      150 
+$&gt; 
+$&gt; 
+$&gt; Absolute confusion matrix:
+$&gt;            setosa versicolor virginica -err.- -n-
+$&gt; setosa         50          0         0      0  50
+$&gt; versicolor      0         49         1      1  50
+$&gt; virginica       0          5        45      5  50
+$&gt; -err.-          0          5         1      6  NA
+$&gt; -n-            50         54        46     NA 150</code></pre>
+</div>
+<div id="-" class="section level2">
+<h2><span class="header-section-number">5.6</span> 分類: 決定閾値の調整</h2>
+<p>事後確率をクラスラベルに割り当てるために用いる閾値は調整することができる。閾値を調整するためには、そもそも確率を予測する学習器を使用する必要があるという点に注意しよう。2クラス分類では、閾値は<strong>positive</strong>クラスに分類するための基準となる。デフォルトは0.5だ。例として閾値を0.9にしてみよう。つまり、事後確率が0.9を上回った時に<strong>positive</strong>に分類するということだ。2つのクラスのどちらが<strong>positive</strong>になっているかは(以前確認したとおり)<code>Task</code>オブジェクトを通じて確認できる。今回は2クラス分類の例として<code>mlbench</code>パッケージの<code>Sonar</code>データを使おう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 学習器の作成と訓練。タスクは用意されているものを使う。
+lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;classif.rpart&quot;</span>, <span class="dt">predict.type =</span> <span class="st">&quot;prob&quot;</span>)
+mod =<span class="st"> </span><span class="kw">train</span>(lrn, <span class="dt">task =</span> sonar.task)
+
+## positiveクラスのラベルを確認する
+<span class="kw">getTaskDesc</span>(sonar.task)<span class="op">$</span>positive</code></pre></div>
+<pre><code>$&gt; [1] &quot;M&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## デフォルトの閾値で予測する
+pred1 =<span class="st"> </span><span class="kw">predict</span>(mod, sonar.task)
+pred1<span class="op">$</span>threshold</code></pre></div>
+<pre><code>$&gt;   M   R 
+$&gt; 0.5 0.5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## positiveクラスに分類する閾値を変更する
+pred2 =<span class="st"> </span><span class="kw">setThreshold</span>(pred1, <span class="dt">threshold =</span> <span class="fl">0.9</span>)
+pred2<span class="op">$</span>threshold</code></pre></div>
+<pre><code>$&gt;   M   R 
+$&gt; 0.9 0.1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred2</code></pre></div>
+<pre><code>$&gt; Prediction: 208 observations
+$&gt; predict.type: prob
+$&gt; threshold: M=0.90,R=0.10
+$&gt; time: 0.01
+$&gt;   id truth    prob.M    prob.R response
+$&gt; 1  1     R 0.1060606 0.8939394        R
+$&gt; 2  2     R 0.7333333 0.2666667        R
+$&gt; 3  3     R 0.0000000 1.0000000        R
+$&gt; 4  4     R 0.1060606 0.8939394        R
+$&gt; 5  5     R 0.9250000 0.0750000        M
+$&gt; 6  6     R 0.0000000 1.0000000        R
+$&gt; ... (208 rows, 5 cols)</code></pre>
+<p>閾値の変更は混同行列に対しても影響する。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">calculateConfusionMatrix</span>(pred1)</code></pre></div>
+<pre><code>$&gt;         predicted
+$&gt; true      M  R -err.-
+$&gt;   M      95 16     16
+$&gt;   R      10 87     10
+$&gt;   -err.- 10 16     26</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">calculateConfusionMatrix</span>(pred2)</code></pre></div>
+<pre><code>$&gt;         predicted
+$&gt; true      M  R -err.-
+$&gt;   M      84 27     27
+$&gt;   R       6 91      6
+$&gt;   -err.-  6 27     33</code></pre>
+<p><code>getPredictionProbabilities</code>はデフォルトでは<strong>positive</strong>クラスの事後確率しか返さない事に注意しよう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">getPredictionProbabilities</span>(pred1))</code></pre></div>
+<pre><code>$&gt; [1] 0.1060606 0.7333333 0.0000000 0.1060606 0.9250000 0.0000000</code></pre>
+<p>次のようにすると全ての事例について確率を得ることができる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">getPredictionProbabilities</span>(pred1, <span class="dt">cl =</span> <span class="kw">c</span>(<span class="st">&quot;M&quot;</span>, <span class="st">&quot;R&quot;</span>)))</code></pre></div>
+<pre><code>$&gt;           M         R
+$&gt; 1 0.1060606 0.8939394
+$&gt; 2 0.7333333 0.2666667
+$&gt; 3 0.0000000 1.0000000
+$&gt; 4 0.1060606 0.8939394
+$&gt; 5 0.9250000 0.0750000
+$&gt; 6 0.0000000 1.0000000</code></pre>
+<p>多クラス分類の場合は、閾値は名前付き数値ベクトルとして与える。予測結果の確率は与えた数値で除算された後に比較され、最大値を持つクラスが予測クラスとして選択される。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;classif.rpart&quot;</span>, <span class="dt">predict.type =</span> <span class="st">&quot;prob&quot;</span>)
+mod =<span class="st"> </span><span class="kw">train</span>(lrn, iris.task)
+pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> iris)
+pred<span class="op">$</span>threshold <span class="co"># デフォルトの閾値</span></code></pre></div>
+<pre><code>$&gt;     setosa versicolor  virginica 
+$&gt;  0.3333333  0.3333333  0.3333333</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 閾値の変更 大きな値を指定するほど予測されにくくなる
+pred =<span class="st"> </span><span class="kw">setThreshold</span>(pred, <span class="kw">c</span>(<span class="dt">setosa =</span> <span class="fl">0.01</span>, <span class="dt">versicolor =</span> <span class="dv">50</span>, <span class="dt">virginica =</span> <span class="dv">1</span>))
+pred<span class="op">$</span>threshold</code></pre></div>
+<pre><code>$&gt;     setosa versicolor  virginica 
+$&gt;       0.01      50.00       1.00</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">as.data.frame</span>(pred)<span class="op">$</span>response)</code></pre></div>
+<pre><code>$&gt; 
+$&gt;     setosa versicolor  virginica 
+$&gt;         50          0        100</code></pre>
+</div>
+<div id="section-5.7" class="section level2">
+<h2><span class="header-section-number">5.7</span> 予測の可視化</h2>
+<p>モデルの説明や教育目的で予測を可視化したければ、<code>plotLearnerPrediction</code>関数を使うことができる。この関数は学習器から1つないし2つの特徴量を選んで訓練したのち、その結果を<code>ggplot2</code>パッケージを用いてプロットする。</p>
+<p>分類では、2つの特徴量(デフォルトではデータセットのはじめの2つが選ばれる)を選んで散布図を作成する。シンボルの形状は真のクラスラベルに対応する。誤分類されたシンボルは、周囲が白色の線で囲われることで強調される。学習器がサポートしていれば、事後確率は背景色の彩度により表現され、事後確率が高い部分ほど高彩度となる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">777</span>)
+lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;classif.rpart&quot;</span>, <span class="dt">id =</span> <span class="st">&quot;CART&quot;</span>)
+<span class="kw">plotLearnerPrediction</span>(lrn, <span class="dt">task =</span> iris.task)</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
+<p>クラスター分析も2つの特徴量による散布図を作成する。この場合はシンボルの色がクラスターに対応する。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;cluster.kmeans&quot;</span>)
+<span class="kw">plotLearnerPrediction</span>(lrn, mtcars.task, <span class="dt">features =</span> <span class="kw">c</span>(<span class="st">&quot;disp&quot;</span>, <span class="st">&quot;drat&quot;</span>), <span class="dt">cv =</span> <span class="dv">0</span>)</code></pre></div>
+<pre><code>$&gt; 
+$&gt; This is package &#39;modeest&#39; written by P. PONCET.
+$&gt; For a complete list of functions, use &#39;library(help = &quot;modeest&quot;)&#39; or &#39;help.start()&#39;.</code></pre>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-78-1.png" width="672" /></p>
+<p>回帰に対してはプロットが2種類ある。1Dプロットでは一つの特徴量と目的変数の関係が示される。このとき、回帰曲線と(学習器がサポートしていれば)推定標準誤差が示される。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotLearnerPrediction</span>(<span class="st">&quot;regr.lm&quot;</span>, <span class="dt">features =</span> <span class="st">&quot;lstat&quot;</span>, <span class="dt">task =</span> bh.task)</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
+<p>2Dプロットでは分類の場合と同様に2つの特徴量による散布図が作成される。この場合シンボルの塗りつぶし色が目的変数の値に対応し、予測値は背景色として示される。標準誤差は示すことができない。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotLearnerPrediction</span>(<span class="st">&quot;regr.lm&quot;</span>, <span class="dt">features =</span> <span class="kw">c</span>(<span class="st">&quot;lstat&quot;</span>, <span class="st">&quot;rm&quot;</span>), <span class="dt">task =</span> bh.task)</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="section-4.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="section-6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
