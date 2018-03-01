@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>mlrパッケージチュートリアル</title>
+  <meta name="description" content="mlrパッケージチュートリアル">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="mlrパッケージチュートリアル" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="mlrパッケージチュートリアル" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="section-2.html">
+<link rel="next" href="section-4.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="1" data-path="quick-start.html"><a href="quick-start.html"><i class="fa fa-check"></i><b>1</b> Quick start</a></li>
+<li class="chapter" data-level="2" data-path="section-2.html"><a href="section-2.html"><i class="fa fa-check"></i><b>2</b> タスク</a><ul>
+<li class="chapter" data-level="2.1" data-path="section-2.html"><a href="section-2.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> タスクの種類と作成</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="section-2.html"><a href="section-2.html#section-2.1.1"><i class="fa fa-check"></i><b>2.1.1</b> 回帰</a></li>
+<li class="chapter" data-level="2.1.2" data-path="section-2.html"><a href="section-2.html#section-2.1.2"><i class="fa fa-check"></i><b>2.1.2</b> 分類</a></li>
+<li class="chapter" data-level="2.1.3" data-path="section-2.html"><a href="section-2.html#section-2.1.3"><i class="fa fa-check"></i><b>2.1.3</b> 生存時間分析</a></li>
+<li class="chapter" data-level="2.1.4" data-path="section-2.html"><a href="section-2.html#section-2.1.4"><i class="fa fa-check"></i><b>2.1.4</b> マルチラベル分類</a></li>
+<li class="chapter" data-level="2.1.5" data-path="section-2.html"><a href="section-2.html#section-2.1.5"><i class="fa fa-check"></i><b>2.1.5</b> クラスター分析</a></li>
+<li class="chapter" data-level="2.1.6" data-path="section-2.html"><a href="section-2.html#section-2.1.6"><i class="fa fa-check"></i><b>2.1.6</b> コスト考慮型分類</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="section-2.html"><a href="section-2.html#section-2.2"><i class="fa fa-check"></i><b>2.2</b> その他の設定</a></li>
+<li class="chapter" data-level="2.3" data-path="section-2.html"><a href="section-2.html#section-2.3"><i class="fa fa-check"></i><b>2.3</b> タスクへのアクセス</a></li>
+<li class="chapter" data-level="2.4" data-path="section-2.html"><a href="section-2.html#section-2.4"><i class="fa fa-check"></i><b>2.4</b> タスクの編集</a></li>
+<li class="chapter" data-level="2.5" data-path="section-2.html"><a href="section-2.html#section-2.5"><i class="fa fa-check"></i><b>2.5</b> タスクの例と便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="section-3.html"><a href="section-3.html"><i class="fa fa-check"></i><b>3</b> 学習器</a><ul>
+<li class="chapter" data-level="3.1" data-path="section-3.html"><a href="section-3.html#section-3.1"><i class="fa fa-check"></i><b>3.1</b> 学習器を構築する</a></li>
+<li class="chapter" data-level="3.2" data-path="section-3.html"><a href="section-3.html#section-3.2"><i class="fa fa-check"></i><b>3.2</b> 学習器へアクセスする</a></li>
+<li class="chapter" data-level="3.3" data-path="section-3.html"><a href="section-3.html#section-3.3"><i class="fa fa-check"></i><b>3.3</b> 学習器の編集</a></li>
+<li class="chapter" data-level="3.4" data-path="section-3.html"><a href="section-3.html#section-3.4"><i class="fa fa-check"></i><b>3.4</b> 学習器一覧</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="section-4.html"><a href="section-4.html"><i class="fa fa-check"></i><b>4</b> 学習器の訓練</a><ul>
+<li class="chapter" data-level="4.1" data-path="section-4.html"><a href="section-4.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 学習器モデルへのアクセス</a></li>
+<li class="chapter" data-level="4.2" data-path="section-4.html"><a href="section-4.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> その他のオプションとコメント</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="section-5.html"><a href="section-5.html"><i class="fa fa-check"></i><b>5</b> 予測</a><ul>
+<li class="chapter" data-level="5.1" data-path="section-5.html"><a href="section-5.html#section-5.1"><i class="fa fa-check"></i><b>5.1</b> 新しいデータに対する結果を予測する</a></li>
+<li class="chapter" data-level="5.2" data-path="section-5.html"><a href="section-5.html#section-5.2"><i class="fa fa-check"></i><b>5.2</b> 予測へのアクセス</a></li>
+<li class="chapter" data-level="5.3" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.3</b> 回帰: 標準誤差を取得する</a></li>
+<li class="chapter" data-level="5.4" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.4</b> 分類とクラスタリング: 確率を取得する</a></li>
+<li class="chapter" data-level="5.5" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.5</b> 分類: 混同行列を取得する</a></li>
+<li class="chapter" data-level="5.6" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.6</b> 分類: 決定閾値の調整</a></li>
+<li class="chapter" data-level="5.7" data-path="section-5.html"><a href="section-5.html#section-5.7"><i class="fa fa-check"></i><b>5.7</b> 予測の可視化</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="section-6.html"><a href="section-6.html"><i class="fa fa-check"></i><b>6</b> データの前処理</a><ul>
+<li class="chapter" data-level="6.1" data-path="section-6.html"><a href="section-6.html#section-6.1"><i class="fa fa-check"></i><b>6.1</b> 前処理と学習器を融合する</a></li>
+<li class="chapter" data-level="6.2" data-path="section-6.html"><a href="section-6.html#makepreprocwrappercaret"><i class="fa fa-check"></i><b>6.2</b> <code>makePreprocWrapperCaret</code>を使用した前処理</a></li>
+<li class="chapter" data-level="6.3" data-path="section-6.html"><a href="section-6.html#section-6.3"><i class="fa fa-check"></i><b>6.3</b> 前処理オプションと学習器パラメータの連結チューニング</a></li>
+<li class="chapter" data-level="6.4" data-path="section-6.html"><a href="section-6.html#section-6.4"><i class="fa fa-check"></i><b>6.4</b> 独自の前処理ラッパーを書く</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="section-6.html"><a href="section-6.html#section-6.4.1"><i class="fa fa-check"></i><b>6.4.1</b> 訓練関数の指定</a></li>
+<li class="chapter" data-level="6.4.2" data-path="section-6.html"><a href="section-6.html#section-6.4.2"><i class="fa fa-check"></i><b>6.4.2</b> 予測関数の指定</a></li>
+<li class="chapter" data-level="6.4.3" data-path="section-6.html"><a href="section-6.html#section-6.4.3"><i class="fa fa-check"></i><b>6.4.3</b> 前処理ラッパーの作成</a></li>
+<li class="chapter" data-level="6.4.4" data-path="section-6.html"><a href="section-6.html#section-6.4.4"><i class="fa fa-check"></i><b>6.4.4</b> 前処理と学習器のパラメータを連結してチューニングする</a></li>
+<li class="chapter" data-level="6.4.5" data-path="section-6.html"><a href="section-6.html#section-6.4.5"><i class="fa fa-check"></i><b>6.4.5</b> 前処理ラッパー関数</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="section-7.html"><a href="section-7.html"><i class="fa fa-check"></i><b>7</b> 学習器の性能を評価する</a><ul>
+<li class="chapter" data-level="7.1" data-path="section-7.html"><a href="section-7.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 利用可能な性能指標</a></li>
+<li class="chapter" data-level="7.2" data-path="section-7.html"><a href="section-7.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 指標の一覧</a></li>
+<li class="chapter" data-level="7.3" data-path="section-7.html"><a href="section-7.html#section-7.3"><i class="fa fa-check"></i><b>7.3</b> 性能指標を計算する</a></li>
+<li class="chapter" data-level="7.4" data-path="section-7.html"><a href="section-7.html#section-7.4"><i class="fa fa-check"></i><b>7.4</b> 指標計算に必要な情報</a></li>
+<li class="chapter" data-level="7.5" data-path="section-7.html"><a href="section-7.html#section-7.5"><i class="fa fa-check"></i><b>7.5</b> 性能指標へのアクセス</a></li>
+<li class="chapter" data-level="7.6" data-path="section-7.html"><a href="section-7.html#section-7.6"><i class="fa fa-check"></i><b>7.6</b> 2クラス分類</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="section-7.html"><a href="section-7.html#section-7.6.1"><i class="fa fa-check"></i><b>7.6.1</b> 性能と閾値の関係をプロットする</a></li>
+<li class="chapter" data-level="7.6.2" data-path="section-7.html"><a href="section-7.html#roc"><i class="fa fa-check"></i><b>7.6.2</b> ROC</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="section-8.html"><a href="section-8.html"><i class="fa fa-check"></i><b>8</b> リサンプリング</a><ul>
+<li class="chapter" data-level="8.1" data-path="section-8.html"><a href="section-8.html#section-8.1"><i class="fa fa-check"></i><b>8.1</b> リサンプリング手法を決める</a></li>
+<li class="chapter" data-level="8.2" data-path="section-8.html"><a href="section-8.html#section-8.2"><i class="fa fa-check"></i><b>8.2</b> リサンプリングを実行する</a></li>
+<li class="chapter" data-level="8.3" data-path="section-8.html"><a href="section-8.html#section-8.3"><i class="fa fa-check"></i><b>8.3</b> リサンプル結果へのアクセス</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="section-8.html"><a href="section-8.html#section-8.3.1"><i class="fa fa-check"></i><b>8.3.1</b> 予測値</a></li>
+<li class="chapter" data-level="8.3.2" data-path="section-8.html"><a href="section-8.html#section-8.3.2"><i class="fa fa-check"></i><b>8.3.2</b> 訓練済みモデルの抽出</a></li>
+<li class="chapter" data-level="8.3.3" data-path="section-8.html"><a href="section-8.html#section-8.3.3"><i class="fa fa-check"></i><b>8.3.3</b> 他の抽出方法</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="section-8.html"><a href="section-8.html#section-8.4"><i class="fa fa-check"></i><b>8.4</b> 階層化とブロック化</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="section-8.html"><a href="section-8.html#section-8.4.1"><i class="fa fa-check"></i><b>8.4.1</b> 目的変数の階層化</a></li>
+<li class="chapter" data-level="8.4.2" data-path="section-8.html"><a href="section-8.html#section-8.4.2"><i class="fa fa-check"></i><b>8.4.2</b> 説明変数の階層化</a></li>
+<li class="chapter" data-level="8.4.3" data-path="section-8.html"><a href="section-8.html#section-8.4.3"><i class="fa fa-check"></i><b>8.4.3</b> ブロック化</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="section-8.html"><a href="section-8.html#section-8.5"><i class="fa fa-check"></i><b>8.5</b> リサンプリングの詳細とリサンプルのインスタンス</a></li>
+<li class="chapter" data-level="8.6" data-path="section-8.html"><a href="section-8.html#section-8.6"><i class="fa fa-check"></i><b>8.6</b> 性能指標の集約</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.1</b> 例: 一つの指標に複数の集約方法</a></li>
+<li class="chapter" data-level="8.6.2" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.2</b> 例: 訓練セットの誤差を計算する</a></li>
+<li class="chapter" data-level="8.6.3" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.3</b> 例: ブートストラップ</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="section-8.html"><a href="section-8.html#section-8.7"><i class="fa fa-check"></i><b>8.7</b> 便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="section-9.html"><a href="section-9.html"><i class="fa fa-check"></i><b>9</b> ハイパーパラメータのチューニング</a><ul>
+<li class="chapter" data-level="9.1" data-path="section-9.html"><a href="section-9.html#section-9.1"><i class="fa fa-check"></i><b>9.1</b> パラメータ探索空間の指定</a></li>
+<li class="chapter" data-level="9.2" data-path="section-9.html"><a href="section-9.html#section-9.2"><i class="fa fa-check"></i><b>9.2</b> 最適化アルゴリズムの指定</a></li>
+<li class="chapter" data-level="9.3" data-path="section-9.html"><a href="section-9.html#section-9.3"><i class="fa fa-check"></i><b>9.3</b> チューニングの実行</a></li>
+<li class="chapter" data-level="9.4" data-path="section-9.html"><a href="section-9.html#section-9.4"><i class="fa fa-check"></i><b>9.4</b> チューニング結果へのアクセス</a></li>
+<li class="chapter" data-level="9.5" data-path="section-9.html"><a href="section-9.html#section-9.5"><i class="fa fa-check"></i><b>9.5</b> ハイパーパラメータチューニングの影響を調査する</a></li>
+<li class="chapter" data-level="9.6" data-path="section-9.html"><a href="section-9.html#section-9.6"><i class="fa fa-check"></i><b>9.6</b> その他いろいろ</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="section-10.html"><a href="section-10.html"><i class="fa fa-check"></i><b>10</b> ベンチマーク試験</a><ul>
+<li class="chapter" data-level="10.1" data-path="section-10.html"><a href="section-10.html#section-10.1"><i class="fa fa-check"></i><b>10.1</b> ベンチマーク試験の実施</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="section-10.html"><a href="section-10.html#section-10.1.1"><i class="fa fa-check"></i><b>10.1.1</b> 実験を再現可能にする</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="section-10.html"><a href="section-10.html#section-10.2"><i class="fa fa-check"></i><b>10.2</b> ベンチマーク結果へのアクセス</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="section-10.html"><a href="section-10.html#section-10.2.1"><i class="fa fa-check"></i><b>10.2.1</b> 学習器の性能</a></li>
+<li class="chapter" data-level="10.2.2" data-path="section-10.html"><a href="section-10.html#-1"><i class="fa fa-check"></i><b>10.2.2</b> 予測</a></li>
+<li class="chapter" data-level="10.2.3" data-path="section-10.html"><a href="section-10.html#id"><i class="fa fa-check"></i><b>10.2.3</b> ID</a></li>
+<li class="chapter" data-level="10.2.4" data-path="section-10.html"><a href="section-10.html#section-10.2.4"><i class="fa fa-check"></i><b>10.2.4</b> フィット済みモデル</a></li>
+<li class="chapter" data-level="10.2.5" data-path="section-10.html"><a href="section-10.html#section-10.2.5"><i class="fa fa-check"></i><b>10.2.5</b> 学習器と性能指標</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="section-10.html"><a href="section-10.html#section-10.3"><i class="fa fa-check"></i><b>10.3</b> ベンチマーク結果のマージ</a></li>
+<li class="chapter" data-level="10.4" data-path="section-10.html"><a href="section-10.html#section-10.4"><i class="fa fa-check"></i><b>10.4</b> ベンチマークの分析と可視化</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="section-10.html"><a href="section-10.html#section-10.4.1"><i class="fa fa-check"></i><b>10.4.1</b> 例：線形判別分析と分類木、ランダムフォレストの比較</a></li>
+<li class="chapter" data-level="10.4.2" data-path="section-10.html"><a href="section-10.html#section-10.4.2"><i class="fa fa-check"></i><b>10.4.2</b> 可視化</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlrパッケージチュートリアル</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section-3" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> 学習器</h1>
+<p>以下に示すクラスは、(コスト考慮型)分類、回帰、生存時間分析、クラスタリングのための統一的なインターフェースを提供する。多くの手法はすでに<code>mlr</code>に統合されているが、そうでないものもある。しかし、パッケージは容易に拡張できるよう設計されている。</p>
+<p><a href="http://mlr-org.github.io/mlr-tutorial/release/html/integrated_learners/index.html">Integrated Learners - mlr tutorial</a>には実装済みの手法とその特徴について一覧が示してある。もし使いたい手法が見つからなければ、issueに書き込むか、<a href="http://mlr-org.github.io/mlr-tutorial/release/html/create_learner/index.html">Create Custom Learners - mlr tutorial</a>を確認してもらいたい。</p>
+<p>まずは実装済みの手法についていかに使用するかを説明しよう。</p>
+<div id="section-3.1" class="section level2">
+<h2><span class="header-section-number">3.1</span> 学習器を構築する</h2>
+<p>学習器は<code>makeLearner</code>関数で作成する。このとき、どのような学習手法を使うのかを指定する。加えて以下の要素を指定できる。</p>
+<ul>
+<li>ハイパーパラメータの指定。</li>
+<li>予測後の出力方法(例えば、分類問題において予測されたクラスラベルなのか、確率なのか)</li>
+<li>ID(いくつかの手法ではこのIDを出力やプロット時の名前として利用できる)</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## ランダムフォレストによる分類で確率も出力する
+classif.lrn =<span class="st"> </span><span class="kw">makeLearner</span>(
+  <span class="st">&quot;classif.randomForest&quot;</span>, <span class="dt">predict.type =</span> <span class="st">&quot;prob&quot;</span>, <span class="dt">fix.factors.prediction =</span> <span class="ot">TRUE</span>)
+## 勾配ブースティング回帰でハイパーパラメータも指定する
+regr.lrn =<span class="st"> </span><span class="kw">makeLearner</span>(
+  <span class="st">&quot;regr.gbm&quot;</span>, <span class="dt">par.vals =</span> <span class="kw">list</span>(<span class="dt">n.trees =</span> <span class="dv">500</span>, <span class="dt">interaction.depth =</span> <span class="dv">3</span>))
+## コックス比例ハザードモデルでidも指定する
+surv.lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;surv.coxph&quot;</span>, <span class="dt">id =</span> <span class="st">&quot;cph&quot;</span>)
+## K平均法でクラスタ数を指定する
+cluster.lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;cluster.kmeans&quot;</span>, <span class="dt">centers =</span> <span class="dv">5</span>)
+## マルチラベルRandom-Ferns
+multilabel.lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;multilabel.rFerns&quot;</span>)</code></pre></div>
+<p>最初の引数はどのアルゴリズムを使うのかを指定する。アルゴリズム名は以下の命名規則に従っている。</p>
+<ul>
+<li><code>classif.&lt;Rのメソッド名&gt;</code>: 分類</li>
+<li><code>regr.&lt;Rのメソッド名&gt;</code>: 回帰</li>
+<li><code>surv.&lt;Rのメソッド名&gt;</code>: 生存時間分析</li>
+<li><code>cluster.&lt;Rのメソッド名&gt;</code>: クラスター分析</li>
+<li><code>multilabel.&lt;Rのメソッド名&gt;</code>: マルチラベル分類</li>
+</ul>
+<p>ハイパーパラメータは<code>...</code>引数として渡すか、<code>par.vals</code>引数にリストとして渡せる。</p>
+<p>因子型の特徴量は、訓練データよりテストデータの方が水準が少なくなってしまうという問題が起こるときがある。<code>fix.factors.prediction = TRUE</code>を指定しておけば、不足する水準をテストデータに加えるという方法によってこの問題を回避できる。</p>
+<p>では、先ほど作成した学習器の中身を見てみよう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">classif.lrn</code></pre></div>
+<pre><code>$&gt; Learner classif.randomForest from package randomForest
+$&gt; Type: classif
+$&gt; Name: Random Forest; Short name: rf
+$&gt; Class: classif.randomForest
+$&gt; Properties: twoclass,multiclass,numerics,factors,ordered,prob,class.weights,oobpreds,featimp
+$&gt; Predict-Type: prob
+$&gt; Hyperparameters:</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">surv.lrn</code></pre></div>
+<pre><code>$&gt; Learner cph from package survival
+$&gt; Type: surv
+$&gt; Name: Cox Proportional Hazard Model; Short name: coxph
+$&gt; Class: surv.coxph
+$&gt; Properties: numerics,factors,weights,rcens
+$&gt; Predict-Type: response
+$&gt; Hyperparameters:</code></pre>
+<p>全ての学習器は<code>Learner</code>クラスのオブジェクトである。クラスには、どのような種類の特徴量を扱えるのか、予測の際にはどのような種類の出力が可能か、マルチクラス分類の問題なのか、観測値は重み付けられているのか、欠測値はサポートされているのか、といった、手法に関する情報が含まれている。</p>
+<p>気づいたかも知れないが、今のところコスト考慮型分類に関する専用のクラスはない。一般的な誤分類コストについては、標準的な分類手法で扱うことができる。事例依存的なコストについては、コスト考慮型の学習器を一般的な回帰と分類の学習機から生成するための方法がいくつかある。この点についてはこのセクションで扱うには大きすぎるので、別途セクションを設けて解説してある。</p>
+</div>
+<div id="section-3.2" class="section level2">
+<h2><span class="header-section-number">3.2</span> 学習器へアクセスする</h2>
+<p><code>Learner</code>オブジェクトはリストであり、ハイパーパラメータと予測の種類に関する情報を含んでいる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## デフォルト値以外を指定したハイパーパラメータ
+cluster.lrn<span class="op">$</span>par.vals</code></pre></div>
+<pre><code>$&gt; $centers
+$&gt; [1] 5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## ハイパーパラメータ一覧
+cluster.lrn<span class="op">$</span>par.set</code></pre></div>
+<pre><code>$&gt;               Type len           Def                             Constr
+$&gt; centers    untyped   -             -                                  -
+$&gt; iter.max   integer   -            10                           1 to Inf
+$&gt; nstart     integer   -             1                           1 to Inf
+$&gt; algorithm discrete   - Hartigan-Wong Hartigan-Wong,Lloyd,Forgy,MacQueen
+$&gt; trace      logical   -             -                                  -
+$&gt;           Req Tunable Trafo
+$&gt; centers     -    TRUE     -
+$&gt; iter.max    -    TRUE     -
+$&gt; nstart      -    TRUE     -
+$&gt; algorithm   -    TRUE     -
+$&gt; trace       -   FALSE     -</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">##予測のタイプ
+regr.lrn<span class="op">$</span>predict.type</code></pre></div>
+<pre><code>$&gt; [1] &quot;response&quot;</code></pre>
+<p><code>$par.set</code>スロットには<code>ParamSet</code>クラスのオブジェクトが入っている。これには、ハイパーパラメータの型(数値なのか論理型なのか)、デフォルト値、そして可能な値の範囲が格納されている。</p>
+<p>また、<code>mlr</code>は<code>Lerner</code>の現在のハイパーパラメータの設定にアクセスする<code>getHyperPars</code>や<code>getLernerParVals</code>、可能な設定項目の詳細を取得する<code>getParamSet</code>関数を用意している。これらは、ラップされた学習器において特に有用である場合がある。例えば、学習器が特徴量選択の手法と融合しており、特徴量選択手法と学習器の両方がハイパーパラメータを持つような場合である。この点については別途セクションを設けて解説している。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## ハイパーパラメータのセッティングの取得
+<span class="kw">getHyperPars</span>(cluster.lrn)</code></pre></div>
+<pre><code>$&gt; $centers
+$&gt; [1] 5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 設定可能なハイパーパラメータの詳細一覧
+<span class="kw">getParamSet</span>(cluster.lrn)</code></pre></div>
+<pre><code>$&gt;               Type len           Def                             Constr
+$&gt; centers    untyped   -             -                                  -
+$&gt; iter.max   integer   -            10                           1 to Inf
+$&gt; nstart     integer   -             1                           1 to Inf
+$&gt; algorithm discrete   - Hartigan-Wong Hartigan-Wong,Lloyd,Forgy,MacQueen
+$&gt; trace      logical   -             -                                  -
+$&gt;           Req Tunable Trafo
+$&gt; centers     -    TRUE     -
+$&gt; iter.max    -    TRUE     -
+$&gt; nstart      -    TRUE     -
+$&gt; algorithm   -    TRUE     -
+$&gt; trace       -   FALSE     -</code></pre>
+<p>また、<code>getParamSet</code>(またはそのエイリアスである<code>getLearnerParamSet</code>)を使い、<code>Lerner</code>オブジェクトを作成すること無くそのデフォルト値を取得することもできる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getParamSet</span>(<span class="st">&quot;classif.randomForest&quot;</span>)</code></pre></div>
+<pre><code>$&gt;                      Type  len   Def   Constr Req Tunable Trafo
+$&gt; ntree             integer    -   500 1 to Inf   -    TRUE     -
+$&gt; mtry              integer    -     - 1 to Inf   -    TRUE     -
+$&gt; replace           logical    -  TRUE        -   -    TRUE     -
+$&gt; classwt     numericvector &lt;NA&gt;     - 0 to Inf   -    TRUE     -
+$&gt; cutoff      numericvector &lt;NA&gt;     -   0 to 1   -    TRUE     -
+$&gt; strata            untyped    -     -        -   -   FALSE     -
+$&gt; sampsize    integervector &lt;NA&gt;     - 1 to Inf   -    TRUE     -
+$&gt; nodesize          integer    -     1 1 to Inf   -    TRUE     -
+$&gt; maxnodes          integer    -     - 1 to Inf   -    TRUE     -
+$&gt; importance        logical    - FALSE        -   -    TRUE     -
+$&gt; localImp          logical    - FALSE        -   -    TRUE     -
+$&gt; proximity         logical    - FALSE        -   -   FALSE     -
+$&gt; oob.prox          logical    -     -        -   Y   FALSE     -
+$&gt; norm.votes        logical    -  TRUE        -   -   FALSE     -
+$&gt; do.trace          logical    - FALSE        -   -   FALSE     -
+$&gt; keep.forest       logical    -  TRUE        -   -   FALSE     -
+$&gt; keep.inbag        logical    - FALSE        -   -   FALSE     -</code></pre>
+<p>学習器に関するメタデータにアクセスするための関数も用意してある。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 学習器のID
+<span class="kw">getLearnerId</span>(surv.lrn)</code></pre></div>
+<pre><code>$&gt; [1] &quot;cph&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 学習器の略称
+<span class="kw">getLearnerShortName</span>(classif.lrn)</code></pre></div>
+<pre><code>$&gt; [1] &quot;rf&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 学習機のタイプ
+<span class="kw">getLearnerType</span>(multilabel.lrn)</code></pre></div>
+<pre><code>$&gt; [1] &quot;multilabel&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 学習器に必要なパッケージ
+<span class="kw">getLearnerPackages</span>(cluster.lrn)</code></pre></div>
+<pre><code>$&gt; [1] &quot;stats&quot; &quot;clue&quot;</code></pre>
+</div>
+<div id="section-3.3" class="section level2">
+<h2><span class="header-section-number">3.3</span> 学習器の編集</h2>
+<p><code>Learner</code>オブジェクトを作り直すことなしに編集する関数が用意されている。以下に例を示そう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## IDの変更
+surv.lrn =<span class="st"> </span><span class="kw">setLearnerId</span>(surv.lrn, <span class="st">&quot;CoxModel&quot;</span>)
+surv.lrn</code></pre></div>
+<pre><code>$&gt; Learner CoxModel from package survival
+$&gt; Type: surv
+$&gt; Name: Cox Proportional Hazard Model; Short name: coxph
+$&gt; Class: surv.coxph
+$&gt; Properties: numerics,factors,weights,rcens
+$&gt; Predict-Type: response
+$&gt; Hyperparameters:</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 予測タイプの変更
+classif.lrn =<span class="st"> </span><span class="kw">setPredictType</span>(classif.lrn, <span class="st">&quot;response&quot;</span>)
+
+## ハイパーパラメータ
+cluster.lrn =<span class="st"> </span><span class="kw">setHyperPars</span>(cluster.lrn, <span class="dt">centers =</span> <span class="dv">4</span>)
+
+## 設定値を除去してデフォルト値に戻す
+regr.lrn =<span class="st"> </span><span class="kw">removeHyperPars</span>(regr.lrn, <span class="kw">c</span>(<span class="st">&quot;n.trees&quot;</span>, <span class="st">&quot;interaction.depth&quot;</span>))</code></pre></div>
+</div>
+<div id="section-3.4" class="section level2">
+<h2><span class="header-section-number">3.4</span> 学習器一覧</h2>
+<p><code>mlr</code>に統合されている学習器とその特性は<a href="http://mlr-org.github.io/mlr-tutorial/release/html/integrated_learners/index.html">Integrated Learners - mlr tutorial</a>に示してある。</p>
+<p>もし、特定のプロパティや特定のタスクに対して利用可能な学習器の一覧がほしければ、<code>listLearners</code>関数を使うと良いだろう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 全ての学習器一覧
+<span class="kw">head</span>(<span class="kw">listLearners</span>()[<span class="kw">c</span>(<span class="st">&quot;class&quot;</span>, <span class="st">&quot;package&quot;</span>)])</code></pre></div>
+<pre><code>$&gt;                 class      package
+$&gt; 1         classif.ada          ada
+$&gt; 2 classif.bartMachine  bartMachine
+$&gt; 3         classif.bdk      kohonen
+$&gt; 4    classif.binomial        stats
+$&gt; 5  classif.blackboost mboost,party
+$&gt; 6    classif.boosting adabag,rpart</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 確率を出力可能な分類器
+<span class="kw">head</span>(<span class="kw">listLearners</span>(<span class="st">&quot;classif&quot;</span>, <span class="dt">properties =</span> <span class="st">&quot;prob&quot;</span>)[<span class="kw">c</span>(<span class="st">&quot;class&quot;</span>, <span class="st">&quot;package&quot;</span>)])</code></pre></div>
+<pre><code>$&gt;                 class      package
+$&gt; 1         classif.ada          ada
+$&gt; 2 classif.bartMachine  bartMachine
+$&gt; 3         classif.bdk      kohonen
+$&gt; 4    classif.binomial        stats
+$&gt; 5  classif.blackboost mboost,party
+$&gt; 6    classif.boosting adabag,rpart</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## iris(つまり多クラス)に使えて、確率を出力できる
+<span class="kw">head</span>(<span class="kw">listLearners</span>(iris.task, <span class="dt">properties =</span> <span class="st">&quot;prob&quot;</span>)[<span class="kw">c</span>(<span class="st">&quot;class&quot;</span>, <span class="st">&quot;package&quot;</span>)])</code></pre></div>
+<pre><code>$&gt;              class      package
+$&gt; 1      classif.bdk      kohonen
+$&gt; 2 classif.boosting adabag,rpart
+$&gt; 3      classif.C50          C50
+$&gt; 4  classif.cforest        party
+$&gt; 5    classif.ctree        party
+$&gt; 6 classif.cvglmnet       glmnet</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Learnerオブジェクトを作成することもできる
+<span class="kw">listLearners</span>(<span class="st">&quot;cluster&quot;</span>, <span class="dt">create =</span> <span class="ot">TRUE</span>)[[<span class="dv">1</span>]]</code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="section-2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="section-4.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

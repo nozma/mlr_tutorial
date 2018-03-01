@@ -1,0 +1,4 @@
+book_filename: "mlr_tutorial_ja"
+delete_marged_file: true
+chapter_name: "Chapter "
+output_dir: "docs"

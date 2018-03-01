@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>mlrパッケージチュートリアル</title>
+  <meta name="description" content="mlrパッケージチュートリアル">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="mlrパッケージチュートリアル" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="mlrパッケージチュートリアル" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="section-5.html">
+<link rel="next" href="section-7.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="1" data-path="quick-start.html"><a href="quick-start.html"><i class="fa fa-check"></i><b>1</b> Quick start</a></li>
+<li class="chapter" data-level="2" data-path="section-2.html"><a href="section-2.html"><i class="fa fa-check"></i><b>2</b> タスク</a><ul>
+<li class="chapter" data-level="2.1" data-path="section-2.html"><a href="section-2.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> タスクの種類と作成</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="section-2.html"><a href="section-2.html#section-2.1.1"><i class="fa fa-check"></i><b>2.1.1</b> 回帰</a></li>
+<li class="chapter" data-level="2.1.2" data-path="section-2.html"><a href="section-2.html#section-2.1.2"><i class="fa fa-check"></i><b>2.1.2</b> 分類</a></li>
+<li class="chapter" data-level="2.1.3" data-path="section-2.html"><a href="section-2.html#section-2.1.3"><i class="fa fa-check"></i><b>2.1.3</b> 生存時間分析</a></li>
+<li class="chapter" data-level="2.1.4" data-path="section-2.html"><a href="section-2.html#section-2.1.4"><i class="fa fa-check"></i><b>2.1.4</b> マルチラベル分類</a></li>
+<li class="chapter" data-level="2.1.5" data-path="section-2.html"><a href="section-2.html#section-2.1.5"><i class="fa fa-check"></i><b>2.1.5</b> クラスター分析</a></li>
+<li class="chapter" data-level="2.1.6" data-path="section-2.html"><a href="section-2.html#section-2.1.6"><i class="fa fa-check"></i><b>2.1.6</b> コスト考慮型分類</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="section-2.html"><a href="section-2.html#section-2.2"><i class="fa fa-check"></i><b>2.2</b> その他の設定</a></li>
+<li class="chapter" data-level="2.3" data-path="section-2.html"><a href="section-2.html#section-2.3"><i class="fa fa-check"></i><b>2.3</b> タスクへのアクセス</a></li>
+<li class="chapter" data-level="2.4" data-path="section-2.html"><a href="section-2.html#section-2.4"><i class="fa fa-check"></i><b>2.4</b> タスクの編集</a></li>
+<li class="chapter" data-level="2.5" data-path="section-2.html"><a href="section-2.html#section-2.5"><i class="fa fa-check"></i><b>2.5</b> タスクの例と便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="section-3.html"><a href="section-3.html"><i class="fa fa-check"></i><b>3</b> 学習器</a><ul>
+<li class="chapter" data-level="3.1" data-path="section-3.html"><a href="section-3.html#section-3.1"><i class="fa fa-check"></i><b>3.1</b> 学習器を構築する</a></li>
+<li class="chapter" data-level="3.2" data-path="section-3.html"><a href="section-3.html#section-3.2"><i class="fa fa-check"></i><b>3.2</b> 学習器へアクセスする</a></li>
+<li class="chapter" data-level="3.3" data-path="section-3.html"><a href="section-3.html#section-3.3"><i class="fa fa-check"></i><b>3.3</b> 学習器の編集</a></li>
+<li class="chapter" data-level="3.4" data-path="section-3.html"><a href="section-3.html#section-3.4"><i class="fa fa-check"></i><b>3.4</b> 学習器一覧</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="section-4.html"><a href="section-4.html"><i class="fa fa-check"></i><b>4</b> 学習器の訓練</a><ul>
+<li class="chapter" data-level="4.1" data-path="section-4.html"><a href="section-4.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 学習器モデルへのアクセス</a></li>
+<li class="chapter" data-level="4.2" data-path="section-4.html"><a href="section-4.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> その他のオプションとコメント</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="section-5.html"><a href="section-5.html"><i class="fa fa-check"></i><b>5</b> 予測</a><ul>
+<li class="chapter" data-level="5.1" data-path="section-5.html"><a href="section-5.html#section-5.1"><i class="fa fa-check"></i><b>5.1</b> 新しいデータに対する結果を予測する</a></li>
+<li class="chapter" data-level="5.2" data-path="section-5.html"><a href="section-5.html#section-5.2"><i class="fa fa-check"></i><b>5.2</b> 予測へのアクセス</a></li>
+<li class="chapter" data-level="5.3" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.3</b> 回帰: 標準誤差を取得する</a></li>
+<li class="chapter" data-level="5.4" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.4</b> 分類とクラスタリング: 確率を取得する</a></li>
+<li class="chapter" data-level="5.5" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.5</b> 分類: 混同行列を取得する</a></li>
+<li class="chapter" data-level="5.6" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.6</b> 分類: 決定閾値の調整</a></li>
+<li class="chapter" data-level="5.7" data-path="section-5.html"><a href="section-5.html#section-5.7"><i class="fa fa-check"></i><b>5.7</b> 予測の可視化</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="section-6.html"><a href="section-6.html"><i class="fa fa-check"></i><b>6</b> データの前処理</a><ul>
+<li class="chapter" data-level="6.1" data-path="section-6.html"><a href="section-6.html#section-6.1"><i class="fa fa-check"></i><b>6.1</b> 前処理と学習器を融合する</a></li>
+<li class="chapter" data-level="6.2" data-path="section-6.html"><a href="section-6.html#makepreprocwrappercaret"><i class="fa fa-check"></i><b>6.2</b> <code>makePreprocWrapperCaret</code>を使用した前処理</a></li>
+<li class="chapter" data-level="6.3" data-path="section-6.html"><a href="section-6.html#section-6.3"><i class="fa fa-check"></i><b>6.3</b> 前処理オプションと学習器パラメータの連結チューニング</a></li>
+<li class="chapter" data-level="6.4" data-path="section-6.html"><a href="section-6.html#section-6.4"><i class="fa fa-check"></i><b>6.4</b> 独自の前処理ラッパーを書く</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="section-6.html"><a href="section-6.html#section-6.4.1"><i class="fa fa-check"></i><b>6.4.1</b> 訓練関数の指定</a></li>
+<li class="chapter" data-level="6.4.2" data-path="section-6.html"><a href="section-6.html#section-6.4.2"><i class="fa fa-check"></i><b>6.4.2</b> 予測関数の指定</a></li>
+<li class="chapter" data-level="6.4.3" data-path="section-6.html"><a href="section-6.html#section-6.4.3"><i class="fa fa-check"></i><b>6.4.3</b> 前処理ラッパーの作成</a></li>
+<li class="chapter" data-level="6.4.4" data-path="section-6.html"><a href="section-6.html#section-6.4.4"><i class="fa fa-check"></i><b>6.4.4</b> 前処理と学習器のパラメータを連結してチューニングする</a></li>
+<li class="chapter" data-level="6.4.5" data-path="section-6.html"><a href="section-6.html#section-6.4.5"><i class="fa fa-check"></i><b>6.4.5</b> 前処理ラッパー関数</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="section-7.html"><a href="section-7.html"><i class="fa fa-check"></i><b>7</b> 学習器の性能を評価する</a><ul>
+<li class="chapter" data-level="7.1" data-path="section-7.html"><a href="section-7.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 利用可能な性能指標</a></li>
+<li class="chapter" data-level="7.2" data-path="section-7.html"><a href="section-7.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 指標の一覧</a></li>
+<li class="chapter" data-level="7.3" data-path="section-7.html"><a href="section-7.html#section-7.3"><i class="fa fa-check"></i><b>7.3</b> 性能指標を計算する</a></li>
+<li class="chapter" data-level="7.4" data-path="section-7.html"><a href="section-7.html#section-7.4"><i class="fa fa-check"></i><b>7.4</b> 指標計算に必要な情報</a></li>
+<li class="chapter" data-level="7.5" data-path="section-7.html"><a href="section-7.html#section-7.5"><i class="fa fa-check"></i><b>7.5</b> 性能指標へのアクセス</a></li>
+<li class="chapter" data-level="7.6" data-path="section-7.html"><a href="section-7.html#section-7.6"><i class="fa fa-check"></i><b>7.6</b> 2クラス分類</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="section-7.html"><a href="section-7.html#section-7.6.1"><i class="fa fa-check"></i><b>7.6.1</b> 性能と閾値の関係をプロットする</a></li>
+<li class="chapter" data-level="7.6.2" data-path="section-7.html"><a href="section-7.html#roc"><i class="fa fa-check"></i><b>7.6.2</b> ROC</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="section-8.html"><a href="section-8.html"><i class="fa fa-check"></i><b>8</b> リサンプリング</a><ul>
+<li class="chapter" data-level="8.1" data-path="section-8.html"><a href="section-8.html#section-8.1"><i class="fa fa-check"></i><b>8.1</b> リサンプリング手法を決める</a></li>
+<li class="chapter" data-level="8.2" data-path="section-8.html"><a href="section-8.html#section-8.2"><i class="fa fa-check"></i><b>8.2</b> リサンプリングを実行する</a></li>
+<li class="chapter" data-level="8.3" data-path="section-8.html"><a href="section-8.html#section-8.3"><i class="fa fa-check"></i><b>8.3</b> リサンプル結果へのアクセス</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="section-8.html"><a href="section-8.html#section-8.3.1"><i class="fa fa-check"></i><b>8.3.1</b> 予測値</a></li>
+<li class="chapter" data-level="8.3.2" data-path="section-8.html"><a href="section-8.html#section-8.3.2"><i class="fa fa-check"></i><b>8.3.2</b> 訓練済みモデルの抽出</a></li>
+<li class="chapter" data-level="8.3.3" data-path="section-8.html"><a href="section-8.html#section-8.3.3"><i class="fa fa-check"></i><b>8.3.3</b> 他の抽出方法</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="section-8.html"><a href="section-8.html#section-8.4"><i class="fa fa-check"></i><b>8.4</b> 階層化とブロック化</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="section-8.html"><a href="section-8.html#section-8.4.1"><i class="fa fa-check"></i><b>8.4.1</b> 目的変数の階層化</a></li>
+<li class="chapter" data-level="8.4.2" data-path="section-8.html"><a href="section-8.html#section-8.4.2"><i class="fa fa-check"></i><b>8.4.2</b> 説明変数の階層化</a></li>
+<li class="chapter" data-level="8.4.3" data-path="section-8.html"><a href="section-8.html#section-8.4.3"><i class="fa fa-check"></i><b>8.4.3</b> ブロック化</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="section-8.html"><a href="section-8.html#section-8.5"><i class="fa fa-check"></i><b>8.5</b> リサンプリングの詳細とリサンプルのインスタンス</a></li>
+<li class="chapter" data-level="8.6" data-path="section-8.html"><a href="section-8.html#section-8.6"><i class="fa fa-check"></i><b>8.6</b> 性能指標の集約</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.1</b> 例: 一つの指標に複数の集約方法</a></li>
+<li class="chapter" data-level="8.6.2" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.2</b> 例: 訓練セットの誤差を計算する</a></li>
+<li class="chapter" data-level="8.6.3" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.3</b> 例: ブートストラップ</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="section-8.html"><a href="section-8.html#section-8.7"><i class="fa fa-check"></i><b>8.7</b> 便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="section-9.html"><a href="section-9.html"><i class="fa fa-check"></i><b>9</b> ハイパーパラメータのチューニング</a><ul>
+<li class="chapter" data-level="9.1" data-path="section-9.html"><a href="section-9.html#section-9.1"><i class="fa fa-check"></i><b>9.1</b> パラメータ探索空間の指定</a></li>
+<li class="chapter" data-level="9.2" data-path="section-9.html"><a href="section-9.html#section-9.2"><i class="fa fa-check"></i><b>9.2</b> 最適化アルゴリズムの指定</a></li>
+<li class="chapter" data-level="9.3" data-path="section-9.html"><a href="section-9.html#section-9.3"><i class="fa fa-check"></i><b>9.3</b> チューニングの実行</a></li>
+<li class="chapter" data-level="9.4" data-path="section-9.html"><a href="section-9.html#section-9.4"><i class="fa fa-check"></i><b>9.4</b> チューニング結果へのアクセス</a></li>
+<li class="chapter" data-level="9.5" data-path="section-9.html"><a href="section-9.html#section-9.5"><i class="fa fa-check"></i><b>9.5</b> ハイパーパラメータチューニングの影響を調査する</a></li>
+<li class="chapter" data-level="9.6" data-path="section-9.html"><a href="section-9.html#section-9.6"><i class="fa fa-check"></i><b>9.6</b> その他いろいろ</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="section-10.html"><a href="section-10.html"><i class="fa fa-check"></i><b>10</b> ベンチマーク試験</a><ul>
+<li class="chapter" data-level="10.1" data-path="section-10.html"><a href="section-10.html#section-10.1"><i class="fa fa-check"></i><b>10.1</b> ベンチマーク試験の実施</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="section-10.html"><a href="section-10.html#section-10.1.1"><i class="fa fa-check"></i><b>10.1.1</b> 実験を再現可能にする</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="section-10.html"><a href="section-10.html#section-10.2"><i class="fa fa-check"></i><b>10.2</b> ベンチマーク結果へのアクセス</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="section-10.html"><a href="section-10.html#section-10.2.1"><i class="fa fa-check"></i><b>10.2.1</b> 学習器の性能</a></li>
+<li class="chapter" data-level="10.2.2" data-path="section-10.html"><a href="section-10.html#-1"><i class="fa fa-check"></i><b>10.2.2</b> 予測</a></li>
+<li class="chapter" data-level="10.2.3" data-path="section-10.html"><a href="section-10.html#id"><i class="fa fa-check"></i><b>10.2.3</b> ID</a></li>
+<li class="chapter" data-level="10.2.4" data-path="section-10.html"><a href="section-10.html#section-10.2.4"><i class="fa fa-check"></i><b>10.2.4</b> フィット済みモデル</a></li>
+<li class="chapter" data-level="10.2.5" data-path="section-10.html"><a href="section-10.html#section-10.2.5"><i class="fa fa-check"></i><b>10.2.5</b> 学習器と性能指標</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="section-10.html"><a href="section-10.html#section-10.3"><i class="fa fa-check"></i><b>10.3</b> ベンチマーク結果のマージ</a></li>
+<li class="chapter" data-level="10.4" data-path="section-10.html"><a href="section-10.html#section-10.4"><i class="fa fa-check"></i><b>10.4</b> ベンチマークの分析と可視化</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="section-10.html"><a href="section-10.html#section-10.4.1"><i class="fa fa-check"></i><b>10.4.1</b> 例：線形判別分析と分類木、ランダムフォレストの比較</a></li>
+<li class="chapter" data-level="10.4.2" data-path="section-10.html"><a href="section-10.html#section-10.4.2"><i class="fa fa-check"></i><b>10.4.2</b> 可視化</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlrパッケージチュートリアル</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section-6" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> データの前処理</h1>
+<p>データの前処理というのは、学習アルゴリズムを適用する前にデータに施すあらゆる種類の変換のことだ。例えば、データの矛盾の発見と解決、欠損値への代入、外れ値の特定・除去・置換、数値データの離散化、カテゴリカルデータからのダミー変数の生成、標準化やBox-Cox変換などのあらゆる種類の変換、次元削減、特徴量の抽出・選択などが含まれる。</p>
+<p><code>mlr</code>は前処理に関して幾つかの選択肢を用意している。以下に示すようなタスク(あるいはデータフレーム)を変更する単純な手法の中には、タスクについての説明で既に触れたものもある。</p>
+<ul>
+<li><code>capLargeValues</code>: 大きな値や無限大の値の変換。</li>
+<li><code>createDummyFeature</code>: 因子型特徴量からのダミー変数の生成。</li>
+<li><code>dropFeatures</code>: 特徴量の削除。</li>
+<li><code>joinClassLevels</code>: (分類のみ)複数のクラスを併合して、大きな1つのクラスにする。</li>
+<li><code>mergeSmallFactorLevels</code>: 因子型特徴量において、例数の少ない水準を併合する。</li>
+<li><code>normalizeFeatures</code>: 正規化には複数の異なったやり方がある。標準化や特定の範囲への再スケールなど。</li>
+<li><code>removeConstantFeatures</code>: 1つの値しか持っていない特徴量(=定数)を除去する。</li>
+<li><code>subsetTask</code>: 観測値や特徴量をタスクから除去する。</li>
+</ul>
+<p>また、以下のものについてはチュートリアルを用意してある。</p>
+<ul>
+<li>特徴量選択</li>
+<li>欠損値への代入</li>
+</ul>
+<div id="section-6.1" class="section level2">
+<h2><span class="header-section-number">6.1</span> 前処理と学習器を融合する</h2>
+<p><code>mlr</code>のラッパー機能により、学習器と前処理を組み合わせることができる。これは、前処理が学習器に属し、訓練や予測の度に実行されるということを意味する。</p>
+<p>このようにすることで非常に便利な点がある。データやタスクの変更なしに、簡単に学習器と前処理の組合せを変えることができるのだ。</p>
+<p>また、これは前処理を行ってから学習器のパフォーマンスを測定する際にありがちな一般的な間違いを避けることにもつながる。前処理は学習アルゴリズムとは完全に独立したものだと考えられがちだ。学習器のパフォーマンスを測定する場合を考えてみよう。例えば、クロスバリデーションで雨処理を事前にデータセット全体に対して行い、学習と予測は学習器だけで行うような場合だ。前処理として何が行われたかによっては、評価が楽観的になる危険性がある。例えば、(欠損値への)平均値の代入という前処理が学習器の性能評価前に、データ全体を対象に行われたとすると、これは楽観的なパフォーマンス評価につながる。</p>
+<p>前処理にはデータ依存的なものとデータ非依存的なものがあることをはっきりさせておこう。データ依存的な前処理とは、前処理のやり方がデータに依存しており、データセットが異なれば結果も異なるというようなもののことだ。一方でデータ非依存的な前処理は常に結果が同じになる。</p>
+<p>データの間違いを修正したり、ID列のような学習に使うべきではないデータ列の除去のような前処理は、明らかにデータ非依存的である。一方、先程例に挙げた欠損値への平均値の代入はデータ依存的である。代入を定数で行うのであれば違うが。</p>
+<p>前処理と組み合わせた学習器の性能評価を正しく行うためには、全てのデータ依存的な前処理をリサンプリングに含める必要がある。学習器と前処理を融合させれば、これは自動的に可能になる。</p>
+<p>この目的のために、<code>mlr</code>パッケージは2つのラッパーを用意している。</p>
+<ul>
+<li><code>makePreprocWrapperCaret</code>は<code>caret</code>パッケージの<code>preProcess</code>関数に対するインターフェースを提供するラッパー。</li>
+<li><code>makePreprocWrapper</code>を使えば、訓練と予測の前の動作を定義することで独自の前処理を作成できる。</li>
+</ul>
+<p>これらを使用する前処理は、<code>normalizeFeatures</code>などを使う前処理とは異なり、ラップされた学習器に組み込まれる。</p>
+<ul>
+<li>タスクそのものは変更されない。</li>
+<li>前処理はデータ全体に対して予め行われるのではなく、リサンプリングなど、訓練とテストの対が発生する毎に実行される。</li>
+<li>前処理に関わる制御可能なパラメータは、学習器のパラメータと一緒に調整できる。</li>
+</ul>
+<p>まずは<code>makePreprocWrapperCaret</code>の例から見ていこう。</p>
+</div>
+<div id="makepreprocwrappercaret" class="section level2">
+<h2><span class="header-section-number">6.2</span> <code>makePreprocWrapperCaret</code>を使用した前処理</h2>
+<p><code>makePreprocWrapperCaret</code>は<code>caret</code>パッケージの<code>preProcess</code>関数へのインターフェースだ。<code>PreProcess</code>関数は、欠損値への代入やスケール変換やBox-Cox変換、独立主成分分析による次元削減など、様々な手法を提供する関数だ。具体的に何が可能かは<code>preProcess</code>関数のヘルプページ(<a href="https://www.rdocumentation.org/packages/caret/versions/6.0-78/topics/preProcess">preProcess function | R Documentation</a>)を確認してもらいたい。</p>
+<p>まず、<code>makePreprocWrapperCaret</code>と<code>preProcess</code>の違いを確認しておこう。</p>
+<ul>
+<li><code>makePreprocWrapperCaret</code>は<code>preProcess</code>とほぼ同じ仮引数を持つが、仮引数名に<code>ppc.</code>というプレフィックスが付く。</li>
+<li>上記の例外は<code>method</code>引数だ。この引数は<code>makePreprocWrapperCaret</code>には無い。その代わりに、本来<code>method</code>に渡す前処理に関するオプションは、対応する仮引数に論理値を指定することで制御する。</li>
+</ul>
+<p>例を見よう。<code>preProcess</code>では行列またはデータフレーム<code>x</code>に対して、次のように前処理を行う。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">preProcess</span>(x, <span class="dt">method=</span> <span class="kw">c</span>(<span class="st">&quot;knnInpute&quot;</span>, <span class="st">&quot;pca&quot;</span>), <span class="dt">pcaComp =</span> <span class="dv">10</span>)</code></pre></div>
+<p>一方、<code>makePreporcWrapperCaret</code>では、<code>Learner</code>クラスのオブジェクトまたはクラスの名前(<code>&quot;classif.lda&quot;</code>など)を引数にとって、次のように前処理を指定する。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">makePreprocWrapperCaret</span>(learner, <span class="dt">ppc.knnImpute =</span> <span class="ot">TRUE</span>, <span class="dt">ppc.pca =</span> <span class="ot">TRUE</span>, <span class="dt">ppc.pcaComp =</span> <span class="dv">10</span>)</code></pre></div>
+<p>この例のように複数の前処理(注: kNNを使った代入と主成分分析)を有効にした場合、それらは特定の順序で実行される。詳細は<code>preProcess</code>関数のヘルプを確認してほしい(訳注: Details後半の“The operations are applied in this order:…”以下。主成分分析は代入後に実施。)。</p>
+<p>以下に主成分分析による次元削減の例を示そう。これは無闇に使用して良い手法ではないが、高次元のデータで問題が起こるような学習器や、データの回転が有用な学習器に対しては有効である。</p>
+<p>例では<code>soner.task</code>を用いる。これは208の観測値と60の特徴量を持つ。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sonar.task</code></pre></div>
+<pre><code>$&gt; Supervised task: Sonar-example
+$&gt; Type: classif
+$&gt; Target: Class
+$&gt; Observations: 208
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;       60        0        0 
+$&gt; Missings: FALSE
+$&gt; Has weights: FALSE
+$&gt; Has blocking: FALSE
+$&gt; Classes: 2
+$&gt;   M   R 
+$&gt; 111  97 
+$&gt; Positive class: M</code></pre>
+<p>今回は、<code>MASS</code>パッケージによる二次判別分析と、主成分分析による前処理を組み合わせる。また、閾値として0.9を設定する。これはつまり、主成分が累積寄与率90%を保持しなければならないという指示になる。データは主成分分析の前に自動的に標準化される。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makePreprocWrapperCaret</span>(<span class="st">&quot;classif.qda&quot;</span>, <span class="dt">ppc.pca =</span> <span class="ot">TRUE</span>, <span class="dt">ppc.thresh =</span> <span class="fl">0.9</span>)
+lrn</code></pre></div>
+<pre><code>$&gt; Learner classif.qda.preproc from package MASS
+$&gt; Type: classif
+$&gt; Name: ; Short name: 
+$&gt; Class: PreprocWrapperCaret
+$&gt; Properties: twoclass,multiclass,numerics,factors,prob
+$&gt; Predict-Type: response
+$&gt; Hyperparameters: ppc.BoxCox=FALSE,ppc.YeoJohnson=FALSE,ppc.expoTrans=FALSE,ppc.center=TRUE,ppc.scale=TRUE,ppc.range=FALSE,ppc.knnImpute=FALSE,ppc.bagImpute=FALSE,ppc.medianImpute=FALSE,ppc.pca=TRUE,ppc.ica=FALSE,ppc.spatialSign=FALSE,ppc.thresh=0.9,ppc.na.remove=TRUE,ppc.k=5,ppc.fudge=0.2,ppc.numUnique=3</code></pre>
+<p>ラップされた学習器を<code>soner.task</code>によって訓練する。訓練したモデルを確認することで、22の主成分が訓練に使われたことがわかるだろう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod =<span class="st"> </span><span class="kw">train</span>(lrn, sonar.task)
+mod</code></pre></div>
+<pre><code>$&gt; Model for learner.id=classif.qda.preproc; learner.class=PreprocWrapperCaret
+$&gt; Trained on: task.id = Sonar-example; obs = 208; features = 60
+$&gt; Hyperparameters: ppc.BoxCox=FALSE,ppc.YeoJohnson=FALSE,ppc.expoTrans=FALSE,ppc.center=TRUE,ppc.scale=TRUE,ppc.range=FALSE,ppc.knnImpute=FALSE,ppc.bagImpute=FALSE,ppc.medianImpute=FALSE,ppc.pca=TRUE,ppc.ica=FALSE,ppc.spatialSign=FALSE,ppc.thresh=0.9,ppc.na.remove=TRUE,ppc.k=5,ppc.fudge=0.2,ppc.numUnique=3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getLearnerModel</span>(mod)</code></pre></div>
+<pre><code>$&gt; Model for learner.id=classif.qda; learner.class=classif.qda
+$&gt; Trained on: task.id = Sonar-example; obs = 208; features = 22
+$&gt; Hyperparameters:</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getLearnerModel</span>(mod, <span class="dt">more.unwrap =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>$&gt; Call:
+$&gt; qda(f, data = getTaskData(.task, .subset, recode.target = &quot;drop.levels&quot;))
+$&gt; 
+$&gt; Prior probabilities of groups:
+$&gt;         M         R 
+$&gt; 0.5336538 0.4663462 
+$&gt; 
+$&gt; Group means:
+$&gt;          PC1        PC2        PC3         PC4         PC5         PC6
+$&gt; M  0.5976122 -0.8058235  0.9773518  0.03794232 -0.04568166 -0.06721702
+$&gt; R -0.6838655  0.9221279 -1.1184128 -0.04341853  0.05227489  0.07691845
+$&gt;          PC7         PC8        PC9       PC10        PC11          PC12
+$&gt; M  0.2278162 -0.01034406 -0.2530606 -0.1793157 -0.04084466 -0.0004789888
+$&gt; R -0.2606969  0.01183702  0.2895848  0.2051963  0.04673977  0.0005481212
+$&gt;          PC13       PC14        PC15        PC16        PC17        PC18
+$&gt; M -0.06138758 -0.1057137  0.02808048  0.05215865 -0.07453265  0.03869042
+$&gt; R  0.07024765  0.1209713 -0.03213333 -0.05968671  0.08528994 -0.04427460
+$&gt;          PC19         PC20        PC21         PC22
+$&gt; M -0.01192247  0.006098658  0.01263492 -0.001224809
+$&gt; R  0.01364323 -0.006978877 -0.01445851  0.001401586</code></pre>
+<p>二次判別分析について、主成分分析を使う場合と使わない場合をベンチマーク試験により比較してみよう。今回の例では各クラスの例数が少ないので、二次判別分析の際のエラーを防ぐためにリサンプリングにおいて層別サンプリングを行っている。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rin =<span class="st"> </span><span class="kw">makeResampleInstance</span>(<span class="st">&quot;CV&quot;</span>, <span class="dt">iters =</span> <span class="dv">3</span>, <span class="dt">stratify =</span> <span class="ot">TRUE</span>, <span class="dt">task =</span> sonar.task)
+res =<span class="st"> </span><span class="kw">benchmark</span>(<span class="kw">list</span>(<span class="st">&quot;classif.qda&quot;</span>, lrn), sonar.task, rin, <span class="dt">show.info =</span> <span class="ot">FALSE</span>)
+res</code></pre></div>
+<pre><code>$&gt;         task.id          learner.id mmce.test.mean
+$&gt; 1 Sonar-example         classif.qda      0.3848861
+$&gt; 2 Sonar-example classif.qda.preproc      0.1826087</code></pre>
+<p>今回の場合では、二次判別分析に対して主成分分析による前処理が効果的だったことがわかる。</p>
+</div>
+<div id="section-6.3" class="section level2">
+<h2><span class="header-section-number">6.3</span> 前処理オプションと学習器パラメータの連結チューニング</h2>
+<p>今の例をもう少し最適化できないか考えてみよう。今回、任意に設定した0.9という閾値によって、主成分は22になった。しかし、主成分の数はもっと多いほうが良いかもしれないし、少ないほうが良いかもしれない。また、<code>qda</code>関数にはクラス共分散行列やクラス確率の推定方法を制御するためのいくつかのオプションがある。</p>
+<p>学習機と前処理のパラメータは、連結してチューニングすることができる。まずは、ラップされた学習器の全てのパラメータを<code>getParamSet</code>関数で確認してみよう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getParamSet</span>(lrn)</code></pre></div>
+<pre><code>$&gt;                      Type len     Def                      Constr Req
+$&gt; ppc.BoxCox        logical   -   FALSE                           -   -
+$&gt; ppc.YeoJohnson    logical   -   FALSE                           -   -
+$&gt; ppc.expoTrans     logical   -   FALSE                           -   -
+$&gt; ppc.center        logical   -    TRUE                           -   -
+$&gt; ppc.scale         logical   -    TRUE                           -   -
+$&gt; ppc.range         logical   -   FALSE                           -   -
+$&gt; ppc.knnImpute     logical   -   FALSE                           -   -
+$&gt; ppc.bagImpute     logical   -   FALSE                           -   -
+$&gt; ppc.medianImpute  logical   -   FALSE                           -   -
+$&gt; ppc.pca           logical   -   FALSE                           -   -
+$&gt; ppc.ica           logical   -   FALSE                           -   -
+$&gt; ppc.spatialSign   logical   -   FALSE                           -   -
+$&gt; ppc.thresh        numeric   -    0.95                    0 to Inf   -
+$&gt; ppc.pcaComp       integer   -       -                    1 to Inf   -
+$&gt; ppc.na.remove     logical   -    TRUE                           -   -
+$&gt; ppc.k             integer   -       5                    1 to Inf   -
+$&gt; ppc.fudge         numeric   -     0.2                    0 to Inf   -
+$&gt; ppc.numUnique     integer   -       3                    1 to Inf   -
+$&gt; ppc.n.comp        integer   -       -                    1 to Inf   -
+$&gt; method           discrete   -  moment            moment,mle,mve,t   -
+$&gt; nu                numeric   -       5                    2 to Inf   Y
+$&gt; predict.method   discrete   - plug-in plug-in,predictive,debiased   -
+$&gt;                  Tunable Trafo
+$&gt; ppc.BoxCox          TRUE     -
+$&gt; ppc.YeoJohnson      TRUE     -
+$&gt; ppc.expoTrans       TRUE     -
+$&gt; ppc.center          TRUE     -
+$&gt; ppc.scale           TRUE     -
+$&gt; ppc.range           TRUE     -
+$&gt; ppc.knnImpute       TRUE     -
+$&gt; ppc.bagImpute       TRUE     -
+$&gt; ppc.medianImpute    TRUE     -
+$&gt; ppc.pca             TRUE     -
+$&gt; ppc.ica             TRUE     -
+$&gt; ppc.spatialSign     TRUE     -
+$&gt; ppc.thresh          TRUE     -
+$&gt; ppc.pcaComp         TRUE     -
+$&gt; ppc.na.remove       TRUE     -
+$&gt; ppc.k               TRUE     -
+$&gt; ppc.fudge           TRUE     -
+$&gt; ppc.numUnique       TRUE     -
+$&gt; ppc.n.comp          TRUE     -
+$&gt; method              TRUE     -
+$&gt; nu                  TRUE     -
+$&gt; predict.method      TRUE     -</code></pre>
+<p><code>ppc.</code>というプレフィックスのついたものが前処理のパラメータで、他が<code>qda</code>関数のパラメータだ。主成分分析の閾値を<code>ppc.thresh</code>を使って調整する代わりに、主成分の数そのものを<code>ppc.pcaComp</code>を使って調整できる。さらに、<code>qda</code>関数に対しては、2種類の事後確率推定法(通常のプラグイン推定と不偏推定)を試してみよう。</p>
+<p>今回は解像度10でグリッドサーチを行ってみよう。もっと解像度を高くしたくなるかもしれないが、今回はあくまでデモだ。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ps =<span class="st"> </span><span class="kw">makeParamSet</span>(
+  <span class="kw">makeIntegerParam</span>(<span class="st">&quot;ppc.pcaComp&quot;</span>, <span class="dt">lower =</span> <span class="dv">1</span>, <span class="dt">upper =</span> <span class="kw">getTaskNFeats</span>(sonar.task)),
+  <span class="kw">makeDiscreteParam</span>(<span class="st">&quot;predict.method&quot;</span>, <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;plug-in&quot;</span>, <span class="st">&quot;debiased&quot;</span>))
+)
+ctrl =<span class="st"> </span><span class="kw">makeTuneControlGrid</span>(<span class="dt">resolution =</span> <span class="dv">10</span>)
+res =<span class="st"> </span><span class="kw">tuneParams</span>(lrn, sonar.task, rin, <span class="dt">par.set =</span> ps, <span class="dt">control =</span> ctrl, <span class="dt">show.info =</span> <span class="ot">FALSE</span>)
+res</code></pre></div>
+<pre><code>$&gt; Tune result:
+$&gt; Op. pars: ppc.pcaComp=21; predict.method=plug-in
+$&gt; mmce.test.mean=0.168</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.data.frame</span>(res<span class="op">$</span>opt.path)[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]</code></pre></div>
+<pre><code>$&gt;    ppc.pcaComp predict.method mmce.test.mean
+$&gt; 1            1        plug-in      0.5288475
+$&gt; 2            8        plug-in      0.2066253
+$&gt; 3           14        plug-in      0.2162871
+$&gt; 4           21        plug-in      0.1681159
+$&gt; 5           27        plug-in      0.2500345
+$&gt; 6           34        plug-in      0.2404417
+$&gt; 7           40        plug-in      0.2643892
+$&gt; 8           47        plug-in      0.2836439
+$&gt; 9           53        plug-in      0.3318150
+$&gt; 10          60        plug-in      0.3848861
+$&gt; 11           1       debiased      0.5241546
+$&gt; 12           8       debiased      0.2642512
+$&gt; 13          14       debiased      0.2933057
+$&gt; 14          21       debiased      0.2596963
+$&gt; 15          27       debiased      0.2449965
+$&gt; 16          34       debiased      0.2304348
+$&gt; 17          40       debiased      0.2498275
+$&gt; 18          47       debiased      0.2928226
+$&gt; 19          53       debiased      0.2739130
+$&gt; 20          60       debiased      0.3217391</code></pre>
+<p><code>&quot;plug-in&quot;</code>と<code>&quot;debiased&quot;</code>のいずれでも少なめ(27以下)の主成分が有効で、<code>&quot;plug-in&quot;</code>の方が若干エラー率が低いようだ。</p>
+</div>
+<div id="section-6.4" class="section level2">
+<h2><span class="header-section-number">6.4</span> 独自の前処理ラッパーを書く</h2>
+<p><code>makePreprocWrapperCaret</code>で不満があれば、<code>makePreprocWrapper</code>関数で独自の前処理ラッパーを作成できる。</p>
+<p>ラッパーに関するチュートリアルでも説明しているが、ラッパーは<strong>訓練</strong>と<strong>予測</strong>という2つのメソッドを使って実装される。前処理ラッパーの場合は、メソッドは学習と予測の前に何をするかを指定するものであり、これは完全にユーザーが指定する。</p>
+<p>以下に例として、訓練と予測の前にデータの中心化とスケーリングを行うラッパーの作成方法を示そう。k最近傍法やサポートベクターマシン、ニューラルネットワークなどは通常スケーリングされた特徴量を必要とする。多くの組み込みスケーリング手法は、データセットを事前にスケーリングし、テストデータセットもそれに従ってスケーリングされる。以下では、学習器にスケーリングオプションを追加し、<code>scale</code>関数と組み合わせる方法を示す。</p>
+<p>今回この単純な例を選んだのはあくまで説明のためだ。中心化とスケーリングは<code>makePreprocWrapperCaret</code>でも可能だということに注意してほしい。</p>
+<div id="section-6.4.1" class="section level3">
+<h3><span class="header-section-number">6.4.1</span> 訓練関数の指定</h3>
+<p><strong>訓練</strong>(ステップで使う)関数は以下の引数を持つ関数でなければならない。</p>
+<ul>
+<li><code>data</code>: 全ての特徴量と目的変数を列として含むデータフレーム。</li>
+<li><code>target</code>: <code>data</code>に含まれる目的変数の名前。</li>
+<li><code>args</code>: 前処理に関わるその他の引数とパラメータのリスト。</li>
+</ul>
+<p>この関数は<code>$data</code>と<code>$control</code>を要素として持つリストを返す必要がある。<code>$data</code>は前処理されたデータセットを、<code>$control</code>には予測のために必要な全ての情報を格納する。</p>
+<p>スケーリングのための訓練関数の定義例を以下に示す。これは数値型の特徴量に対して<code>scale</code>関数を呼び出し、スケーリングされたデータと関連するスケーリングパラメータを返す。</p>
+<p><code>args</code>は<code>scale</code>関数の引数である<code>center</code>と<code>scale</code>引数を含み、予測で使用するためにこれを<code>$control</code>スロットに保持する。これらの引数は、論理値または数値型の列の数に等しい長さの数値型ベクトルで指定する必要がある。<code>center</code>引数は数値を渡された場合にはその値を各データから引くが、<code>TRUE</code>が指定された場合には平均値を引く。<code>scale</code>引数は数値を渡されるとその値で各データを割るが、<code>TRUE</code>の場合は標準偏差か二乗平均平方根を引く(いずれになるかは<code>center</code>引数に依存する)。2つの引数のいずれかor両方に<code>TRUE</code>が指定された場合には、この値を予測の段階で使用するためには返り値の<code>$control</code>スロットに保持しておく必要があるという点に注意しよう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trainfun =<span class="st"> </span><span class="cf">function</span>(data, target, <span class="dt">args =</span> <span class="kw">list</span>(center, scale)){
+  ## 数値特徴量を特定する
+  cns =<span class="st"> </span><span class="kw">colnames</span>(data)
+  nums =<span class="st"> </span><span class="kw">setdiff</span>(cns[<span class="kw">sapply</span>(data, is.numeric)], target)
+  ## 数値特徴量を抽出し、scale関数を呼び出す
+  x =<span class="st"> </span><span class="kw">as.matrix</span>(data[, nums, <span class="dt">drop =</span> <span class="ot">FALSE</span>])
+  x =<span class="st"> </span><span class="kw">scale</span>(x, <span class="dt">center =</span> args<span class="op">$</span>center, <span class="dt">scale =</span> args<span class="op">$</span>scale)
+  ## スケーリングパラメータを後で予測に使うためにcontrolに保持する
+  control =<span class="st"> </span>args
+  <span class="cf">if</span>(<span class="kw">is.logical</span>(control<span class="op">$</span>center) <span class="op">&amp;&amp;</span><span class="st"> </span>control<span class="op">$</span>center){
+    control<span class="op">$</span>center =<span class="st"> </span><span class="kw">attr</span>(x, <span class="st">&quot;scaled:center&quot;</span>)
+  }
+  <span class="cf">if</span>(<span class="kw">is.logical</span>(control<span class="op">$</span>scale) <span class="op">&amp;&amp;</span><span class="st"> </span>control<span class="op">$</span>scale){
+    control<span class="op">$</span>scale =<span class="st"> </span><span class="kw">attr</span>(x, <span class="st">&quot;scaled:scale&quot;</span>)
+  }
+  ## 結果をdataにまとめる
+  data =<span class="st"> </span>data[, <span class="kw">setdiff</span>(cns, nums), drop =<span class="st"> </span><span class="ot">FALSE</span>]
+  data =<span class="st"> </span><span class="kw">cbind</span>(data, <span class="kw">as.data.frame</span>(x))
+  <span class="kw">return</span>(<span class="kw">list</span>(<span class="dt">data =</span> data, <span class="dt">control =</span> control))
+}</code></pre></div>
+</div>
+<div id="section-6.4.2" class="section level3">
+<h3><span class="header-section-number">6.4.2</span> 予測関数の指定</h3>
+<p><strong>予測</strong>(ステップで使う)関数は以下の引数を持つ必要がある。</p>
+<ul>
+<li><code>data</code>: 特徴量のみをもつデータフレーム。(予測ステップでは目的変数の値は未知なのが普通だ。)</li>
+<li><code>target</code>: 目的変数の名前。</li>
+<li><code>args</code>: 訓練関数に渡された<code>args</code>。</li>
+<li><code>control</code>: 訓練関数が返したもの。</li>
+</ul>
+<p>この関数は前処理済みのデータを返す。</p>
+<p>今回の例では、予測関数は数値特徴量を訓練ステージで<code>control</code>に保持されたパラメータを使ってスケーリングする。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">predictfun =<span class="st"> </span><span class="cf">function</span>(data, target, args, control){
+  ## 数値特徴量の特定
+  cns =<span class="st"> </span><span class="kw">colnames</span>(data)
+  nums =<span class="st"> </span>cns[<span class="kw">sapply</span>(data, is.numeric)]
+  ## データから数値特徴量を抽出してscale関数を適用する
+  x =<span class="st"> </span><span class="kw">as.matrix</span>(data[, nums, <span class="dt">drop =</span> <span class="ot">FALSE</span>])
+  x =<span class="st"> </span><span class="kw">scale</span>(x, <span class="dt">center =</span> control<span class="op">$</span>center, <span class="dt">scale =</span> control<span class="op">$</span>scale)
+  ## dataにまとめて返す
+  data =<span class="st"> </span>data[, <span class="kw">setdiff</span>(cns, nums), drop =<span class="st"> </span><span class="ot">FALSE</span>]
+  data =<span class="st"> </span><span class="kw">cbind</span>(data, <span class="kw">as.data.frame</span>(x))
+  <span class="kw">return</span>(data)
+}</code></pre></div>
+</div>
+<div id="section-6.4.3" class="section level3">
+<h3><span class="header-section-number">6.4.3</span> 前処理ラッパーの作成</h3>
+<p>以下では、ニューラルネットワークによる回帰(これは自前のスケーリングオプションを持たない)をベースの学習器として前処理ラッパーを作成する。</p>
+<p>先に定義した<strong>訓練</strong>および<strong>予測</strong>関数を<code>makePreprocWrapper</code>関数の<code>train</code>と<code>predict</code>引数に渡す。<code>par.vals</code>には、訓練関数の<code>args</code>に渡すパラメータをリストとして渡す。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;regr.nnet&quot;</span>, <span class="dt">trace =</span> <span class="ot">FALSE</span>, <span class="dt">decay =</span> <span class="fl">1e-02</span>)
+lrn =<span class="st"> </span><span class="kw">makePreprocWrapper</span>(lrn, <span class="dt">train =</span> trainfun, <span class="dt">predict =</span> predictfun,
+                         <span class="dt">par.vals =</span> <span class="kw">list</span>(<span class="dt">center =</span> <span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>))</code></pre></div>
+<p>データセット<code>BostonHousing</code>を対象にして、スケーリングの有無による平均二乗誤差の違いを確認してみよう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rdesc =<span class="st"> </span><span class="kw">makeResampleDesc</span>(<span class="st">&quot;CV&quot;</span>, <span class="dt">iters =</span> <span class="dv">3</span>)
+
+## スケーリングあり(上で前処理を指定した)
+r =<span class="st"> </span><span class="kw">resample</span>(lrn, bh.task, <span class="dt">resampling =</span> rdesc, <span class="dt">show.info =</span> <span class="ot">FALSE</span>)
+r</code></pre></div>
+<pre><code>$&gt; Resample Result
+$&gt; Task: BostonHousing-example
+$&gt; Learner: regr.nnet.preproc
+$&gt; Aggr perf: mse.test.mean=29.1
+$&gt; Runtime: 0.142855</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 前処理無しの学習器を再度作る
+lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;regr.nnet&quot;</span>, <span class="dt">trace =</span> <span class="ot">FALSE</span>, <span class="dt">decay =</span> <span class="fl">1e-02</span>)
+r =<span class="st"> </span><span class="kw">resample</span>(lrn, bh.task, <span class="dt">resampling =</span> rdesc, <span class="dt">show.info =</span> <span class="ot">FALSE</span>)
+r</code></pre></div>
+<pre><code>$&gt; Resample Result
+$&gt; Task: BostonHousing-example
+$&gt; Learner: regr.nnet
+$&gt; Aggr perf: mse.test.mean=32.8
+$&gt; Runtime: 0.105755</code></pre>
+</div>
+<div id="section-6.4.4" class="section level3">
+<h3><span class="header-section-number">6.4.4</span> 前処理と学習器のパラメータを連結してチューニングする</h3>
+<p>前処理のオプションをどのように設定すれば特定のアルゴリズムに対して上手くいくのかということは、明確には分からないことが多い。<code>makePreprocWrapperCaret</code>の例で、既に前処理と学習器のパラメータを両方ともチューニングする方法を既に見た。</p>
+<p>スケーリングの例では、ニューラルネットに対してスケーリングと中心化の両方を行うのが良いのか、いずれか片方なのか、あるいは行わないほうが良いのかという点を確認することができる。<code>center</code>と<code>scale</code>をチューニングするためには、適切な種類の<code>LearnerParam</code>をパラメータセットに追加する必要がある。</p>
+<p>前述のように、<code>center</code>と<code>scale</code>には数値型か論理値型のいずれかを指定できるが、今回は論理値型のパラメータとしてチューニングしよう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;regr.nnet&quot;</span>, <span class="dt">trace =</span> <span class="ot">FALSE</span>)
+lrn =<span class="st"> </span><span class="kw">makePreprocWrapper</span>(lrn, <span class="dt">train =</span> trainfun, <span class="dt">predict =</span> predictfun,
+                         <span class="dt">par.set =</span> <span class="kw">makeParamSet</span>(
+                           <span class="kw">makeLogicalLearnerParam</span>(<span class="st">&quot;center&quot;</span>),
+                           <span class="kw">makeLogicalLearnerParam</span>(<span class="st">&quot;scale&quot;</span>)
+                         ),
+                         <span class="dt">par.vals =</span> <span class="kw">list</span>(<span class="dt">center =</span> <span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>))
+lrn</code></pre></div>
+<pre><code>$&gt; Learner regr.nnet.preproc from package nnet
+$&gt; Type: regr
+$&gt; Name: ; Short name: 
+$&gt; Class: PreprocWrapper
+$&gt; Properties: numerics,factors,weights
+$&gt; Predict-Type: response
+$&gt; Hyperparameters: size=3,trace=FALSE,center=TRUE,scale=TRUE</code></pre>
+<p>今回はグリッドサーチで<code>nnet</code>の<code>decay</code>パラメータと<code>scale</code>の<code>center</code>と<code>scale</code>パラメータをチューニングする。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rdesc =<span class="st"> </span><span class="kw">makeResampleDesc</span>(<span class="st">&quot;Holdout&quot;</span>)
+ps =<span class="st"> </span><span class="kw">makeParamSet</span>(
+  <span class="kw">makeDiscreteLearnerParam</span>(<span class="st">&quot;decay&quot;</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>)),
+  <span class="kw">makeLogicalLearnerParam</span>(<span class="st">&quot;center&quot;</span>),
+  <span class="kw">makeLogicalLearnerParam</span>(<span class="st">&quot;scale&quot;</span>)
+)
+crrl =<span class="st"> </span><span class="kw">makeTuneControlGrid</span>()
+res =<span class="st"> </span><span class="kw">tuneParams</span>(lrn, bh.task, rdesc, <span class="dt">par.set =</span> ps, <span class="dt">control =</span> ctrl, <span class="dt">show.info =</span> <span class="ot">FALSE</span>)
+res</code></pre></div>
+<pre><code>$&gt; Tune result:
+$&gt; Op. pars: decay=0; center=TRUE; scale=TRUE
+$&gt; mse.test.mean=10.4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.data.frame</span>(res<span class="op">$</span>opt.path)</code></pre></div>
+<pre><code>$&gt;    decay center scale mse.test.mean dob eol error.message exec.time
+$&gt; 1      0   TRUE  TRUE      10.35758   1  NA          &lt;NA&gt;     0.049
+$&gt; 2   0.05   TRUE  TRUE      24.16396   2  NA          &lt;NA&gt;     0.043
+$&gt; 3    0.1   TRUE  TRUE      13.87898   3  NA          &lt;NA&gt;     0.046
+$&gt; 4      0  FALSE  TRUE      67.40683   4  NA          &lt;NA&gt;     0.022
+$&gt; 5   0.05  FALSE  TRUE      12.67467   5  NA          &lt;NA&gt;     0.044
+$&gt; 6    0.1  FALSE  TRUE      13.55953   6  NA          &lt;NA&gt;     0.043
+$&gt; 7      0   TRUE FALSE      54.70995   7  NA          &lt;NA&gt;     0.034
+$&gt; 8   0.05   TRUE FALSE      40.64841   8  NA          &lt;NA&gt;     0.047
+$&gt; 9    0.1   TRUE FALSE      50.72933   9  NA          &lt;NA&gt;     0.044
+$&gt; 10     0  FALSE FALSE      67.40683  10  NA          &lt;NA&gt;     0.021
+$&gt; 11  0.05  FALSE FALSE      49.67953  11  NA          &lt;NA&gt;     0.042
+$&gt; 12   0.1  FALSE FALSE      29.85388  12  NA          &lt;NA&gt;     0.044</code></pre>
+</div>
+<div id="section-6.4.5" class="section level3">
+<h3><span class="header-section-number">6.4.5</span> 前処理ラッパー関数</h3>
+<p>よい前処理ラッパーを作成したのであれば、それを関数としてカプセル化するのは良いアイデアだ。他の人も使えると便利だろうから<code>mlr</code>に追加して欲しい、というのであれば<a href="https://github.com/mlr-org/mlr/issues">Issues · mlr-org/mlr</a>からコンタクトして欲しい。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">makePreprocWrapperScale =<span class="st"> </span><span class="cf">function</span>(learner, <span class="dt">center =</span> <span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>) {
+  trainfun =<span class="st"> </span><span class="cf">function</span>(data, target, <span class="dt">args =</span> <span class="kw">list</span>(center, scale)) {
+    cns =<span class="st"> </span><span class="kw">colnames</span>(data)
+    nums =<span class="st"> </span><span class="kw">setdiff</span>(cns[<span class="kw">sapply</span>(data, is.numeric)], target)
+    x =<span class="st"> </span><span class="kw">as.matrix</span>(data[, nums, <span class="dt">drop =</span> <span class="ot">FALSE</span>])
+    x =<span class="st"> </span><span class="kw">scale</span>(x, <span class="dt">center =</span> args<span class="op">$</span>center, <span class="dt">scale =</span> args<span class="op">$</span>scale)
+    control =<span class="st"> </span>args
+    <span class="cf">if</span> (<span class="kw">is.logical</span>(control<span class="op">$</span>center) <span class="op">&amp;&amp;</span><span class="st"> </span>control<span class="op">$</span>center)
+      control<span class="op">$</span>center =<span class="st"> </span><span class="kw">attr</span>(x, <span class="st">&quot;scaled:center&quot;</span>)
+    <span class="cf">if</span> (<span class="kw">is.logical</span>(control<span class="op">$</span>scale) <span class="op">&amp;&amp;</span><span class="st"> </span>control<span class="op">$</span>scale)
+      control<span class="op">$</span>scale =<span class="st"> </span><span class="kw">attr</span>(x, <span class="st">&quot;scaled:scale&quot;</span>)
+    data =<span class="st"> </span>data[, <span class="kw">setdiff</span>(cns, nums), drop =<span class="st"> </span><span class="ot">FALSE</span>]
+    data =<span class="st"> </span><span class="kw">cbind</span>(data, <span class="kw">as.data.frame</span>(x))
+    <span class="kw">return</span>(<span class="kw">list</span>(<span class="dt">data =</span> data, <span class="dt">control =</span> control))
+  }
+  predictfun =<span class="st"> </span><span class="cf">function</span>(data, target, args, control) {
+    cns =<span class="st"> </span><span class="kw">colnames</span>(data)
+    nums =<span class="st"> </span>cns[<span class="kw">sapply</span>(data, is.numeric)]
+    x =<span class="st"> </span><span class="kw">as.matrix</span>(data[, nums, <span class="dt">drop =</span> <span class="ot">FALSE</span>])
+    x =<span class="st"> </span><span class="kw">scale</span>(x, <span class="dt">center =</span> control<span class="op">$</span>center, <span class="dt">scale =</span> control<span class="op">$</span>scale)
+    data =<span class="st"> </span>data[, <span class="kw">setdiff</span>(cns, nums), drop =<span class="st"> </span><span class="ot">FALSE</span>]
+    data =<span class="st"> </span><span class="kw">cbind</span>(data, <span class="kw">as.data.frame</span>(x))
+    <span class="kw">return</span>(data)
+  }
+  <span class="kw">makePreprocWrapper</span>(
+    learner,
+    <span class="dt">train =</span> trainfun,
+    <span class="dt">predict =</span> predictfun,
+    <span class="dt">par.set =</span> <span class="kw">makeParamSet</span>(
+      <span class="kw">makeLogicalLearnerParam</span>(<span class="st">&quot;center&quot;</span>),
+      <span class="kw">makeLogicalLearnerParam</span>(<span class="st">&quot;scale&quot;</span>)
+    ),
+    <span class="dt">par.vals =</span> <span class="kw">list</span>(<span class="dt">center =</span> center, <span class="dt">scale =</span> scale)
+  )
+}
+
+lrn =<span class="st"> </span><span class="kw">makePreprocWrapperScale</span>(<span class="st">&quot;classif.lda&quot;</span>)
+<span class="kw">train</span>(lrn, iris.task)</code></pre></div>
+<pre><code>$&gt; Model for learner.id=classif.lda.preproc; learner.class=PreprocWrapper
+$&gt; Trained on: task.id = iris-example; obs = 150; features = 4
+$&gt; Hyperparameters: center=TRUE,scale=TRUE</code></pre>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="section-5.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="section-7.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

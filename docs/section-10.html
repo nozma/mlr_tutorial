@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>mlrパッケージチュートリアル</title>
+  <meta name="description" content="mlrパッケージチュートリアル">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="mlrパッケージチュートリアル" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="mlrパッケージチュートリアル" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="section-9.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="1" data-path="quick-start.html"><a href="quick-start.html"><i class="fa fa-check"></i><b>1</b> Quick start</a></li>
+<li class="chapter" data-level="2" data-path="section-2.html"><a href="section-2.html"><i class="fa fa-check"></i><b>2</b> タスク</a><ul>
+<li class="chapter" data-level="2.1" data-path="section-2.html"><a href="section-2.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> タスクの種類と作成</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="section-2.html"><a href="section-2.html#section-2.1.1"><i class="fa fa-check"></i><b>2.1.1</b> 回帰</a></li>
+<li class="chapter" data-level="2.1.2" data-path="section-2.html"><a href="section-2.html#section-2.1.2"><i class="fa fa-check"></i><b>2.1.2</b> 分類</a></li>
+<li class="chapter" data-level="2.1.3" data-path="section-2.html"><a href="section-2.html#section-2.1.3"><i class="fa fa-check"></i><b>2.1.3</b> 生存時間分析</a></li>
+<li class="chapter" data-level="2.1.4" data-path="section-2.html"><a href="section-2.html#section-2.1.4"><i class="fa fa-check"></i><b>2.1.4</b> マルチラベル分類</a></li>
+<li class="chapter" data-level="2.1.5" data-path="section-2.html"><a href="section-2.html#section-2.1.5"><i class="fa fa-check"></i><b>2.1.5</b> クラスター分析</a></li>
+<li class="chapter" data-level="2.1.6" data-path="section-2.html"><a href="section-2.html#section-2.1.6"><i class="fa fa-check"></i><b>2.1.6</b> コスト考慮型分類</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="section-2.html"><a href="section-2.html#section-2.2"><i class="fa fa-check"></i><b>2.2</b> その他の設定</a></li>
+<li class="chapter" data-level="2.3" data-path="section-2.html"><a href="section-2.html#section-2.3"><i class="fa fa-check"></i><b>2.3</b> タスクへのアクセス</a></li>
+<li class="chapter" data-level="2.4" data-path="section-2.html"><a href="section-2.html#section-2.4"><i class="fa fa-check"></i><b>2.4</b> タスクの編集</a></li>
+<li class="chapter" data-level="2.5" data-path="section-2.html"><a href="section-2.html#section-2.5"><i class="fa fa-check"></i><b>2.5</b> タスクの例と便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="section-3.html"><a href="section-3.html"><i class="fa fa-check"></i><b>3</b> 学習器</a><ul>
+<li class="chapter" data-level="3.1" data-path="section-3.html"><a href="section-3.html#section-3.1"><i class="fa fa-check"></i><b>3.1</b> 学習器を構築する</a></li>
+<li class="chapter" data-level="3.2" data-path="section-3.html"><a href="section-3.html#section-3.2"><i class="fa fa-check"></i><b>3.2</b> 学習器へアクセスする</a></li>
+<li class="chapter" data-level="3.3" data-path="section-3.html"><a href="section-3.html#section-3.3"><i class="fa fa-check"></i><b>3.3</b> 学習器の編集</a></li>
+<li class="chapter" data-level="3.4" data-path="section-3.html"><a href="section-3.html#section-3.4"><i class="fa fa-check"></i><b>3.4</b> 学習器一覧</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="section-4.html"><a href="section-4.html"><i class="fa fa-check"></i><b>4</b> 学習器の訓練</a><ul>
+<li class="chapter" data-level="4.1" data-path="section-4.html"><a href="section-4.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 学習器モデルへのアクセス</a></li>
+<li class="chapter" data-level="4.2" data-path="section-4.html"><a href="section-4.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> その他のオプションとコメント</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="section-5.html"><a href="section-5.html"><i class="fa fa-check"></i><b>5</b> 予測</a><ul>
+<li class="chapter" data-level="5.1" data-path="section-5.html"><a href="section-5.html#section-5.1"><i class="fa fa-check"></i><b>5.1</b> 新しいデータに対する結果を予測する</a></li>
+<li class="chapter" data-level="5.2" data-path="section-5.html"><a href="section-5.html#section-5.2"><i class="fa fa-check"></i><b>5.2</b> 予測へのアクセス</a></li>
+<li class="chapter" data-level="5.3" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.3</b> 回帰: 標準誤差を取得する</a></li>
+<li class="chapter" data-level="5.4" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.4</b> 分類とクラスタリング: 確率を取得する</a></li>
+<li class="chapter" data-level="5.5" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.5</b> 分類: 混同行列を取得する</a></li>
+<li class="chapter" data-level="5.6" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.6</b> 分類: 決定閾値の調整</a></li>
+<li class="chapter" data-level="5.7" data-path="section-5.html"><a href="section-5.html#section-5.7"><i class="fa fa-check"></i><b>5.7</b> 予測の可視化</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="section-6.html"><a href="section-6.html"><i class="fa fa-check"></i><b>6</b> データの前処理</a><ul>
+<li class="chapter" data-level="6.1" data-path="section-6.html"><a href="section-6.html#section-6.1"><i class="fa fa-check"></i><b>6.1</b> 前処理と学習器を融合する</a></li>
+<li class="chapter" data-level="6.2" data-path="section-6.html"><a href="section-6.html#makepreprocwrappercaret"><i class="fa fa-check"></i><b>6.2</b> <code>makePreprocWrapperCaret</code>を使用した前処理</a></li>
+<li class="chapter" data-level="6.3" data-path="section-6.html"><a href="section-6.html#section-6.3"><i class="fa fa-check"></i><b>6.3</b> 前処理オプションと学習器パラメータの連結チューニング</a></li>
+<li class="chapter" data-level="6.4" data-path="section-6.html"><a href="section-6.html#section-6.4"><i class="fa fa-check"></i><b>6.4</b> 独自の前処理ラッパーを書く</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="section-6.html"><a href="section-6.html#section-6.4.1"><i class="fa fa-check"></i><b>6.4.1</b> 訓練関数の指定</a></li>
+<li class="chapter" data-level="6.4.2" data-path="section-6.html"><a href="section-6.html#section-6.4.2"><i class="fa fa-check"></i><b>6.4.2</b> 予測関数の指定</a></li>
+<li class="chapter" data-level="6.4.3" data-path="section-6.html"><a href="section-6.html#section-6.4.3"><i class="fa fa-check"></i><b>6.4.3</b> 前処理ラッパーの作成</a></li>
+<li class="chapter" data-level="6.4.4" data-path="section-6.html"><a href="section-6.html#section-6.4.4"><i class="fa fa-check"></i><b>6.4.4</b> 前処理と学習器のパラメータを連結してチューニングする</a></li>
+<li class="chapter" data-level="6.4.5" data-path="section-6.html"><a href="section-6.html#section-6.4.5"><i class="fa fa-check"></i><b>6.4.5</b> 前処理ラッパー関数</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="section-7.html"><a href="section-7.html"><i class="fa fa-check"></i><b>7</b> 学習器の性能を評価する</a><ul>
+<li class="chapter" data-level="7.1" data-path="section-7.html"><a href="section-7.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 利用可能な性能指標</a></li>
+<li class="chapter" data-level="7.2" data-path="section-7.html"><a href="section-7.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 指標の一覧</a></li>
+<li class="chapter" data-level="7.3" data-path="section-7.html"><a href="section-7.html#section-7.3"><i class="fa fa-check"></i><b>7.3</b> 性能指標を計算する</a></li>
+<li class="chapter" data-level="7.4" data-path="section-7.html"><a href="section-7.html#section-7.4"><i class="fa fa-check"></i><b>7.4</b> 指標計算に必要な情報</a></li>
+<li class="chapter" data-level="7.5" data-path="section-7.html"><a href="section-7.html#section-7.5"><i class="fa fa-check"></i><b>7.5</b> 性能指標へのアクセス</a></li>
+<li class="chapter" data-level="7.6" data-path="section-7.html"><a href="section-7.html#section-7.6"><i class="fa fa-check"></i><b>7.6</b> 2クラス分類</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="section-7.html"><a href="section-7.html#section-7.6.1"><i class="fa fa-check"></i><b>7.6.1</b> 性能と閾値の関係をプロットする</a></li>
+<li class="chapter" data-level="7.6.2" data-path="section-7.html"><a href="section-7.html#roc"><i class="fa fa-check"></i><b>7.6.2</b> ROC</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="section-8.html"><a href="section-8.html"><i class="fa fa-check"></i><b>8</b> リサンプリング</a><ul>
+<li class="chapter" data-level="8.1" data-path="section-8.html"><a href="section-8.html#section-8.1"><i class="fa fa-check"></i><b>8.1</b> リサンプリング手法を決める</a></li>
+<li class="chapter" data-level="8.2" data-path="section-8.html"><a href="section-8.html#section-8.2"><i class="fa fa-check"></i><b>8.2</b> リサンプリングを実行する</a></li>
+<li class="chapter" data-level="8.3" data-path="section-8.html"><a href="section-8.html#section-8.3"><i class="fa fa-check"></i><b>8.3</b> リサンプル結果へのアクセス</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="section-8.html"><a href="section-8.html#section-8.3.1"><i class="fa fa-check"></i><b>8.3.1</b> 予測値</a></li>
+<li class="chapter" data-level="8.3.2" data-path="section-8.html"><a href="section-8.html#section-8.3.2"><i class="fa fa-check"></i><b>8.3.2</b> 訓練済みモデルの抽出</a></li>
+<li class="chapter" data-level="8.3.3" data-path="section-8.html"><a href="section-8.html#section-8.3.3"><i class="fa fa-check"></i><b>8.3.3</b> 他の抽出方法</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="section-8.html"><a href="section-8.html#section-8.4"><i class="fa fa-check"></i><b>8.4</b> 階層化とブロック化</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="section-8.html"><a href="section-8.html#section-8.4.1"><i class="fa fa-check"></i><b>8.4.1</b> 目的変数の階層化</a></li>
+<li class="chapter" data-level="8.4.2" data-path="section-8.html"><a href="section-8.html#section-8.4.2"><i class="fa fa-check"></i><b>8.4.2</b> 説明変数の階層化</a></li>
+<li class="chapter" data-level="8.4.3" data-path="section-8.html"><a href="section-8.html#section-8.4.3"><i class="fa fa-check"></i><b>8.4.3</b> ブロック化</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="section-8.html"><a href="section-8.html#section-8.5"><i class="fa fa-check"></i><b>8.5</b> リサンプリングの詳細とリサンプルのインスタンス</a></li>
+<li class="chapter" data-level="8.6" data-path="section-8.html"><a href="section-8.html#section-8.6"><i class="fa fa-check"></i><b>8.6</b> 性能指標の集約</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.1</b> 例: 一つの指標に複数の集約方法</a></li>
+<li class="chapter" data-level="8.6.2" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.2</b> 例: 訓練セットの誤差を計算する</a></li>
+<li class="chapter" data-level="8.6.3" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.3</b> 例: ブートストラップ</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="section-8.html"><a href="section-8.html#section-8.7"><i class="fa fa-check"></i><b>8.7</b> 便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="section-9.html"><a href="section-9.html"><i class="fa fa-check"></i><b>9</b> ハイパーパラメータのチューニング</a><ul>
+<li class="chapter" data-level="9.1" data-path="section-9.html"><a href="section-9.html#section-9.1"><i class="fa fa-check"></i><b>9.1</b> パラメータ探索空間の指定</a></li>
+<li class="chapter" data-level="9.2" data-path="section-9.html"><a href="section-9.html#section-9.2"><i class="fa fa-check"></i><b>9.2</b> 最適化アルゴリズムの指定</a></li>
+<li class="chapter" data-level="9.3" data-path="section-9.html"><a href="section-9.html#section-9.3"><i class="fa fa-check"></i><b>9.3</b> チューニングの実行</a></li>
+<li class="chapter" data-level="9.4" data-path="section-9.html"><a href="section-9.html#section-9.4"><i class="fa fa-check"></i><b>9.4</b> チューニング結果へのアクセス</a></li>
+<li class="chapter" data-level="9.5" data-path="section-9.html"><a href="section-9.html#section-9.5"><i class="fa fa-check"></i><b>9.5</b> ハイパーパラメータチューニングの影響を調査する</a></li>
+<li class="chapter" data-level="9.6" data-path="section-9.html"><a href="section-9.html#section-9.6"><i class="fa fa-check"></i><b>9.6</b> その他いろいろ</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="section-10.html"><a href="section-10.html"><i class="fa fa-check"></i><b>10</b> ベンチマーク試験</a><ul>
+<li class="chapter" data-level="10.1" data-path="section-10.html"><a href="section-10.html#section-10.1"><i class="fa fa-check"></i><b>10.1</b> ベンチマーク試験の実施</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="section-10.html"><a href="section-10.html#section-10.1.1"><i class="fa fa-check"></i><b>10.1.1</b> 実験を再現可能にする</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="section-10.html"><a href="section-10.html#section-10.2"><i class="fa fa-check"></i><b>10.2</b> ベンチマーク結果へのアクセス</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="section-10.html"><a href="section-10.html#section-10.2.1"><i class="fa fa-check"></i><b>10.2.1</b> 学習器の性能</a></li>
+<li class="chapter" data-level="10.2.2" data-path="section-10.html"><a href="section-10.html#-1"><i class="fa fa-check"></i><b>10.2.2</b> 予測</a></li>
+<li class="chapter" data-level="10.2.3" data-path="section-10.html"><a href="section-10.html#id"><i class="fa fa-check"></i><b>10.2.3</b> ID</a></li>
+<li class="chapter" data-level="10.2.4" data-path="section-10.html"><a href="section-10.html#section-10.2.4"><i class="fa fa-check"></i><b>10.2.4</b> フィット済みモデル</a></li>
+<li class="chapter" data-level="10.2.5" data-path="section-10.html"><a href="section-10.html#section-10.2.5"><i class="fa fa-check"></i><b>10.2.5</b> 学習器と性能指標</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="section-10.html"><a href="section-10.html#section-10.3"><i class="fa fa-check"></i><b>10.3</b> ベンチマーク結果のマージ</a></li>
+<li class="chapter" data-level="10.4" data-path="section-10.html"><a href="section-10.html#section-10.4"><i class="fa fa-check"></i><b>10.4</b> ベンチマークの分析と可視化</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="section-10.html"><a href="section-10.html#section-10.4.1"><i class="fa fa-check"></i><b>10.4.1</b> 例：線形判別分析と分類木、ランダムフォレストの比較</a></li>
+<li class="chapter" data-level="10.4.2" data-path="section-10.html"><a href="section-10.html#section-10.4.2"><i class="fa fa-check"></i><b>10.4.2</b> 可視化</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlrパッケージチュートリアル</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section-10" class="section level1">
+<h1><span class="header-section-number">Chapter 10</span> ベンチマーク試験</h1>
+<p>ベンチマーク試験では、1つ、あるいは複数の性能指標に基いてアルゴリズムを比較するために、異なる学習手法を1つあるいは複数のデータセットに適用する。</p>
+<p><code>mlr</code>では<code>benchmark</code>関数に学習器とタスクをリストで渡すことでベンチマーク試験を実施できる。<code>benchmark</code>は通常、学習器とタスクの対に対してリサンプリングを実行する。タスクと性能指標の組み合わせに対してどのようなリサンプリング手法を適用するかは選択することができる。</p>
+<div id="section-10.1" class="section level2">
+<h2><span class="header-section-number">10.1</span> ベンチマーク試験の実施</h2>
+<p>小さな例から始めよう。線形判別分析(lda)と分類木(rpart)を<code>sonar.task</code>に適用する。リサンプリング手法はホールドアウト法を用いる。</p>
+<p>以下の例では<code>ResampleDesc</code>オブジェクトを作成する。各リサンプリングのインスタンスは<code>benchmark</code>関数によって自動的に作成される。インスタンス化はタスクに対して1度だけ実行される。つまり、全ての学習器は全くおなじ訓練セット、テストセットを用いることになる。なお、明示的に<code>ResampleInstance</code>を渡しても良い。</p>
+<p>もし、データセットの作成を無作為ではなく任意に行いたければ、<code>makeFixedHoldoutinstance</code>を使うと良いだろう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrns =<span class="st"> </span><span class="kw">list</span>(<span class="kw">makeLearner</span>(<span class="st">&quot;classif.lda&quot;</span>), <span class="kw">makeLearner</span>(<span class="st">&quot;classif.rpart&quot;</span>))
+
+rdesc =<span class="st"> </span><span class="kw">makeResampleDesc</span>(<span class="st">&quot;Holdout&quot;</span>)
+
+bmr =<span class="st"> </span><span class="kw">benchmark</span>(lrns, sonar.task, rdesc)</code></pre></div>
+<pre><code>$&gt; Task: Sonar-example, Learner: classif.lda</code></pre>
+<pre><code>$&gt; [Resample] holdout iter 1: mmce.test.mean=0.271
+$&gt; [Resample] Aggr. Result: mmce.test.mean=0.271
+$&gt; Task: Sonar-example, Learner: classif.rpart
+$&gt; [Resample] holdout iter 1: mmce.test.mean=0.357
+$&gt; [Resample] Aggr. Result: mmce.test.mean=0.357</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bmr</code></pre></div>
+<pre><code>$&gt;         task.id    learner.id mmce.test.mean
+$&gt; 1 Sonar-example   classif.lda      0.2714286
+$&gt; 2 Sonar-example classif.rpart      0.3571429</code></pre>
+<p>もし<code>makeLearner</code>に学習器の種類以外の引数を指定するつもりがなければ、明示的に<code>makeLearner</code>を呼び出さずに単に学習器の名前を指定しても良い。上記の例は次のように書き換えることができる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 学習器の名前だけをベクトルで指定しても良い
+lrns =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;classif.lda&quot;</span>, <span class="st">&quot;classif.rpart&quot;</span>)
+
+## 学習器の名前とLearnerオブジェクトを混ぜたリストでも良い
+lrns =<span class="st"> </span><span class="kw">list</span>(<span class="kw">makeLearner</span>(<span class="st">&quot;classif.lda&quot;</span>, <span class="dt">predict.type =</span> <span class="st">&quot;prob&quot;</span>), <span class="st">&quot;classif.rpart&quot;</span>)
+
+bmr =<span class="st"> </span><span class="kw">benchmark</span>(lrns, sonar.task, rdesc)</code></pre></div>
+<pre><code>$&gt; Task: Sonar-example, Learner: classif.lda</code></pre>
+<pre><code>$&gt; [Resample] holdout iter 1: mmce.test.mean=0.314
+$&gt; [Resample] Aggr. Result: mmce.test.mean=0.314
+$&gt; Task: Sonar-example, Learner: classif.rpart
+$&gt; [Resample] holdout iter 1: mmce.test.mean=0.329
+$&gt; [Resample] Aggr. Result: mmce.test.mean=0.329</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bmr</code></pre></div>
+<pre><code>$&gt;         task.id    learner.id mmce.test.mean
+$&gt; 1 Sonar-example   classif.lda      0.3142857
+$&gt; 2 Sonar-example classif.rpart      0.3285714</code></pre>
+<p><code>print</code>の結果は各行がタスクと学習器の1つの組合せに対応している。ここでは分類のデフォルトの指標である平均誤分類率が示されている。</p>
+<p><code>bmr</code>は<code>BenchmarcResult</code>クラスのオブジェクトである。基本的には、これは<code>ResampleResult</code>クラスのオブジェクトのリストのリストを含んでおり、最初のリストはタスク、その中のリストは学習器に対応した並びになっている。</p>
+<div id="section-10.1.1" class="section level3">
+<h3><span class="header-section-number">10.1.1</span> 実験を再現可能にする</h3>
+<p>一般的にいって、実験は再現可能であることが望ましい。<code>mlr</code>は<code>set.seed</code>関数の設定に従うので、スクリプト実行前に<code>set.seed</code>によって乱数種を固定しておけば再現性が確保できる。</p>
+<p>もし並列計算を使用する場合は、ユースケースに合わせて<code>set.seed</code>の呼び出し方を調整する必要がある。例えば、<code>set.seed(123, &quot;L'Ecuyer&quot;)</code>と指定すると子プロセス単位で再現性が確保できる。mcapplyの例(<a href="https://www.rdocumentation.org/packages/parallel/versions/3.4.1/topics/mclapply">mclapply function | R Documentation</a>)を見ると並列計算と再現性に関するもう少し詳しい情報が得られるだろう(訳注:こちらのほうが良いかも？<a href="https://rforge.net/doc/packages/multicore/mclapply.html">R: Parallel version of lapply</a>)。</p>
+</div>
+</div>
+<div id="section-10.2" class="section level2">
+<h2><span class="header-section-number">10.2</span> ベンチマーク結果へのアクセス</h2>
+<p><code>mlr</code>は<code>getBMR&lt;抽出対象&gt;</code>という名前のアクセサ関数を幾つか用意している。これにより、さらなる分析のために情報を探索することができる。これには検討中の学習アルゴリズムに関するパフォーマンスや予測などが含まれる。</p>
+<div id="section-10.2.1" class="section level3">
+<h3><span class="header-section-number">10.2.1</span> 学習器の性能</h3>
+<p>先程のベンチマーク試験の結果を見てみよう。<code>getBMRPerformances</code>は個々のリサンプリング毎の性能指標を返し、<code>getMBRAggrPerformances</code>は性能指標の集約値を返す。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRPerformances</span>(bmr)</code></pre></div>
+<pre><code>$&gt; $`Sonar-example`
+$&gt; $`Sonar-example`$classif.lda
+$&gt;   iter      mmce
+$&gt; 1    1 0.3142857
+$&gt; 
+$&gt; $`Sonar-example`$classif.rpart
+$&gt;   iter      mmce
+$&gt; 1    1 0.3285714</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRAggrPerformances</span>(bmr)</code></pre></div>
+<pre><code>$&gt; $`Sonar-example`
+$&gt; $`Sonar-example`$classif.lda
+$&gt; mmce.test.mean 
+$&gt;      0.3142857 
+$&gt; 
+$&gt; $`Sonar-example`$classif.rpart
+$&gt; mmce.test.mean 
+$&gt;      0.3285714</code></pre>
+<p>今回の例ではリサンプリング手法にホールドアウト法を選んだので、リサンプリングは1回しか行っていない。そのため、個々のリサンプリング結果に基づく性能指標と集約値はどちらも同じ表示結果になっている。</p>
+<p>デフォルトでは、ほぼすべてのゲッター関数ネストされたリストを返す。リストの最初のレベルはタスクで分類されており、二番目のレベルは学習器での分類になる。学習器またはタスクが1つしかない場合は、<code>drop = TRUE</code>を指定するとフラットなリストを得ることもできる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRPerformances</span>(bmr, <span class="dt">drop =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>$&gt; $classif.lda
+$&gt;   iter      mmce
+$&gt; 1    1 0.3142857
+$&gt; 
+$&gt; $classif.rpart
+$&gt;   iter      mmce
+$&gt; 1    1 0.3285714</code></pre>
+<p>大抵の場合はデータフレームの方が便利だろう。<code>as.df = TRUE</code>を指定すると結果をデータフレームに変換できる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRPerformances</span>(bmr, <span class="dt">as.df =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>$&gt;         task.id    learner.id iter      mmce
+$&gt; 1 Sonar-example   classif.lda    1 0.3142857
+$&gt; 2 Sonar-example classif.rpart    1 0.3285714</code></pre>
+</div>
+<div id="-1" class="section level3">
+<h3><span class="header-section-number">10.2.2</span> 予測</h3>
+<p>デフォルトでは、<code>BenchmarkResult</code>は学習器の予測結果も含んでいる。もし、メモリ節約などの目的でこれを止めさせたければ<code>keep.pred = FALSE</code>を<code>benchmark</code>関数に指定すれば良い。</p>
+<p>予測へのアクセスは<code>getBMRPredictions</code>関数を使う。デフォルトでは、<code>ResamplePrediction</code>オブジェクトのネストされたリストが返ってくる。性能指標の場合と同様に、ここでも<code>drop</code>及び<code>as.df</code>引数を使うことができる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRPredictions</span>(bmr)</code></pre></div>
+<pre><code>$&gt; $`Sonar-example`
+$&gt; $`Sonar-example`$classif.lda
+$&gt; Resampled Prediction for:
+$&gt; Resample description: holdout with 0.67 split rate.
+$&gt; Predict: test
+$&gt; Stratification: FALSE
+$&gt; predict.type: prob
+$&gt; threshold: M=0.50,R=0.50
+$&gt; time (mean): 0.01
+$&gt;    id truth       prob.M       prob.R response iter  set
+$&gt; 1 165     M 9.739057e-01 0.0260942571        M    1 test
+$&gt; 2 118     M 9.769969e-01 0.0230031469        M    1 test
+$&gt; 3 107     M 5.205392e-01 0.4794608221        M    1 test
+$&gt; 4 159     M 9.996184e-01 0.0003815522        M    1 test
+$&gt; 5  66     R 4.726013e-07 0.9999995274        R    1 test
+$&gt; 6 193     M 9.955122e-01 0.0044878035        M    1 test
+$&gt; ... (70 rows, 7 cols)
+$&gt; 
+$&gt; 
+$&gt; $`Sonar-example`$classif.rpart
+$&gt; Resampled Prediction for:
+$&gt; Resample description: holdout with 0.67 split rate.
+$&gt; Predict: test
+$&gt; Stratification: FALSE
+$&gt; predict.type: response
+$&gt; threshold: 
+$&gt; time (mean): 0.01
+$&gt;    id truth response iter  set
+$&gt; 1 165     M        M    1 test
+$&gt; 2 118     M        M    1 test
+$&gt; 3 107     M        R    1 test
+$&gt; 4 159     M        M    1 test
+$&gt; 5  66     R        R    1 test
+$&gt; 6 193     M        M    1 test
+$&gt; ... (70 rows, 5 cols)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">getBMRPredictions</span>(bmr, <span class="dt">as.df =</span> <span class="ot">TRUE</span>))</code></pre></div>
+<pre><code>$&gt;         task.id  learner.id  id truth       prob.M       prob.R response
+$&gt; 1 Sonar-example classif.lda 165     M 9.739057e-01 0.0260942571        M
+$&gt; 2 Sonar-example classif.lda 118     M 9.769969e-01 0.0230031469        M
+$&gt; 3 Sonar-example classif.lda 107     M 5.205392e-01 0.4794608221        M
+$&gt; 4 Sonar-example classif.lda 159     M 9.996184e-01 0.0003815522        M
+$&gt; 5 Sonar-example classif.lda  66     R 4.726013e-07 0.9999995274        R
+$&gt; 6 Sonar-example classif.lda 193     M 9.955122e-01 0.0044878035        M
+$&gt;   iter  set
+$&gt; 1    1 test
+$&gt; 2    1 test
+$&gt; 3    1 test
+$&gt; 4    1 test
+$&gt; 5    1 test
+$&gt; 6    1 test</code></pre>
+<p>IDを通じて特定の学習器やタスクの結果にアクセスすることもできる。多くのゲッター関数はIDを指定するための<code>learner.ids</code>引数と<code>task.ids</code>引数が用意されている。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">getBMRPredictions</span>(bmr, <span class="dt">learner.ids =</span> <span class="st">&quot;classif.rpart&quot;</span>, <span class="dt">as.df =</span> <span class="ot">TRUE</span>))</code></pre></div>
+<pre><code>$&gt;         task.id    learner.id  id truth response iter  set
+$&gt; 1 Sonar-example classif.rpart 165     M        M    1 test
+$&gt; 2 Sonar-example classif.rpart 118     M        M    1 test
+$&gt; 3 Sonar-example classif.rpart 107     M        R    1 test
+$&gt; 4 Sonar-example classif.rpart 159     M        M    1 test
+$&gt; 5 Sonar-example classif.rpart  66     R        R    1 test
+$&gt; 6 Sonar-example classif.rpart 193     M        M    1 test</code></pre>
+<p>デフォルトのIDが嫌なら、<code>makeLearner</code>や<code>make*Task</code>関数の<code>id</code>引数を通じて設定できる。さらに、学習器のIDを簡単に変更するための関数として<code>setLearnerId</code>関数も用意されている。</p>
+</div>
+<div id="id" class="section level3">
+<h3><span class="header-section-number">10.2.3</span> ID</h3>
+<p>ベンチマーク試験における学習器、タスク、性能指標のIDは、以下のように取得できる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRTaskIds</span>(bmr)</code></pre></div>
+<pre><code>$&gt; [1] &quot;Sonar-example&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRLearnerIds</span>(bmr)</code></pre></div>
+<pre><code>$&gt; [1] &quot;classif.lda&quot;   &quot;classif.rpart&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRMeasureIds</span>(bmr)</code></pre></div>
+<pre><code>$&gt; [1] &quot;mmce&quot;</code></pre>
+</div>
+<div id="section-10.2.4" class="section level3">
+<h3><span class="header-section-number">10.2.4</span> フィット済みモデル</h3>
+<p>デフォルトでは<code>BenchmarkResult</code>オブジェクトはフィット済みモデルも含んでいる。これは、<code>benchmark</code>関数を呼び出す際に<code>models = FALSE</code>を指定することで抑制できる。フィット済みモデルは<code>getBMRModels</code>関数を使うことで確認できる。この関数が返すのは(おそらくネストされた)<code>WrappedModel</code>オブジェクトのリストである。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRModels</span>(bmr)</code></pre></div>
+<pre><code>$&gt; $`Sonar-example`
+$&gt; $`Sonar-example`$classif.lda
+$&gt; $`Sonar-example`$classif.lda[[1]]
+$&gt; Model for learner.id=classif.lda; learner.class=classif.lda
+$&gt; Trained on: task.id = Sonar-example; obs = 138; features = 60
+$&gt; Hyperparameters: 
+$&gt; 
+$&gt; 
+$&gt; $`Sonar-example`$classif.rpart
+$&gt; $`Sonar-example`$classif.rpart[[1]]
+$&gt; Model for learner.id=classif.rpart; learner.class=classif.rpart
+$&gt; Trained on: task.id = Sonar-example; obs = 138; features = 60
+$&gt; Hyperparameters: xval=0</code></pre>
+</div>
+<div id="section-10.2.5" class="section level3">
+<h3><span class="header-section-number">10.2.5</span> 学習器と性能指標</h3>
+<p>使用された学習器は<code>getBMRLearners</code>で、性能指標は<code>getBMRMeasures</code>でそれぞれ抽出できる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRLearners</span>(bmr)</code></pre></div>
+<pre><code>$&gt; $classif.lda
+$&gt; Learner classif.lda from package MASS
+$&gt; Type: classif
+$&gt; Name: Linear Discriminant Analysis; Short name: lda
+$&gt; Class: classif.lda
+$&gt; Properties: twoclass,multiclass,numerics,factors,prob
+$&gt; Predict-Type: prob
+$&gt; Hyperparameters: 
+$&gt; 
+$&gt; 
+$&gt; $classif.rpart
+$&gt; Learner classif.rpart from package rpart
+$&gt; Type: classif
+$&gt; Name: Decision Tree; Short name: rpart
+$&gt; Class: classif.rpart
+$&gt; Properties: twoclass,multiclass,missings,numerics,factors,ordered,prob,weights,featimp
+$&gt; Predict-Type: response
+$&gt; Hyperparameters: xval=0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRMeasures</span>(bmr)</code></pre></div>
+<pre><code>$&gt; [[1]]
+$&gt; Name: Mean misclassification error
+$&gt; Performance measure: mmce
+$&gt; Properties: classif,classif.multi,req.pred,req.truth
+$&gt; Minimize: TRUE
+$&gt; Best: 0; Worst: 1
+$&gt; Aggregated by: test.mean
+$&gt; Note: Defined as: mean(response != truth)</code></pre>
+</div>
+</div>
+<div id="section-10.3" class="section level2">
+<h2><span class="header-section-number">10.3</span> ベンチマーク結果のマージ</h2>
+<p>ベンチマーク試験が終わった後で、他の学習器やタスクを追加したくなったらどうすればよいだろうか。このような場合は、<code>mergeBenchmarkResults</code>関数を使えば、複数の<code>BenchmarkResutl</code>オブジェクトをマージすることができる。</p>
+<p>先程行った線形判別分析と決定木のベンチマーク試験結果に対し、ランダムフォレストと二次判別分析の結果を追加してみよう。</p>
+<p>まず、ランダムフォレストと二次判別分析のベンチマーク試験を行う。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrns2 =<span class="st"> </span><span class="kw">list</span>(<span class="kw">makeLearner</span>(<span class="st">&quot;classif.randomForest&quot;</span>), <span class="kw">makeLearner</span>(<span class="st">&quot;classif.qda&quot;</span>))
+bmr2 =<span class="st"> </span><span class="kw">benchmark</span>(lrns2, sonar.task, rdesc, <span class="dt">show.info =</span> <span class="ot">FALSE</span>)
+bmr2</code></pre></div>
+<pre><code>$&gt;         task.id           learner.id mmce.test.mean
+$&gt; 1 Sonar-example classif.randomForest      0.1857143
+$&gt; 2 Sonar-example          classif.qda      0.4428571</code></pre>
+<p>次に、<code>bmr</code>と<code>bmr2</code>をマージする。<code>BenchmarkResult</code>オブジェクトはリストで渡す。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mergeBenchmarkResults</span>(<span class="kw">list</span>(bmr, bmr2))</code></pre></div>
+<pre><code>$&gt;         task.id           learner.id mmce.test.mean
+$&gt; 1 Sonar-example          classif.lda      0.3142857
+$&gt; 2 Sonar-example        classif.rpart      0.3285714
+$&gt; 3 Sonar-example classif.randomForest      0.1857143
+$&gt; 4 Sonar-example          classif.qda      0.4428571</code></pre>
+<p>上記の例ではリサンプルdescriptionを<code>benchmark</code>関数に指定していることに注意してもらいたい。つまり、<code>lda</code>と<code>rpart</code>は<code>randamForest</code>および<code>qda</code>とは異なる訓練/テストセットを用いて評価された可能性が高い。</p>
+<p>異なる訓練/テストセットを用いて評価を行うと、学習器間の正確な性能比較が難しくなる。もし、他の学習器を使った試験を後から追加する見込みがあるのなら、最初から<code>ResampleInstances</code>を使用したほうが良い。リサンプルをインスタンス化しておけば、同じ訓練/テストセットを後の試験でも使用することができるからだ。</p>
+<p>あるいは、<code>BenchmarkResult</code>オブジェクトから<code>ResampleInstance</code>を抽出し、これを他の試験に使用しても良い。例を示そう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># インスタンスの抽出</span>
+rin =<span class="st"> </span><span class="kw">getBMRPredictions</span>(bmr)[[<span class="dv">1</span>]][[<span class="dv">1</span>]]<span class="op">$</span>instance
+
+<span class="co"># インスタンスを用いてベンチマーク試験を行う</span>
+bmr3 =<span class="st"> </span><span class="kw">benchmark</span>(lrns2, sonar.task, rin, <span class="dt">show.info =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># 結果をマージする</span>
+<span class="kw">mergeBenchmarkResults</span>(<span class="kw">list</span>(bmr, bmr3))</code></pre></div>
+<pre><code>$&gt;         task.id           learner.id mmce.test.mean
+$&gt; 1 Sonar-example          classif.lda      0.3142857
+$&gt; 2 Sonar-example        classif.rpart      0.3285714
+$&gt; 3 Sonar-example classif.randomForest      0.1714286
+$&gt; 4 Sonar-example          classif.qda      0.4285714</code></pre>
+</div>
+<div id="section-10.4" class="section level2">
+<h2><span class="header-section-number">10.4</span> ベンチマークの分析と可視化</h2>
+<p><code>mlr</code>はベンチマーク試験を分析する機能も備えている。これには、可視化、アルゴリズムの順位付け、パフォーマンスの差に対する仮説検定が含まれる。</p>
+<p>今回はこの機能を紹介するために、5つの分類タスクと3つの学習アルゴリズムを使用する、やや大きなベンチマーク試験を実施する。</p>
+<div id="section-10.4.1" class="section level3">
+<h3><span class="header-section-number">10.4.1</span> 例：線形判別分析と分類木、ランダムフォレストの比較</h3>
+<p><strong>3つのアルゴリズム</strong>は線形判別分析、決定木、ランダムフォレストである。これらのデフォルトの学習器IDはやや長いので、以下の例ではもう少し短い別名を設定した。</p>
+<p><strong>5つの分類タスク</strong>と言ったが、3つは既に紹介したものだ。これに加えて、<code>mlbench</code>パッケージに含まれるデータを<code>convertMLBenchObjToTask</code>関数でタスクに変換したものを用いる。</p>
+<p>全てのタスクは10分割クロスバリデーションによりリサンプリングを行う。これは、一つのresample descriptionを<code>benchmark</code>関数に渡すことで行う。これにより、それぞれのタスクに対するリサンプリングのインスタンス化が自動的に実行される。この方法では、一つのタスク内で全ての学習器に対して同じインスタンスが使用されることになる。</p>
+<p>タスクの数と同じ長さのリストでリサンプリング手法を指定すれば、それぞれのタスクに異なるリサンプリング手法を適用することもできる。この際渡すのはresample descriptionsでも良いし、インスタンスでも良い。</p>
+<p>評価手法は平均誤分類率を主とするが、合わせてbalanced error rate(ber)と訓練時間(timetrain)も算出する。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 学習器リストの作成
+lrns =<span class="st"> </span><span class="kw">list</span>(
+  <span class="kw">makeLearner</span>(<span class="st">&quot;classif.lda&quot;</span>, <span class="dt">id =</span> <span class="st">&quot;lda&quot;</span>),
+  <span class="kw">makeLearner</span>(<span class="st">&quot;classif.rpart&quot;</span>, <span class="dt">id =</span> <span class="st">&quot;rpart&quot;</span>),
+  <span class="kw">makeLearner</span>(<span class="st">&quot;classif.randomForest&quot;</span>, <span class="dt">id =</span> <span class="st">&quot;randomForest&quot;</span>)
+)
+
+## mlbenchパッケージから追加タスクを生成する
+ring.task =<span class="st"> </span><span class="kw">convertMLBenchObjToTask</span>(<span class="st">&quot;mlbench.ringnorm&quot;</span>, <span class="dt">n =</span> <span class="dv">600</span>)</code></pre></div>
+<pre><code>$&gt; Loading required package: mlbench</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wave.task =<span class="st"> </span><span class="kw">convertMLBenchObjToTask</span>(<span class="st">&quot;mlbench.waveform&quot;</span>, <span class="dt">n =</span> <span class="dv">600</span>)
+
+## タスクリストの作成
+tasks =<span class="st"> </span><span class="kw">list</span>(iris.task, sonar.task, pid.task, ring.task, wave.task)
+## リサンプリング手法の指定
+rdesc =<span class="st"> </span><span class="kw">makeResampleDesc</span>(<span class="st">&quot;CV&quot;</span>, <span class="dt">iters =</span> <span class="dv">10</span>)
+## 評価指標の指定
+meas =<span class="st"> </span><span class="kw">list</span>(mmce, ber, timetrain)
+## ベンチマーク試験の実行
+bmr =<span class="st"> </span><span class="kw">benchmark</span>(lrns, tasks, rdesc, meas, <span class="dt">show.info =</span> <span class="ot">FALSE</span>)
+bmr</code></pre></div>
+<pre><code>$&gt;                        task.id   learner.id mmce.test.mean ber.test.mean
+$&gt; 1                 iris-example          lda     0.02000000    0.01666667
+$&gt; 2                 iris-example        rpart     0.08000000    0.07277778
+$&gt; 3                 iris-example randomForest     0.06000000    0.05500000
+$&gt; 4             mlbench.ringnorm          lda     0.40666667    0.40395082
+$&gt; 5             mlbench.ringnorm        rpart     0.20000000    0.20307555
+$&gt; 6             mlbench.ringnorm randomForest     0.04666667    0.04691889
+$&gt; 7             mlbench.waveform          lda     0.16666667    0.16451184
+$&gt; 8             mlbench.waveform        rpart     0.24500000    0.24799876
+$&gt; 9             mlbench.waveform randomForest     0.16000000    0.16211064
+$&gt; 10 PimaIndiansDiabetes-example          lda     0.22650376    0.27578705
+$&gt; 11 PimaIndiansDiabetes-example        rpart     0.25768968    0.30048359
+$&gt; 12 PimaIndiansDiabetes-example randomForest     0.22790499    0.27238976
+$&gt; 13               Sonar-example          lda     0.30285714    0.30454643
+$&gt; 14               Sonar-example        rpart     0.28428571    0.28040571
+$&gt; 15               Sonar-example randomForest     0.16380952    0.16538045
+$&gt;    timetrain.test.mean
+$&gt; 1               0.0027
+$&gt; 2               0.0040
+$&gt; 3               0.0351
+$&gt; 4               0.0084
+$&gt; 5               0.0115
+$&gt; 6               0.3938
+$&gt; 7               0.0109
+$&gt; 8               0.0136
+$&gt; 9               0.4079
+$&gt; 10              0.0049
+$&gt; 11              0.0064
+$&gt; 12              0.3875
+$&gt; 13              0.0164
+$&gt; 14              0.0131
+$&gt; 15              0.2822</code></pre>
+<p>iris-exampleとPimaIndiansDiabetes-exampleでは線形判別分析が優れいているが、他のタスクではランダムフォレストが良い成績を出しているようだ。一方、訓練時間を見るとランダムフォレストは他の学習器よりも長い時間がかかっている。</p>
+<p>パフォーマンスの平均値から何らかの結論を言いたければ、値の変動も考慮に入れる必要がある。リサンプリングの繰り返し全体で値がどのように分布しているかも考慮できれば尚良い。</p>
+<p>10分割クロスバリデーションにより、各タスクは10回評価されていることになるが、これは以下の様にして詳細を確認できる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">perf =<span class="st"> </span><span class="kw">getBMRPerformances</span>(bmr, <span class="dt">as.df =</span> <span class="ot">TRUE</span>)
+<span class="kw">head</span>(perf)</code></pre></div>
+<pre><code>$&gt;        task.id learner.id iter       mmce        ber timetrain
+$&gt; 1 iris-example        lda    1 0.00000000 0.00000000     0.003
+$&gt; 2 iris-example        lda    2 0.00000000 0.00000000     0.003
+$&gt; 3 iris-example        lda    3 0.00000000 0.00000000     0.003
+$&gt; 4 iris-example        lda    4 0.06666667 0.08333333     0.003
+$&gt; 5 iris-example        lda    5 0.00000000 0.00000000     0.002
+$&gt; 6 iris-example        lda    6 0.13333333 0.08333333     0.003</code></pre>
+<p>結果を詳しく確認すると、ランダムフォレストは全てのインスタンスで分類木より優れており、線形判別分析は時間の面でほとんどどの場合も優れている事が分かる。また、線形判別分析は時々ランダムフォレストより優れた結果を出している。このサイズの試験結果ならまだ「詳しく確認する」は可能であるが、これよりももっと大きなスケールのベンチマーク試験では、このような判断はずっと難しくなる。</p>
+<p><code>mlr</code>には可視化と仮説検定の仕組みがあるので、より大きなスケールの試験に対してはそれを使おう。</p>
+</div>
+<div id="section-10.4.2" class="section level3">
+<h3><span class="header-section-number">10.4.2</span> 可視化</h3>
+<p>プロットには<code>ggplot2</code>パッケージが使用される。したがって、要素のリネームや配色変更などのカスタマイズは容易に行える。</p>
+<div id="section-10.4.2.1" class="section level4">
+<h4><span class="header-section-number">10.4.2.1</span> パフォーマンスの可視化</h4>
+<p><code>plotBMRBoxplot</code>は箱ひげ図またはバイオリンプロットによって、リサンプリングの繰り返しの間に指標がどのような値をとったのかを可視化する。これはつまり<code>getBMRPerformances</code>の可視化である。</p>
+<p>以下に箱ひげ図で<code>mmce</code>の分布を示す。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotBMRBoxplots</span>(bmr, <span class="dt">measure =</span> mmce)</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-196-1.png" width="672" /></p>
+<p>次にバイオリンプロットの例を示す。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># aes, theme, element_textをggplot2::なしで呼び出すためには</span>
+<span class="co"># ライブラリのロードが必要</span>
+<span class="kw">library</span>(ggplot2) 
+<span class="kw">plotBMRBoxplots</span>(bmr, <span class="dt">measure =</span> ber, <span class="dt">style =</span> <span class="st">&quot;violin&quot;</span>,
+                <span class="dt">pretty.names =</span> <span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">color =</span> learner.id) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.text.x =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">6</span>))</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-197-1.png" width="672" /></p>
+<p>ここでは、指標として<code>ber</code>を使用するとともに、<code>learner.id</code>に基づく色の塗り分けも行っている。また、<code>theme</code>はグラフのラベル(strip)のフォントサイズを調整している。</p>
+<p><code>pretty.names=FALSE</code>は何かというと、性能指標や学習器のラベルとしてidを使ってくれという指定である。これを指定しなかったときにどのような名前が使われるかは、性能指標であれば<code>指標名$name</code>、学習器では<code>getBMRLEarnerShortName</code>で確認できる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mmce<span class="op">$</span>name</code></pre></div>
+<pre><code>$&gt; [1] &quot;Mean misclassification error&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getBMRLearnerShortNames</span>(bmr)</code></pre></div>
+<pre><code>$&gt; [1] &quot;lda&quot;   &quot;rpart&quot; &quot;rf&quot;</code></pre>
+<p>プロットに関してよくある質問は、「パネルのヘッダと学習器の名前はどうやったら変更できるのか」といったものだ。</p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="section-9.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

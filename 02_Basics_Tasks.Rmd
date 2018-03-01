@@ -1,0 +1,213 @@
+# タスク
+
+```{r include=FALSE}
+library(mlr)
+```
+
+**タスク**はデータ及び機械学習問題に関する情報、例えば教師あり学習におけるターゲットの名前などをカプセル化したものだ。
+
+## タスクの種類と作成
+
+全てのタスクは`Task`クラスを頂点とする階層構造を持っている。以下に示すクラスは全て`Task`のサブクラスである。
+
+- `RegrTask`: 回帰分析に関するタスク。
+- `ClassifTask`: 2クラス分類または多クラス分類に関するタスク(注: コストがクラス依存であるコスト考慮型分類も扱うことができる)。
+- `SurvTask`: 生存時間分析に関するタスク。
+- `ClusterTask`: クラスター分析に関するタスク。
+- `MultilabelTask`: マルチラベル分類に関するタスク。
+- `CostSensTask`: 一般のコスト考慮型分類に関するタスク(コストが事例に依存するもの)。
+
+タスクを作成するには、`make<タスク名>`というような名前の関数を使う。例えば分類タスクであれば`makeClassifTask`である。全てのタスクはID(引数`id`に指定する)とデータフレーム(引数`data`に指定する)を最低限必要とする。ただし、IDを未指定の場合は、データの変数名に基づいて自動的に割り当てられる。IDはプロットの際の注釈や、ベンチマークテストの際に名前として使われる。また、問題の性質に応じて、追加の引数が必要となる場合もある。
+
+以下にそれぞれのタスクの生成方法を説明する。
+
+### 回帰
+
+教師あり学習である回帰では、`data`の他に目的変数列名である`target`を指定する必要がある。これは後に見る分類と生存時間分析においても同様である。
+
+```{r}
+data(BostonHousing, package = "mlbench")
+regr.task = makeRegrTask(id = "bh", data = BostonHousing, target = "medv")
+regr.task
+```
+
+`Task`オブジェクトの中には、学習問題のタイプと、データセットに関する基本的な情報(例えば特徴量の型やデータ数、欠測値の有無など)が格納されている。
+
+分類でも生存時間分析でもタスク作成の基本的な枠組みは同じである。ただし、`data`の中の目的変数の種類は異なる。これについては以下で述べる。
+
+### 分類
+
+分類問題では、目的変数は因子型でなければならない。
+
+以下に`BreastCancer`データセットを使って分類タスクを作成する例を示そう。ここでは`Id`列を除外していることに注意してもらいたい(訳注: `Id`列はその意味から考えて特徴量に含めるのが適当でないのは当然のこと、`character`型であるため特徴量に含めようとしてもエラーがでる)。
+
+```{r}
+data(BreastCancer, package = "mlbench")
+df = BreastCancer
+df$Id = NULL
+classif.task = makeClassifTask(id = "BreastCancer", data = df, target = "Class")
+classif.task
+```
+
+2クラス分類においては、しばしばそれぞれのクラスを**positive**と**negative**に対応させる。上記例を見るとわかるように、デフォルトでは因子型における最初のレベルが**positive**に割り当てられるが、引数`positive`によって明示的に指定することもできる。
+
+```{r}
+makeClassifTask(data = df, target = "Class", positive = "malignant")
+```
+
+### 生存時間分析
+
+生存時間分析においては目的変数列が2つ必要になる。左打ち切り及び右打ち切りデータでは、生存時間と打ち切りかどうかを示す二値変数が必要である。区間打ち切りデータでは、`interval2`形式でのデータ指定が必要である(詳しくは[Surv function | R Documentation](https://www.rdocumentation.org/packages/survival/versions/2.41-2/topics/Surv)を参照)。
+
+```{r}
+data(lung, package = "survival")
+# statusは1=censored, 2=deadとして符号化されているので、
+# 論理値に変換する必要がある。
+lung$status = (lung$status == 2) 
+surv.task = makeSurvTask(data = lung, target = c("time", "status"))
+surv.task
+```
+
+打ち切りの種類は`censoring`引数で明示的に指定できる。デフォルトは`rcens`(右打ち切り)である。
+
+### マルチラベル分類
+
+マルチラベル分類とは、対象が複数のカテゴリに同時に属す可能性があるような分類問題である。
+
+`data`にはクラスラベルと同じだけの数の目的変数列が必要である。また、それぞれの目的変数列は論理値によってそのクラスに属するかどうかを示す必要がある。
+
+以下に`yeast`データを用いた例を示そう。
+
+```{r}
+yeast = getTaskData(yeast.task)
+
+labels = colnames(yeast)[1:14]
+yeast.task = makeMultilabelTask(id = "multi", data = yeast, target = labels)
+yeast.task
+```
+
+### クラスター分析
+
+クラスター分析は教師なし学習の一種である。タスクの作成に必須の引数は`data`だけだ。`mtcars`を使ってクラスター分析のタスクを作成する例を示そう。
+
+```{r}
+data(mtcars, package = "datasets")
+cluster.task = makeClusterTask(data = mtcars)
+cluster.task
+```
+
+### コスト考慮型分類
+
+一般に分類問題では精度を最大化すること、つまり誤分類の数を最小化することが目的となる。つまり、これは全ての誤分類の価値を平等と考えるということである。しかし、問題によっては間違いの価値は平等とは言えないことがある。例えば健康や金融に関わる問題では、ある間違いは他の間違いよりより深刻であるということがあり得ることは容易に想像できるだろう。
+
+コスト考慮型問題のうち、コストがクラスラベルの種類にのみ依存するような問題は、`ClassifTask`にて扱うことができる。
+
+一方、コストが事例に依存するような例は`CostSensTask`でタスクを作成する必要がある。このケースでは入力$x$と出力$y$からなる事例$(x, y)$がそれぞれコストベクトル$K$に結びついていることを想定する。コストベクトル$K$はクラスラベルの数と同じ長さをもち、$k$番目の要素は$x$をクラス$k$に結びつけた場合のコストを表す。当然、$y$はコストを最小化するように選択されることが期待される。
+
+コストベクトルはクラス$y$に関する全ての情報を包含するので、`CostSensTask`を作成するために必要なのは、全ての事例に対するコストベクトルをまとめたコスト行列と、特徴量のみである。
+
+`iris`と人工的に作成したコスト行列を使ってコスト考慮型分類タスクを作成する例を示そう。
+
+```{r}
+set.seed(123)
+df = iris
+cost = matrix(runif(150 * 3, 0, 2000), 150) * (1 - diag(3))[df$Species, ]
+df$Species = NULL
+costsens.task = makeCostSensTask(data = df, cost = cost)
+costsens.task
+```
+
+## その他の設定
+
+それぞれのタスク作成関数のヘルプページを確認すると、その他の引数についての情報を得ることができるだろう。
+
+例えば、`blocking`引数は、幾つかの観測値が**一緒である**ことを示す。これによって、リサンプリングの際にそれらのデータが分割されなくなる。
+
+他に`weights`という引数がある。これは単に観測頻度やデータ採取方法に由来する重みを表現するための方法であって、重みが本当にタスクに属している場合にのみ使用するようにしてもらいたい。もし、同じタスク内で重みを変化させて訓練をしたいと考えているのであれば、`mlr`はそのための他の方法を用意している。詳しくは`training`のチュートリアルページか`makeWeightedClassesWrapper`関数のヘルプを確認してもらいたい。
+
+## タスクへのアクセス
+
+タスクオブジェクト内の要素を取得する方法は複数ある。これらの中で重要なものは各タスクおよび`getTaskData`のヘルプページにリストアップされている。
+
+まずは`?TaskDesc`でリストアップされている要素を取得する方法を示そう。
+
+```{r}
+getTaskDesc(classif.task)
+```
+
+取得できる要素の種類はタスクの種類によって多少異なる。
+
+よく使う要素については、直接アクセスする手段が用意されている。
+
+```{r, collapse=FALSE}
+## ID
+getTaskId(classif.task)
+
+## タスクの種類
+getTaskType(classif.task)
+
+## 目的変数の列名
+getTaskTargetNames(classif.task)
+
+## 観測値の数
+getTaskSize(classif.task)
+
+## 特徴量の種類数
+getTaskNFeats(classif.task)
+
+## クラスレベル
+getTaskClassLevels(classif.task)
+
+```
+
+`mlr`はさらに幾つかの関数を提供する。
+
+```{r, collapse = FALSE}
+## タスク内のデータ
+str(getTaskData(classif.task))
+
+## 特徴量の名前
+getTaskFeatureNames(cluster.task)
+
+## 目的変数の値
+head(getTaskTargets(surv.task))
+
+## コスト行列
+head(getTaskCosts(costsens.task))
+```
+
+## タスクの編集
+
+`mlr`には既存のタスクを編集するための関数も用意されている。既存タスクの編集は、新しいタスクをゼロから作成するよりも便利な場合がある。以下に例を示そう。
+
+```{r}
+## dataの編集
+cluster.task2 = subsetTask(cluster.task, subset = 4:17)
+getTaskData(cluster.task)
+getTaskData(cluster.task2)
+```
+
+`data`のサブセットをとると、特徴量によっては値に変化がなくなる場合がある。上記の例では`am`列の値が全て0になる。このような特徴量を除外する関数として`removeConstantFeatures`がある。
+
+```{r}
+removeConstantFeatures(cluster.task2)
+```
+
+特定の特徴量を除外したい場合は、`dropFeatures`が使える。
+
+```{r}
+dropFeatures(surv.task, c("meal.cal", "wt.loss"))
+```
+
+数値型の特徴量を正規化したければ`normalizeFeatures`を使おう。
+
+```{r}
+task = normalizeFeatures(cluster.task, method = "range")
+summary(getTaskData(task))
+```
+
+## タスクの例と便利な関数
+
+利便性のために、`mlr`には予めいくつかのタスクが定義してある。チュートリアルでもコードを短くするためにこれらを使う場合がある。これらの一覧は[Example Tasks - mlr tutorial](http://mlr-org.github.io/mlr-tutorial/release/html/example_tasks/index.html)を参照のこと。
+
+また、`convertMLBenchObjToTask`関数は、`mlbench`パッケージに含まれるデータセットやデータ生成関数に由来するデータからタスクを生成するための関数である。

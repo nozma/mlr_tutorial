@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>mlrパッケージチュートリアル</title>
+  <meta name="description" content="mlrパッケージチュートリアル">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="mlrパッケージチュートリアル" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="mlrパッケージチュートリアル" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="quick-start.html">
+<link rel="next" href="section-3.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="1" data-path="quick-start.html"><a href="quick-start.html"><i class="fa fa-check"></i><b>1</b> Quick start</a></li>
+<li class="chapter" data-level="2" data-path="section-2.html"><a href="section-2.html"><i class="fa fa-check"></i><b>2</b> タスク</a><ul>
+<li class="chapter" data-level="2.1" data-path="section-2.html"><a href="section-2.html#section-2.1"><i class="fa fa-check"></i><b>2.1</b> タスクの種類と作成</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="section-2.html"><a href="section-2.html#section-2.1.1"><i class="fa fa-check"></i><b>2.1.1</b> 回帰</a></li>
+<li class="chapter" data-level="2.1.2" data-path="section-2.html"><a href="section-2.html#section-2.1.2"><i class="fa fa-check"></i><b>2.1.2</b> 分類</a></li>
+<li class="chapter" data-level="2.1.3" data-path="section-2.html"><a href="section-2.html#section-2.1.3"><i class="fa fa-check"></i><b>2.1.3</b> 生存時間分析</a></li>
+<li class="chapter" data-level="2.1.4" data-path="section-2.html"><a href="section-2.html#section-2.1.4"><i class="fa fa-check"></i><b>2.1.4</b> マルチラベル分類</a></li>
+<li class="chapter" data-level="2.1.5" data-path="section-2.html"><a href="section-2.html#section-2.1.5"><i class="fa fa-check"></i><b>2.1.5</b> クラスター分析</a></li>
+<li class="chapter" data-level="2.1.6" data-path="section-2.html"><a href="section-2.html#section-2.1.6"><i class="fa fa-check"></i><b>2.1.6</b> コスト考慮型分類</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="section-2.html"><a href="section-2.html#section-2.2"><i class="fa fa-check"></i><b>2.2</b> その他の設定</a></li>
+<li class="chapter" data-level="2.3" data-path="section-2.html"><a href="section-2.html#section-2.3"><i class="fa fa-check"></i><b>2.3</b> タスクへのアクセス</a></li>
+<li class="chapter" data-level="2.4" data-path="section-2.html"><a href="section-2.html#section-2.4"><i class="fa fa-check"></i><b>2.4</b> タスクの編集</a></li>
+<li class="chapter" data-level="2.5" data-path="section-2.html"><a href="section-2.html#section-2.5"><i class="fa fa-check"></i><b>2.5</b> タスクの例と便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="section-3.html"><a href="section-3.html"><i class="fa fa-check"></i><b>3</b> 学習器</a><ul>
+<li class="chapter" data-level="3.1" data-path="section-3.html"><a href="section-3.html#section-3.1"><i class="fa fa-check"></i><b>3.1</b> 学習器を構築する</a></li>
+<li class="chapter" data-level="3.2" data-path="section-3.html"><a href="section-3.html#section-3.2"><i class="fa fa-check"></i><b>3.2</b> 学習器へアクセスする</a></li>
+<li class="chapter" data-level="3.3" data-path="section-3.html"><a href="section-3.html#section-3.3"><i class="fa fa-check"></i><b>3.3</b> 学習器の編集</a></li>
+<li class="chapter" data-level="3.4" data-path="section-3.html"><a href="section-3.html#section-3.4"><i class="fa fa-check"></i><b>3.4</b> 学習器一覧</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="section-4.html"><a href="section-4.html"><i class="fa fa-check"></i><b>4</b> 学習器の訓練</a><ul>
+<li class="chapter" data-level="4.1" data-path="section-4.html"><a href="section-4.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 学習器モデルへのアクセス</a></li>
+<li class="chapter" data-level="4.2" data-path="section-4.html"><a href="section-4.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> その他のオプションとコメント</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="section-5.html"><a href="section-5.html"><i class="fa fa-check"></i><b>5</b> 予測</a><ul>
+<li class="chapter" data-level="5.1" data-path="section-5.html"><a href="section-5.html#section-5.1"><i class="fa fa-check"></i><b>5.1</b> 新しいデータに対する結果を予測する</a></li>
+<li class="chapter" data-level="5.2" data-path="section-5.html"><a href="section-5.html#section-5.2"><i class="fa fa-check"></i><b>5.2</b> 予測へのアクセス</a></li>
+<li class="chapter" data-level="5.3" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.3</b> 回帰: 標準誤差を取得する</a></li>
+<li class="chapter" data-level="5.4" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.4</b> 分類とクラスタリング: 確率を取得する</a></li>
+<li class="chapter" data-level="5.5" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.5</b> 分類: 混同行列を取得する</a></li>
+<li class="chapter" data-level="5.6" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>5.6</b> 分類: 決定閾値の調整</a></li>
+<li class="chapter" data-level="5.7" data-path="section-5.html"><a href="section-5.html#section-5.7"><i class="fa fa-check"></i><b>5.7</b> 予測の可視化</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="section-6.html"><a href="section-6.html"><i class="fa fa-check"></i><b>6</b> データの前処理</a><ul>
+<li class="chapter" data-level="6.1" data-path="section-6.html"><a href="section-6.html#section-6.1"><i class="fa fa-check"></i><b>6.1</b> 前処理と学習器を融合する</a></li>
+<li class="chapter" data-level="6.2" data-path="section-6.html"><a href="section-6.html#makepreprocwrappercaret"><i class="fa fa-check"></i><b>6.2</b> <code>makePreprocWrapperCaret</code>を使用した前処理</a></li>
+<li class="chapter" data-level="6.3" data-path="section-6.html"><a href="section-6.html#section-6.3"><i class="fa fa-check"></i><b>6.3</b> 前処理オプションと学習器パラメータの連結チューニング</a></li>
+<li class="chapter" data-level="6.4" data-path="section-6.html"><a href="section-6.html#section-6.4"><i class="fa fa-check"></i><b>6.4</b> 独自の前処理ラッパーを書く</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="section-6.html"><a href="section-6.html#section-6.4.1"><i class="fa fa-check"></i><b>6.4.1</b> 訓練関数の指定</a></li>
+<li class="chapter" data-level="6.4.2" data-path="section-6.html"><a href="section-6.html#section-6.4.2"><i class="fa fa-check"></i><b>6.4.2</b> 予測関数の指定</a></li>
+<li class="chapter" data-level="6.4.3" data-path="section-6.html"><a href="section-6.html#section-6.4.3"><i class="fa fa-check"></i><b>6.4.3</b> 前処理ラッパーの作成</a></li>
+<li class="chapter" data-level="6.4.4" data-path="section-6.html"><a href="section-6.html#section-6.4.4"><i class="fa fa-check"></i><b>6.4.4</b> 前処理と学習器のパラメータを連結してチューニングする</a></li>
+<li class="chapter" data-level="6.4.5" data-path="section-6.html"><a href="section-6.html#section-6.4.5"><i class="fa fa-check"></i><b>6.4.5</b> 前処理ラッパー関数</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="section-7.html"><a href="section-7.html"><i class="fa fa-check"></i><b>7</b> 学習器の性能を評価する</a><ul>
+<li class="chapter" data-level="7.1" data-path="section-7.html"><a href="section-7.html#section-7.1"><i class="fa fa-check"></i><b>7.1</b> 利用可能な性能指標</a></li>
+<li class="chapter" data-level="7.2" data-path="section-7.html"><a href="section-7.html#section-7.2"><i class="fa fa-check"></i><b>7.2</b> 指標の一覧</a></li>
+<li class="chapter" data-level="7.3" data-path="section-7.html"><a href="section-7.html#section-7.3"><i class="fa fa-check"></i><b>7.3</b> 性能指標を計算する</a></li>
+<li class="chapter" data-level="7.4" data-path="section-7.html"><a href="section-7.html#section-7.4"><i class="fa fa-check"></i><b>7.4</b> 指標計算に必要な情報</a></li>
+<li class="chapter" data-level="7.5" data-path="section-7.html"><a href="section-7.html#section-7.5"><i class="fa fa-check"></i><b>7.5</b> 性能指標へのアクセス</a></li>
+<li class="chapter" data-level="7.6" data-path="section-7.html"><a href="section-7.html#section-7.6"><i class="fa fa-check"></i><b>7.6</b> 2クラス分類</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="section-7.html"><a href="section-7.html#section-7.6.1"><i class="fa fa-check"></i><b>7.6.1</b> 性能と閾値の関係をプロットする</a></li>
+<li class="chapter" data-level="7.6.2" data-path="section-7.html"><a href="section-7.html#roc"><i class="fa fa-check"></i><b>7.6.2</b> ROC</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="section-8.html"><a href="section-8.html"><i class="fa fa-check"></i><b>8</b> リサンプリング</a><ul>
+<li class="chapter" data-level="8.1" data-path="section-8.html"><a href="section-8.html#section-8.1"><i class="fa fa-check"></i><b>8.1</b> リサンプリング手法を決める</a></li>
+<li class="chapter" data-level="8.2" data-path="section-8.html"><a href="section-8.html#section-8.2"><i class="fa fa-check"></i><b>8.2</b> リサンプリングを実行する</a></li>
+<li class="chapter" data-level="8.3" data-path="section-8.html"><a href="section-8.html#section-8.3"><i class="fa fa-check"></i><b>8.3</b> リサンプル結果へのアクセス</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="section-8.html"><a href="section-8.html#section-8.3.1"><i class="fa fa-check"></i><b>8.3.1</b> 予測値</a></li>
+<li class="chapter" data-level="8.3.2" data-path="section-8.html"><a href="section-8.html#section-8.3.2"><i class="fa fa-check"></i><b>8.3.2</b> 訓練済みモデルの抽出</a></li>
+<li class="chapter" data-level="8.3.3" data-path="section-8.html"><a href="section-8.html#section-8.3.3"><i class="fa fa-check"></i><b>8.3.3</b> 他の抽出方法</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="section-8.html"><a href="section-8.html#section-8.4"><i class="fa fa-check"></i><b>8.4</b> 階層化とブロック化</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="section-8.html"><a href="section-8.html#section-8.4.1"><i class="fa fa-check"></i><b>8.4.1</b> 目的変数の階層化</a></li>
+<li class="chapter" data-level="8.4.2" data-path="section-8.html"><a href="section-8.html#section-8.4.2"><i class="fa fa-check"></i><b>8.4.2</b> 説明変数の階層化</a></li>
+<li class="chapter" data-level="8.4.3" data-path="section-8.html"><a href="section-8.html#section-8.4.3"><i class="fa fa-check"></i><b>8.4.3</b> ブロック化</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="section-8.html"><a href="section-8.html#section-8.5"><i class="fa fa-check"></i><b>8.5</b> リサンプリングの詳細とリサンプルのインスタンス</a></li>
+<li class="chapter" data-level="8.6" data-path="section-8.html"><a href="section-8.html#section-8.6"><i class="fa fa-check"></i><b>8.6</b> 性能指標の集約</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.1</b> 例: 一つの指標に複数の集約方法</a></li>
+<li class="chapter" data-level="8.6.2" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.2</b> 例: 訓練セットの誤差を計算する</a></li>
+<li class="chapter" data-level="8.6.3" data-path="section-5.html"><a href="section-5.html#-"><i class="fa fa-check"></i><b>8.6.3</b> 例: ブートストラップ</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="section-8.html"><a href="section-8.html#section-8.7"><i class="fa fa-check"></i><b>8.7</b> 便利な関数</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="section-9.html"><a href="section-9.html"><i class="fa fa-check"></i><b>9</b> ハイパーパラメータのチューニング</a><ul>
+<li class="chapter" data-level="9.1" data-path="section-9.html"><a href="section-9.html#section-9.1"><i class="fa fa-check"></i><b>9.1</b> パラメータ探索空間の指定</a></li>
+<li class="chapter" data-level="9.2" data-path="section-9.html"><a href="section-9.html#section-9.2"><i class="fa fa-check"></i><b>9.2</b> 最適化アルゴリズムの指定</a></li>
+<li class="chapter" data-level="9.3" data-path="section-9.html"><a href="section-9.html#section-9.3"><i class="fa fa-check"></i><b>9.3</b> チューニングの実行</a></li>
+<li class="chapter" data-level="9.4" data-path="section-9.html"><a href="section-9.html#section-9.4"><i class="fa fa-check"></i><b>9.4</b> チューニング結果へのアクセス</a></li>
+<li class="chapter" data-level="9.5" data-path="section-9.html"><a href="section-9.html#section-9.5"><i class="fa fa-check"></i><b>9.5</b> ハイパーパラメータチューニングの影響を調査する</a></li>
+<li class="chapter" data-level="9.6" data-path="section-9.html"><a href="section-9.html#section-9.6"><i class="fa fa-check"></i><b>9.6</b> その他いろいろ</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="section-10.html"><a href="section-10.html"><i class="fa fa-check"></i><b>10</b> ベンチマーク試験</a><ul>
+<li class="chapter" data-level="10.1" data-path="section-10.html"><a href="section-10.html#section-10.1"><i class="fa fa-check"></i><b>10.1</b> ベンチマーク試験の実施</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="section-10.html"><a href="section-10.html#section-10.1.1"><i class="fa fa-check"></i><b>10.1.1</b> 実験を再現可能にする</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="section-10.html"><a href="section-10.html#section-10.2"><i class="fa fa-check"></i><b>10.2</b> ベンチマーク結果へのアクセス</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="section-10.html"><a href="section-10.html#section-10.2.1"><i class="fa fa-check"></i><b>10.2.1</b> 学習器の性能</a></li>
+<li class="chapter" data-level="10.2.2" data-path="section-10.html"><a href="section-10.html#-1"><i class="fa fa-check"></i><b>10.2.2</b> 予測</a></li>
+<li class="chapter" data-level="10.2.3" data-path="section-10.html"><a href="section-10.html#id"><i class="fa fa-check"></i><b>10.2.3</b> ID</a></li>
+<li class="chapter" data-level="10.2.4" data-path="section-10.html"><a href="section-10.html#section-10.2.4"><i class="fa fa-check"></i><b>10.2.4</b> フィット済みモデル</a></li>
+<li class="chapter" data-level="10.2.5" data-path="section-10.html"><a href="section-10.html#section-10.2.5"><i class="fa fa-check"></i><b>10.2.5</b> 学習器と性能指標</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="section-10.html"><a href="section-10.html#section-10.3"><i class="fa fa-check"></i><b>10.3</b> ベンチマーク結果のマージ</a></li>
+<li class="chapter" data-level="10.4" data-path="section-10.html"><a href="section-10.html#section-10.4"><i class="fa fa-check"></i><b>10.4</b> ベンチマークの分析と可視化</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="section-10.html"><a href="section-10.html#section-10.4.1"><i class="fa fa-check"></i><b>10.4.1</b> 例：線形判別分析と分類木、ランダムフォレストの比較</a></li>
+<li class="chapter" data-level="10.4.2" data-path="section-10.html"><a href="section-10.html#section-10.4.2"><i class="fa fa-check"></i><b>10.4.2</b> 可視化</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlrパッケージチュートリアル</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="section-2" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> タスク</h1>
+<p><strong>タスク</strong>はデータ及び機械学習問題に関する情報、例えば教師あり学習におけるターゲットの名前などをカプセル化したものだ。</p>
+<div id="section-2.1" class="section level2">
+<h2><span class="header-section-number">2.1</span> タスクの種類と作成</h2>
+<p>全てのタスクは<code>Task</code>クラスを頂点とする階層構造を持っている。以下に示すクラスは全て<code>Task</code>のサブクラスである。</p>
+<ul>
+<li><code>RegrTask</code>: 回帰分析に関するタスク。</li>
+<li><code>ClassifTask</code>: 2クラス分類または多クラス分類に関するタスク(注: コストがクラス依存であるコスト考慮型分類も扱うことができる)。</li>
+<li><code>SurvTask</code>: 生存時間分析に関するタスク。</li>
+<li><code>ClusterTask</code>: クラスター分析に関するタスク。</li>
+<li><code>MultilabelTask</code>: マルチラベル分類に関するタスク。</li>
+<li><code>CostSensTask</code>: 一般のコスト考慮型分類に関するタスク(コストが事例に依存するもの)。</li>
+</ul>
+<p>タスクを作成するには、<code>make&lt;タスク名&gt;</code>というような名前の関数を使う。例えば分類タスクであれば<code>makeClassifTask</code>である。全てのタスクはID(引数<code>id</code>に指定する)とデータフレーム(引数<code>data</code>に指定する)を最低限必要とする。ただし、IDを未指定の場合は、データの変数名に基づいて自動的に割り当てられる。IDはプロットの際の注釈や、ベンチマークテストの際に名前として使われる。また、問題の性質に応じて、追加の引数が必要となる場合もある。</p>
+<p>以下にそれぞれのタスクの生成方法を説明する。</p>
+<div id="section-2.1.1" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> 回帰</h3>
+<p>教師あり学習である回帰では、<code>data</code>の他に目的変数列名である<code>target</code>を指定する必要がある。これは後に見る分類と生存時間分析においても同様である。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(BostonHousing, <span class="dt">package =</span> <span class="st">&quot;mlbench&quot;</span>)
+regr.task =<span class="st"> </span><span class="kw">makeRegrTask</span>(<span class="dt">id =</span> <span class="st">&quot;bh&quot;</span>, <span class="dt">data =</span> BostonHousing, <span class="dt">target =</span> <span class="st">&quot;medv&quot;</span>)
+regr.task</code></pre></div>
+<pre><code>$&gt; Supervised task: bh
+$&gt; Type: regr
+$&gt; Target: medv
+$&gt; Observations: 506
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;       12        1        0 
+$&gt; Missings: FALSE
+$&gt; Has weights: FALSE
+$&gt; Has blocking: FALSE</code></pre>
+<p><code>Task</code>オブジェクトの中には、学習問題のタイプと、データセットに関する基本的な情報(例えば特徴量の型やデータ数、欠測値の有無など)が格納されている。</p>
+<p>分類でも生存時間分析でもタスク作成の基本的な枠組みは同じである。ただし、<code>data</code>の中の目的変数の種類は異なる。これについては以下で述べる。</p>
+</div>
+<div id="section-2.1.2" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> 分類</h3>
+<p>分類問題では、目的変数は因子型でなければならない。</p>
+<p>以下に<code>BreastCancer</code>データセットを使って分類タスクを作成する例を示そう。ここでは<code>Id</code>列を除外していることに注意してもらいたい(訳注: <code>Id</code>列はその意味から考えて特徴量に含めるのが適当でないのは当然のこと、<code>character</code>型であるため特徴量に含めようとしてもエラーがでる)。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(BreastCancer, <span class="dt">package =</span> <span class="st">&quot;mlbench&quot;</span>)
+df =<span class="st"> </span>BreastCancer
+df<span class="op">$</span>Id =<span class="st"> </span><span class="ot">NULL</span>
+classif.task =<span class="st"> </span><span class="kw">makeClassifTask</span>(<span class="dt">id =</span> <span class="st">&quot;BreastCancer&quot;</span>, <span class="dt">data =</span> df, <span class="dt">target =</span> <span class="st">&quot;Class&quot;</span>)
+classif.task</code></pre></div>
+<pre><code>$&gt; Supervised task: BreastCancer
+$&gt; Type: classif
+$&gt; Target: Class
+$&gt; Observations: 699
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;        0        4        5 
+$&gt; Missings: TRUE
+$&gt; Has weights: FALSE
+$&gt; Has blocking: FALSE
+$&gt; Classes: 2
+$&gt;    benign malignant 
+$&gt;       458       241 
+$&gt; Positive class: benign</code></pre>
+<p>2クラス分類においては、しばしばそれぞれのクラスを<strong>positive</strong>と<strong>negative</strong>に対応させる。上記例を見るとわかるように、デフォルトでは因子型における最初のレベルが<strong>positive</strong>に割り当てられるが、引数<code>positive</code>によって明示的に指定することもできる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">makeClassifTask</span>(<span class="dt">data =</span> df, <span class="dt">target =</span> <span class="st">&quot;Class&quot;</span>, <span class="dt">positive =</span> <span class="st">&quot;malignant&quot;</span>)</code></pre></div>
+<pre><code>$&gt; Supervised task: df
+$&gt; Type: classif
+$&gt; Target: Class
+$&gt; Observations: 699
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;        0        4        5 
+$&gt; Missings: TRUE
+$&gt; Has weights: FALSE
+$&gt; Has blocking: FALSE
+$&gt; Classes: 2
+$&gt;    benign malignant 
+$&gt;       458       241 
+$&gt; Positive class: malignant</code></pre>
+</div>
+<div id="section-2.1.3" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> 生存時間分析</h3>
+<p>生存時間分析においては目的変数列が2つ必要になる。左打ち切り及び右打ち切りデータでは、生存時間と打ち切りかどうかを示す二値変数が必要である。区間打ち切りデータでは、<code>interval2</code>形式でのデータ指定が必要である(詳しくは<a href="https://www.rdocumentation.org/packages/survival/versions/2.41-2/topics/Surv">Surv function | R Documentation</a>を参照)。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(lung, <span class="dt">package =</span> <span class="st">&quot;survival&quot;</span>)
+<span class="co"># statusは1=censored, 2=deadとして符号化されているので、</span>
+<span class="co"># 論理値に変換する必要がある。</span>
+lung<span class="op">$</span>status =<span class="st"> </span>(lung<span class="op">$</span>status <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) 
+surv.task =<span class="st"> </span><span class="kw">makeSurvTask</span>(<span class="dt">data =</span> lung, <span class="dt">target =</span> <span class="kw">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;status&quot;</span>))
+surv.task</code></pre></div>
+<pre><code>$&gt; Supervised task: lung
+$&gt; Type: surv
+$&gt; Target: time,status
+$&gt; Events: 165
+$&gt; Observations: 228
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;        8        0        0 
+$&gt; Missings: TRUE
+$&gt; Has weights: FALSE
+$&gt; Has blocking: FALSE</code></pre>
+<p>打ち切りの種類は<code>censoring</code>引数で明示的に指定できる。デフォルトは<code>rcens</code>(右打ち切り)である。</p>
+</div>
+<div id="section-2.1.4" class="section level3">
+<h3><span class="header-section-number">2.1.4</span> マルチラベル分類</h3>
+<p>マルチラベル分類とは、対象が複数のカテゴリに同時に属す可能性があるような分類問題である。</p>
+<p><code>data</code>にはクラスラベルと同じだけの数の目的変数列が必要である。また、それぞれの目的変数列は論理値によってそのクラスに属するかどうかを示す必要がある。</p>
+<p>以下に<code>yeast</code>データを用いた例を示そう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">yeast =<span class="st"> </span><span class="kw">getTaskData</span>(yeast.task)
+
+labels =<span class="st"> </span><span class="kw">colnames</span>(yeast)[<span class="dv">1</span><span class="op">:</span><span class="dv">14</span>]
+yeast.task =<span class="st"> </span><span class="kw">makeMultilabelTask</span>(<span class="dt">id =</span> <span class="st">&quot;multi&quot;</span>, <span class="dt">data =</span> yeast, <span class="dt">target =</span> labels)
+yeast.task</code></pre></div>
+<pre><code>$&gt; Supervised task: multi
+$&gt; Type: multilabel
+$&gt; Target: label1,label2,label3,label4,label5,label6,label7,label8,label9,label10,label11,label12,label13,label14
+$&gt; Observations: 2417
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;      103        0        0 
+$&gt; Missings: FALSE
+$&gt; Has weights: FALSE
+$&gt; Has blocking: FALSE
+$&gt; Classes: 14
+$&gt;  label1  label2  label3  label4  label5  label6  label7  label8  label9 
+$&gt;     762    1038     983     862     722     597     428     480     178 
+$&gt; label10 label11 label12 label13 label14 
+$&gt;     253     289    1816    1799      34</code></pre>
+</div>
+<div id="section-2.1.5" class="section level3">
+<h3><span class="header-section-number">2.1.5</span> クラスター分析</h3>
+<p>クラスター分析は教師なし学習の一種である。タスクの作成に必須の引数は<code>data</code>だけだ。<code>mtcars</code>を使ってクラスター分析のタスクを作成する例を示そう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(mtcars, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)
+cluster.task =<span class="st"> </span><span class="kw">makeClusterTask</span>(<span class="dt">data =</span> mtcars)
+cluster.task</code></pre></div>
+<pre><code>$&gt; Unsupervised task: mtcars
+$&gt; Type: cluster
+$&gt; Observations: 32
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;       11        0        0 
+$&gt; Missings: FALSE
+$&gt; Has weights: FALSE
+$&gt; Has blocking: FALSE</code></pre>
+</div>
+<div id="section-2.1.6" class="section level3">
+<h3><span class="header-section-number">2.1.6</span> コスト考慮型分類</h3>
+<p>一般に分類問題では精度を最大化すること、つまり誤分類の数を最小化することが目的となる。つまり、これは全ての誤分類の価値を平等と考えるということである。しかし、問題によっては間違いの価値は平等とは言えないことがある。例えば健康や金融に関わる問題では、ある間違いは他の間違いよりより深刻であるということがあり得ることは容易に想像できるだろう。</p>
+<p>コスト考慮型問題のうち、コストがクラスラベルの種類にのみ依存するような問題は、<code>ClassifTask</code>にて扱うことができる。</p>
+<p>一方、コストが事例に依存するような例は<code>CostSensTask</code>でタスクを作成する必要がある。このケースでは入力<span class="math inline">\(x\)</span>と出力<span class="math inline">\(y\)</span>からなる事例<span class="math inline">\((x, y)\)</span>がそれぞれコストベクトル<span class="math inline">\(K\)</span>に結びついていることを想定する。コストベクトル<span class="math inline">\(K\)</span>はクラスラベルの数と同じ長さをもち、<span class="math inline">\(k\)</span>番目の要素は<span class="math inline">\(x\)</span>をクラス<span class="math inline">\(k\)</span>に結びつけた場合のコストを表す。当然、<span class="math inline">\(y\)</span>はコストを最小化するように選択されることが期待される。</p>
+<p>コストベクトルはクラス<span class="math inline">\(y\)</span>に関する全ての情報を包含するので、<code>CostSensTask</code>を作成するために必要なのは、全ての事例に対するコストベクトルをまとめたコスト行列と、特徴量のみである。</p>
+<p><code>iris</code>と人工的に作成したコスト行列を使ってコスト考慮型分類タスクを作成する例を示そう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
+df =<span class="st"> </span>iris
+cost =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(<span class="dv">150</span> <span class="op">*</span><span class="st"> </span><span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">2000</span>), <span class="dv">150</span>) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>))[df<span class="op">$</span>Species, ]
+df<span class="op">$</span>Species =<span class="st"> </span><span class="ot">NULL</span>
+costsens.task =<span class="st"> </span><span class="kw">makeCostSensTask</span>(<span class="dt">data =</span> df, <span class="dt">cost =</span> cost)
+costsens.task</code></pre></div>
+<pre><code>$&gt; Supervised task: df
+$&gt; Type: costsens
+$&gt; Observations: 150
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;        4        0        0 
+$&gt; Missings: FALSE
+$&gt; Has blocking: FALSE
+$&gt; Classes: 3
+$&gt; y1, y2, y3</code></pre>
+</div>
+</div>
+<div id="section-2.2" class="section level2">
+<h2><span class="header-section-number">2.2</span> その他の設定</h2>
+<p>それぞれのタスク作成関数のヘルプページを確認すると、その他の引数についての情報を得ることができるだろう。</p>
+<p>例えば、<code>blocking</code>引数は、幾つかの観測値が<strong>一緒である</strong>ことを示す。これによって、リサンプリングの際にそれらのデータが分割されなくなる。</p>
+<p>他に<code>weights</code>という引数がある。これは単に観測頻度やデータ採取方法に由来する重みを表現するための方法であって、重みが本当にタスクに属している場合にのみ使用するようにしてもらいたい。もし、同じタスク内で重みを変化させて訓練をしたいと考えているのであれば、<code>mlr</code>はそのための他の方法を用意している。詳しくは<code>training</code>のチュートリアルページか<code>makeWeightedClassesWrapper</code>関数のヘルプを確認してもらいたい。</p>
+</div>
+<div id="section-2.3" class="section level2">
+<h2><span class="header-section-number">2.3</span> タスクへのアクセス</h2>
+<p>タスクオブジェクト内の要素を取得する方法は複数ある。これらの中で重要なものは各タスクおよび<code>getTaskData</code>のヘルプページにリストアップされている。</p>
+<p>まずは<code>?TaskDesc</code>でリストアップされている要素を取得する方法を示そう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getTaskDesc</span>(classif.task)</code></pre></div>
+<pre><code>$&gt; $id
+$&gt; [1] &quot;BreastCancer&quot;
+$&gt; 
+$&gt; $type
+$&gt; [1] &quot;classif&quot;
+$&gt; 
+$&gt; $target
+$&gt; [1] &quot;Class&quot;
+$&gt; 
+$&gt; $size
+$&gt; [1] 699
+$&gt; 
+$&gt; $n.feat
+$&gt; numerics  factors  ordered 
+$&gt;        0        4        5 
+$&gt; 
+$&gt; $has.missings
+$&gt; [1] TRUE
+$&gt; 
+$&gt; $has.weights
+$&gt; [1] FALSE
+$&gt; 
+$&gt; $has.blocking
+$&gt; [1] FALSE
+$&gt; 
+$&gt; $class.levels
+$&gt; [1] &quot;benign&quot;    &quot;malignant&quot;
+$&gt; 
+$&gt; $positive
+$&gt; [1] &quot;benign&quot;
+$&gt; 
+$&gt; $negative
+$&gt; [1] &quot;malignant&quot;
+$&gt; 
+$&gt; attr(,&quot;class&quot;)
+$&gt; [1] &quot;ClassifTaskDesc&quot;    &quot;SupervisedTaskDesc&quot; &quot;TaskDesc&quot;</code></pre>
+<p>取得できる要素の種類はタスクの種類によって多少異なる。</p>
+<p>よく使う要素については、直接アクセスする手段が用意されている。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## ID
+<span class="kw">getTaskId</span>(classif.task)</code></pre></div>
+<pre><code>$&gt; [1] &quot;BreastCancer&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## タスクの種類
+<span class="kw">getTaskType</span>(classif.task)</code></pre></div>
+<pre><code>$&gt; [1] &quot;classif&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 目的変数の列名
+<span class="kw">getTaskTargetNames</span>(classif.task)</code></pre></div>
+<pre><code>$&gt; [1] &quot;Class&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 観測値の数
+<span class="kw">getTaskSize</span>(classif.task)</code></pre></div>
+<pre><code>$&gt; [1] 699</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 特徴量の種類数
+<span class="kw">getTaskNFeats</span>(classif.task)</code></pre></div>
+<pre><code>$&gt; [1] 9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## クラスレベル
+<span class="kw">getTaskClassLevels</span>(classif.task)</code></pre></div>
+<pre><code>$&gt; [1] &quot;benign&quot;    &quot;malignant&quot;</code></pre>
+<p><code>mlr</code>はさらに幾つかの関数を提供する。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## タスク内のデータ
+<span class="kw">str</span>(<span class="kw">getTaskData</span>(classif.task))</code></pre></div>
+<pre><code>$&gt; &#39;data.frame&#39;:    699 obs. of  10 variables:
+$&gt;  $ Cl.thickness   : Ord.factor w/ 10 levels &quot;1&quot;&lt;&quot;2&quot;&lt;&quot;3&quot;&lt;&quot;4&quot;&lt;..: 5 5 3 6 4 8 1 2 2 4 ...
+$&gt;  $ Cell.size      : Ord.factor w/ 10 levels &quot;1&quot;&lt;&quot;2&quot;&lt;&quot;3&quot;&lt;&quot;4&quot;&lt;..: 1 4 1 8 1 10 1 1 1 2 ...
+$&gt;  $ Cell.shape     : Ord.factor w/ 10 levels &quot;1&quot;&lt;&quot;2&quot;&lt;&quot;3&quot;&lt;&quot;4&quot;&lt;..: 1 4 1 8 1 10 1 2 1 1 ...
+$&gt;  $ Marg.adhesion  : Ord.factor w/ 10 levels &quot;1&quot;&lt;&quot;2&quot;&lt;&quot;3&quot;&lt;&quot;4&quot;&lt;..: 1 5 1 1 3 8 1 1 1 1 ...
+$&gt;  $ Epith.c.size   : Ord.factor w/ 10 levels &quot;1&quot;&lt;&quot;2&quot;&lt;&quot;3&quot;&lt;&quot;4&quot;&lt;..: 2 7 2 3 2 7 2 2 2 2 ...
+$&gt;  $ Bare.nuclei    : Factor w/ 10 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 10 2 4 1 10 10 1 1 1 ...
+$&gt;  $ Bl.cromatin    : Factor w/ 10 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 3 3 3 3 3 9 3 3 1 2 ...
+$&gt;  $ Normal.nucleoli: Factor w/ 10 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 2 1 7 1 7 1 1 1 1 ...
+$&gt;  $ Mitoses        : Factor w/ 9 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 1 1 1 1 5 1 ...
+$&gt;  $ Class          : Factor w/ 2 levels &quot;benign&quot;,&quot;malignant&quot;: 1 1 1 1 1 2 1 1 1 1 ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 特徴量の名前
+<span class="kw">getTaskFeatureNames</span>(cluster.task)</code></pre></div>
+<pre><code>$&gt;  [1] &quot;mpg&quot;  &quot;cyl&quot;  &quot;disp&quot; &quot;hp&quot;   &quot;drat&quot; &quot;wt&quot;   &quot;qsec&quot; &quot;vs&quot;   &quot;am&quot;   &quot;gear&quot;
+$&gt; [11] &quot;carb&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 目的変数の値
+<span class="kw">head</span>(<span class="kw">getTaskTargets</span>(surv.task))</code></pre></div>
+<pre><code>$&gt;   time status
+$&gt; 1  306   TRUE
+$&gt; 2  455   TRUE
+$&gt; 3 1010  FALSE
+$&gt; 4  210   TRUE
+$&gt; 5  883   TRUE
+$&gt; 6 1022  FALSE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## コスト行列
+<span class="kw">head</span>(<span class="kw">getTaskCosts</span>(costsens.task))</code></pre></div>
+<pre><code>$&gt;      y1        y2         y3
+$&gt; [1,]  0 1694.9063 1569.15053
+$&gt; [2,]  0  995.0545   18.85981
+$&gt; [3,]  0  775.8181 1558.13177
+$&gt; [4,]  0  492.8980 1458.78130
+$&gt; [5,]  0  222.1929 1260.26371
+$&gt; [6,]  0  779.9889  961.82166</code></pre>
+</div>
+<div id="section-2.4" class="section level2">
+<h2><span class="header-section-number">2.4</span> タスクの編集</h2>
+<p><code>mlr</code>には既存のタスクを編集するための関数も用意されている。既存タスクの編集は、新しいタスクをゼロから作成するよりも便利な場合がある。以下に例を示そう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## dataの編集
+cluster.task2 =<span class="st"> </span><span class="kw">subsetTask</span>(cluster.task, <span class="dt">subset =</span> <span class="dv">4</span><span class="op">:</span><span class="dv">17</span>)
+<span class="kw">getTaskData</span>(cluster.task)</code></pre></div>
+<pre><code>$&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+$&gt; Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+$&gt; Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+$&gt; Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+$&gt; Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+$&gt; Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+$&gt; Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+$&gt; Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+$&gt; Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+$&gt; Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+$&gt; Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+$&gt; Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+$&gt; Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+$&gt; Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+$&gt; Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+$&gt; Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+$&gt; Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+$&gt; Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+$&gt; Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+$&gt; Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+$&gt; Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+$&gt; Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+$&gt; Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+$&gt; AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+$&gt; Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+$&gt; Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+$&gt; Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+$&gt; Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+$&gt; Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+$&gt; Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+$&gt; Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+$&gt; Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+$&gt; Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getTaskData</span>(cluster.task2)</code></pre></div>
+<pre><code>$&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+$&gt; Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+$&gt; Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+$&gt; Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+$&gt; Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+$&gt; Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+$&gt; Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+$&gt; Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+$&gt; Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+$&gt; Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+$&gt; Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+$&gt; Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+$&gt; Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+$&gt; Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+$&gt; Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4</code></pre>
+<p><code>data</code>のサブセットをとると、特徴量によっては値に変化がなくなる場合がある。上記の例では<code>am</code>列の値が全て0になる。このような特徴量を除外する関数として<code>removeConstantFeatures</code>がある。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">removeConstantFeatures</span>(cluster.task2)</code></pre></div>
+<pre><code>$&gt; Removing 1 columns: am</code></pre>
+<pre><code>$&gt; Unsupervised task: mtcars
+$&gt; Type: cluster
+$&gt; Observations: 14
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;       10        0        0 
+$&gt; Missings: FALSE
+$&gt; Has weights: FALSE
+$&gt; Has blocking: FALSE</code></pre>
+<p>特定の特徴量を除外したい場合は、<code>dropFeatures</code>が使える。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dropFeatures</span>(surv.task, <span class="kw">c</span>(<span class="st">&quot;meal.cal&quot;</span>, <span class="st">&quot;wt.loss&quot;</span>))</code></pre></div>
+<pre><code>$&gt; Supervised task: lung
+$&gt; Type: surv
+$&gt; Target: time,status
+$&gt; Events: 165
+$&gt; Observations: 228
+$&gt; Features:
+$&gt; numerics  factors  ordered 
+$&gt;        6        0        0 
+$&gt; Missings: TRUE
+$&gt; Has weights: FALSE
+$&gt; Has blocking: FALSE</code></pre>
+<p>数値型の特徴量を正規化したければ<code>normalizeFeatures</code>を使おう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">task =<span class="st"> </span><span class="kw">normalizeFeatures</span>(cluster.task, <span class="dt">method =</span> <span class="st">&quot;range&quot;</span>)
+<span class="kw">summary</span>(<span class="kw">getTaskData</span>(task))</code></pre></div>
+<pre><code>$&gt;       mpg              cyl              disp              hp        
+$&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+$&gt;  1st Qu.:0.2138   1st Qu.:0.0000   1st Qu.:0.1240   1st Qu.:0.1572  
+$&gt;  Median :0.3745   Median :0.5000   Median :0.3123   Median :0.2509  
+$&gt;  Mean   :0.4124   Mean   :0.5469   Mean   :0.3982   Mean   :0.3346  
+$&gt;  3rd Qu.:0.5277   3rd Qu.:1.0000   3rd Qu.:0.6358   3rd Qu.:0.4523  
+$&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
+$&gt;       drat              wt              qsec              vs        
+$&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+$&gt;  1st Qu.:0.1475   1st Qu.:0.2731   1st Qu.:0.2848   1st Qu.:0.0000  
+$&gt;  Median :0.4309   Median :0.4633   Median :0.3821   Median :0.0000  
+$&gt;  Mean   :0.3855   Mean   :0.4358   Mean   :0.3987   Mean   :0.4375  
+$&gt;  3rd Qu.:0.5346   3rd Qu.:0.5362   3rd Qu.:0.5238   3rd Qu.:1.0000  
+$&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
+$&gt;        am              gear             carb       
+$&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+$&gt;  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1429  
+$&gt;  Median :0.0000   Median :0.5000   Median :0.1429  
+$&gt;  Mean   :0.4062   Mean   :0.3438   Mean   :0.2589  
+$&gt;  3rd Qu.:1.0000   3rd Qu.:0.5000   3rd Qu.:0.4286  
+$&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000</code></pre>
+</div>
+<div id="section-2.5" class="section level2">
+<h2><span class="header-section-number">2.5</span> タスクの例と便利な関数</h2>
+<p>利便性のために、<code>mlr</code>には予めいくつかのタスクが定義してある。チュートリアルでもコードを短くするためにこれらを使う場合がある。これらの一覧は<a href="http://mlr-org.github.io/mlr-tutorial/release/html/example_tasks/index.html">Example Tasks - mlr tutorial</a>を参照のこと。</p>
+<p>また、<code>convertMLBenchObjToTask</code>関数は、<code>mlbench</code>パッケージに含まれるデータセットやデータ生成関数に由来するデータからタスクを生成するための関数である。</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="quick-start.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="section-3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
