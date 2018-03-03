@@ -1,5 +1,10 @@
 # ベンチマーク試験
 
+```{r include=FALSE}
+library(mlr)
+```
+
+
 ベンチマーク試験では、1つ、あるいは複数の性能指標に基いてアルゴリズムを比較するために、異なる学習手法を1つあるいは複数のデータセットに適用する。
 
 `mlr`では`benchmark`関数に学習器とタスクをリストで渡すことでベンチマーク試験を実施できる。`benchmark`は通常、学習器とタスクの対に対してリサンプリングを実行する。タスクと性能指標の組み合わせに対してどのようなリサンプリング手法を適用するかは選択することができる。
@@ -257,7 +262,7 @@ plotBMRBoxplots(bmr, measure = ber, style = "violin",
   theme(strip.text.x = element_text(size = 6))
 ```
 
-ここでは、指標として`ber`を使用するとともに、`learner.id`に基づく色の塗り分けも行っている。また、`theme`はグラフのラベル(strip)のフォントサイズを調整している。
+ここでは、指標として`ber`を使用するとともに、`learner.id`に基づく色の塗り分けも行っている。また、`theme`は各パネルのラベル(strip)のフォントサイズを調整している。
 
 `pretty.names=FALSE`は何かというと、性能指標や学習器のラベルとしてidを使ってくれという指定である。これを指定しなかったときにどのような名前が使われるかは、性能指標であれば`指標名$name`、学習器では`getBMRLEarnerShortName`で確認できる。
 
@@ -269,5 +274,56 @@ mmce$name
 getBMRLearnerShortNames(bmr)
 ```
 
-プロットに関してよくある質問は、「パネルのヘッダと学習器の名前はどうやったら変更できるのか」といったものだ。
+プロットに関してよくある質問は、「パネルのラベルと学習器の名前はどうやったら変更できるのか」といったものだ。例えば、今見せた例で言えば、パネルのラベル名に含まれている`-example`や`mlbench.`を取り除いたり、学習機の名前を大文字の略称に変更したい、などの思ったのではないだろうか。現状、これを解決する一番簡単なやり方はfactorのlevelを書き換えてしまうことだ。例を示そう。
 
+```{r}
+plt = plotBMRBoxplots(bmr, measure = mmce)
+levels(plt$data$task.id) = c("Iris", "Ringnorm", "Waveform", "Diabetes", "Sonar")
+levels(plt$data$learner.id) = c("LDA", "CART", "RF")
+plt
+```
+
+### 集約結果の可視化
+
+集約された性能指標(`getBMRAggrPerformances`で得られるもの)は、`plotBMRSummary`で可視化できる。このプロットでは各タスクの性能指標集約値が同一の線上に並べられる(注: ドットプロット)。標準では、`benchmark`で指定された最初の指標がプロット対象となる。今回の例では`mmce`だ。加えて、各ポイントには縦方向に若干の誤差が加えられる。これはデータポイントが重なった場合にも識別できるようにするためだ。
+
+```{r}
+plotBMRSummary(bmr)
+```
+
+### 順位の計算と可視化
+
+性能指標の値に加えて、順位のような相対指標があると新しい知見が得られる場合がある。
+
+`convertBMRToRankMatrix`関数は、集約された性能指標のひとつに基づいて順位を計算する。例として`mmce`に基づくランキングを求めてみよう。
+
+```{r}
+convertBMRToRankMatrix(bmr)
+```
+
+**順位**は最高のパフォーマンスを示した、つまり`mmce`が最も低かった手法に対して小さな値が割り当てられる。今回の例ではLDAがirisとPimaIndiansDiabetesに対して最良の結果を示したが、他のタスクではランダムフォレストが優れていた事がわかる。
+
+`plotBMRRanksAsBarChart`関数を使うと順位を可視化することができる。`pos = "tile"`を指定すると、順位・学習器・タスクの関係がヒートマップで図示される。この場合、x軸が順位、y軸がタスク、学習器の種類が色にそれぞれ割り当てられる。
+
+```{r}
+plotBMRRanksAsBarChart(bmr, pos = "tile")
+```
+
+なお、`plotBMRSummary`でもオプションに`trafo = "rank"`を指定することで、性能指標が順位に変換されるため、同様の情報を含むプロットを作成できる。
+
+```{r}
+plotBMRSummary(bmr, trafo = "rank")
+```
+
+`plotBMRRanksAsBarChart`はデフォルトでは積み上げ棒グラフを、`pos = "dodge"`オプションを指定すると通常の棒グラフを描画する。これは各種法が獲得した順位の頻度を確認する場合に適している。
+
+```{r}
+plotBMRRanksAsBarChart(bmr)
+plotBMRRanksAsBarChart(bmr, pos = "dodge")
+```
+
+### 仮説検定で学習器を比較する
+
+多くの研究者はアルゴリズムの有意性を仮説検定によって示す必要性を感じていることだろう。ベンチマーク試験の結果の比較などに適していると思われるノンパラメトリック検定として、`mlr`はOverall Friedman testとFriedman-Nemenyi post hoc testをサポートしている。
+
+Friedman testは`stats`パッケージの`friedman.test`関数に基いており、これは学習器間に差があるかどうかを検定する。一方、Friedman-Nemenyi testは全ての学習器間の組合せについて差があるかどうかを検定する。ノンパラメトリック検定はパラメトリック検定と違い、データの分布に関する仮定を持たなくて済むという利点がある。しかしこれは、妥当な有意水準の元で優位な差を示すためには多くのデータセットが必要であるということでもある。
