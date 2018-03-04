@@ -214,6 +214,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="10.5" data-path="section-10.html"><a href="section-10.html#section-10.5"><i class="fa fa-check"></i><b>10.5</b> その他のコメント</a></li>
 </ul></li>
+<li class="chapter" data-level="11" data-path="section-11.html"><a href="section-11.html"><i class="fa fa-check"></i><b>11</b> 並列化</a><ul>
+<li class="chapter" data-level="11.1" data-path="section-11.html"><a href="section-11.html#section-11.1"><i class="fa fa-check"></i><b>11.1</b> 並列化レベル</a></li>
+<li class="chapter" data-level="11.2" data-path="section-11.html"><a href="section-11.html#section-11.2"><i class="fa fa-check"></i><b>11.2</b> 自作の学習器と並列化</a></li>
+<li class="chapter" data-level="11.3" data-path="section-11.html"><a href="section-11.html#section-11.3"><i class="fa fa-check"></i><b>11.3</b> 並列化の話はこれで終わりだ！</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -306,7 +311,7 @@ $&gt; 42.794531  9.101212  4.556043</code></pre>
 <p>一例は訓練にかかった時間(timetrain)だ。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">performance</span>(pred, <span class="dt">measures =</span> timetrain, <span class="dt">model =</span> mod)</code></pre></div>
 <pre><code>$&gt; timetrain 
-$&gt;      0.34</code></pre>
+$&gt;     0.318</code></pre>
 <p>クラスター分析に関わる多くの性能指標はタスクを必要とする。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;cluster.kmeans&quot;</span>, <span class="dt">centers =</span> <span class="dv">3</span>)
 mod =<span class="st"> </span><span class="kw">train</span>(lrn, mtcars.task)

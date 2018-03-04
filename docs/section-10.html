@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="section-9.html">
-
+<link rel="next" href="section-11.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -214,6 +214,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="10.5" data-path="section-10.html"><a href="section-10.html#section-10.5"><i class="fa fa-check"></i><b>10.5</b> その他のコメント</a></li>
 </ul></li>
+<li class="chapter" data-level="11" data-path="section-11.html"><a href="section-11.html"><i class="fa fa-check"></i><b>11</b> 並列化</a><ul>
+<li class="chapter" data-level="11.1" data-path="section-11.html"><a href="section-11.html#section-11.1"><i class="fa fa-check"></i><b>11.1</b> 並列化レベル</a></li>
+<li class="chapter" data-level="11.2" data-path="section-11.html"><a href="section-11.html#section-11.2"><i class="fa fa-check"></i><b>11.2</b> 自作の学習器と並列化</a></li>
+<li class="chapter" data-level="11.3" data-path="section-11.html"><a href="section-11.html#section-11.3"><i class="fa fa-check"></i><b>11.3</b> 並列化の話はこれで終わりだ！</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -352,7 +357,7 @@ $&gt; Predict: test
 $&gt; Stratification: FALSE
 $&gt; predict.type: response
 $&gt; threshold: 
-$&gt; time (mean): 0.01
+$&gt; time (mean): 0.00
 $&gt;    id truth response iter  set
 $&gt; 1 165     M        M    1 test
 $&gt; 2 118     M        M    1 test
@@ -532,30 +537,30 @@ $&gt; 13               Sonar-example          lda     0.30285714    0.30454643
 $&gt; 14               Sonar-example        rpart     0.28428571    0.28040571
 $&gt; 15               Sonar-example randomForest     0.16380952    0.16538045
 $&gt;    timetrain.test.mean
-$&gt; 1               0.0033
-$&gt; 2               0.0041
-$&gt; 3               0.0291
-$&gt; 4               0.0090
-$&gt; 5               0.0110
-$&gt; 6               0.4260
-$&gt; 7               0.0078
-$&gt; 8               0.0105
-$&gt; 9               0.4347
-$&gt; 10              0.0055
-$&gt; 11              0.0059
-$&gt; 12              0.3345
-$&gt; 13              0.0170
+$&gt; 1               0.0026
+$&gt; 2               0.0040
+$&gt; 3               0.0282
+$&gt; 4               0.0085
+$&gt; 5               0.0112
+$&gt; 6               0.4142
+$&gt; 7               0.0084
+$&gt; 8               0.0108
+$&gt; 9               0.4212
+$&gt; 10              0.0044
+$&gt; 11              0.0066
+$&gt; 12              0.3264
+$&gt; 13              0.0166
 $&gt; 14              0.0138
-$&gt; 15              0.2496</code></pre>
+$&gt; 15              0.2460</code></pre>
 <p>iris-exampleとPimaIndiansDiabetes-exampleでは線形判別分析が優れいているが、他のタスクではランダムフォレストが良い成績を出しているようだ。一方、訓練時間を見るとランダムフォレストは他の学習器よりも長い時間がかかっている。</p>
 <p>パフォーマンスの平均値から何らかの結論を言いたければ、値の変動も考慮に入れる必要がある。リサンプリングの繰り返し全体で値がどのように分布しているかも考慮できれば尚良い。</p>
 <p>10分割クロスバリデーションにより、各タスクは10回評価されていることになるが、これは以下の様にして詳細を確認できる。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">perf =<span class="st"> </span><span class="kw">getBMRPerformances</span>(bmr, <span class="dt">as.df =</span> <span class="ot">TRUE</span>)
 <span class="kw">head</span>(perf)</code></pre></div>
 <pre><code>$&gt;        task.id learner.id iter       mmce        ber timetrain
-$&gt; 1 iris-example        lda    1 0.00000000 0.00000000     0.003
-$&gt; 2 iris-example        lda    2 0.00000000 0.00000000     0.003
-$&gt; 3 iris-example        lda    3 0.00000000 0.00000000     0.003
+$&gt; 1 iris-example        lda    1 0.00000000 0.00000000     0.002
+$&gt; 2 iris-example        lda    2 0.00000000 0.00000000     0.002
+$&gt; 3 iris-example        lda    3 0.00000000 0.00000000     0.002
 $&gt; 4 iris-example        lda    4 0.06666667 0.08333333     0.003
 $&gt; 5 iris-example        lda    5 0.00000000 0.00000000     0.003
 $&gt; 6 iris-example        lda    6 0.13333333 0.08333333     0.003</code></pre>
@@ -727,8 +732,8 @@ GGally<span class="op">::</span><span class="kw">ggpairs</span>(df, <span class=
           </div>
         </div>
       </div>
-<a href="section-9.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="section-9.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="section-11.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

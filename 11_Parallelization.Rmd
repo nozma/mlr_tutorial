@@ -1,0 +1,50 @@
+# 並列化
+
+```{r, include=FALSE}
+library(mlr)
+```
+
+Rはデフォルトでは並列化を行わない。`parallelMap`パッケージを`mlr`と合わせて使うことで、`mlr`が既にサポートしている並列化機能を容易に有効化できる。`parallelMap`は主要な並列化バックエンドの全てで動作する。例えば`parallel`を使用したローカルでのマルチコアを利用した並列化、`snow`パッケージを用いたソケットやMPIによるクラスタ、`BatchJobs`パッケージを使用した一時的なSSHクラスタやハイパフォーマンスコンピューティング(SLURMやTorque/PBS、SGEやLSFなどのスケジューラによる)などが含まれる。
+
+実際に行う作業は、`parallelStart*`関数によりバックエンドを選択するだけだ。並列実行可能とマークされたループは自動的に並列化される。また、スクリプトの実行が終わったら`parallelStop`を呼び出すのを忘れないようにしよう。
+
+```{r}
+library(parallelMap)
+parallelStartSocket(2)
+
+rdesc = makeResampleDesc("CV", iters = 3)
+r = resample("classif.lda", iris.task, rdesc)
+
+parallelStop()
+```
+
+LinuxかmacOSを使用している場合は、`parallelStartMulticore`を代わりに使うことができる。
+
+## 並列化レベル
+
+並列化をきめ細かく制御するために、`mlr`は異なる並列化レベルを提供している。例えば、ベンチマーク試験は例数が少ないので並列化しなくてよいが、リサンプリングは並列化したいという場合は、`parallelStart*`関数を呼び出す際に`level = "mlr.resample"`を指定すれば良い。現状、以下の並列化レベルがサポートされている。
+
+```{r}
+parallelGetRegisteredLevels()
+```
+
+これらの詳細は`?mlr::parallelization`で確認してほしい。
+
+## 自作の学習器と並列化
+
+ローカルで自作の学習器を実装した場合は、現状ではこれをスレーブとしてエクスポートする必要がある。たとえば並列化したリサンプリングで次のようなエラーが出た場合
+
+```
+no applicable method for 'trainLearner' applied to an object of class <自作の学習器名>
+```
+
+`parallelStart`以後に次の文を実行すれば良い。
+
+```r
+parallelExport("trainLearner.<自作の学習器名>", "predictLearner.<自作の学習器名>")
+```
+
+## 並列化の話はこれで終わりだ！
+
+より詳しい話はparallelMapのチュートリアル([berndbischl/parallelMap: R package to interface some popular parallelization back-ends with a unified interface](https://github.com/berndbischl/parallelMap#parallelmap))かヘルプを参照してもらいたい。
+
