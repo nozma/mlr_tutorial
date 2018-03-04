@@ -1,5 +1,5 @@
 ---
-title: "mlrパッケージチュートリアル"
+title: "mlrパッケージチュートリアル - Quick Walkthrough編"
 site: "bookdown::bookdown_site"
 output:
   bookdown::gitbook: default

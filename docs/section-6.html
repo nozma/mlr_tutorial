@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>mlrパッケージチュートリアル</title>
-  <meta name="description" content="mlrパッケージチュートリアル">
+  <title>mlrパッケージチュートリアル - Quick Walkthrough編</title>
+  <meta name="description" content="mlrパッケージチュートリアル - Quick Walkthrough編">
   <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
-  <meta property="og:title" content="mlrパッケージチュートリアル" />
+  <meta property="og:title" content="mlrパッケージチュートリアル - Quick Walkthrough編" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="mlrパッケージチュートリアル" />
+  <meta name="twitter:title" content="mlrパッケージチュートリアル - Quick Walkthrough編" />
   
   
   
@@ -235,7 +235,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlrパッケージチュートリアル</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlrパッケージチュートリアル - Quick Walkthrough編</a>
           </h1>
         </div>
 
@@ -529,7 +529,7 @@ r</code></pre></div>
 $&gt; Task: BostonHousing-example
 $&gt; Learner: regr.nnet.preproc
 $&gt; Aggr perf: mse.test.mean=29.1
-$&gt; Runtime: 0.149858</code></pre>
+$&gt; Runtime: 0.144378</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 前処理無しの学習器を再度作る
 lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;regr.nnet&quot;</span>, <span class="dt">trace =</span> <span class="ot">FALSE</span>, <span class="dt">decay =</span> <span class="fl">1e-02</span>)
 r =<span class="st"> </span><span class="kw">resample</span>(lrn, bh.task, <span class="dt">resampling =</span> rdesc, <span class="dt">show.info =</span> <span class="ot">FALSE</span>)
@@ -538,7 +538,7 @@ r</code></pre></div>
 $&gt; Task: BostonHousing-example
 $&gt; Learner: regr.nnet
 $&gt; Aggr perf: mse.test.mean=32.8
-$&gt; Runtime: 0.097965</code></pre>
+$&gt; Runtime: 0.101327</code></pre>
 </div>
 <div id="section-6.4.4" class="section level3">
 <h3><span class="header-section-number">6.4.4</span> 前処理と学習器のパラメータを連結してチューニングする</h3>
@@ -575,18 +575,18 @@ $&gt; Op. pars: decay=0; center=TRUE; scale=TRUE
 $&gt; mse.test.mean=10.4</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.data.frame</span>(res<span class="op">$</span>opt.path)</code></pre></div>
 <pre><code>$&gt;    decay center scale mse.test.mean dob eol error.message exec.time
-$&gt; 1      0   TRUE  TRUE      10.35758   1  NA          &lt;NA&gt;     0.048
-$&gt; 2   0.05   TRUE  TRUE      24.16396   2  NA          &lt;NA&gt;     0.042
-$&gt; 3    0.1   TRUE  TRUE      13.87898   3  NA          &lt;NA&gt;     0.045
+$&gt; 1      0   TRUE  TRUE      10.35758   1  NA          &lt;NA&gt;     0.045
+$&gt; 2   0.05   TRUE  TRUE      24.16396   2  NA          &lt;NA&gt;     0.044
+$&gt; 3    0.1   TRUE  TRUE      13.87898   3  NA          &lt;NA&gt;     0.043
 $&gt; 4      0  FALSE  TRUE      67.40683   4  NA          &lt;NA&gt;     0.022
-$&gt; 5   0.05  FALSE  TRUE      12.67467   5  NA          &lt;NA&gt;     0.046
-$&gt; 6    0.1  FALSE  TRUE      13.55953   6  NA          &lt;NA&gt;     0.045
-$&gt; 7      0   TRUE FALSE      54.70995   7  NA          &lt;NA&gt;     0.033
-$&gt; 8   0.05   TRUE FALSE      40.64841   8  NA          &lt;NA&gt;     0.043
+$&gt; 5   0.05  FALSE  TRUE      12.67467   5  NA          &lt;NA&gt;     0.044
+$&gt; 6    0.1  FALSE  TRUE      13.55953   6  NA          &lt;NA&gt;     0.040
+$&gt; 7      0   TRUE FALSE      54.70995   7  NA          &lt;NA&gt;     0.030
+$&gt; 8   0.05   TRUE FALSE      40.64841   8  NA          &lt;NA&gt;     0.042
 $&gt; 9    0.1   TRUE FALSE      50.72933   9  NA          &lt;NA&gt;     0.043
 $&gt; 10     0  FALSE FALSE      67.40683  10  NA          &lt;NA&gt;     0.020
-$&gt; 11  0.05  FALSE FALSE      49.67953  11  NA          &lt;NA&gt;     0.037
-$&gt; 12   0.1  FALSE FALSE      29.85388  12  NA          &lt;NA&gt;     0.042</code></pre>
+$&gt; 11  0.05  FALSE FALSE      49.67953  11  NA          &lt;NA&gt;     0.036
+$&gt; 12   0.1  FALSE FALSE      29.85388  12  NA          &lt;NA&gt;     0.044</code></pre>
 </div>
 <div id="section-6.4.5" class="section level3">
 <h3><span class="header-section-number">6.4.5</span> 前処理ラッパー関数</h3>

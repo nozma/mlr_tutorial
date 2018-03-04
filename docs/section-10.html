@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>mlrパッケージチュートリアル</title>
-  <meta name="description" content="mlrパッケージチュートリアル">
+  <title>mlrパッケージチュートリアル - Quick Walkthrough編</title>
+  <meta name="description" content="mlrパッケージチュートリアル - Quick Walkthrough編">
   <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
-  <meta property="og:title" content="mlrパッケージチュートリアル" />
+  <meta property="og:title" content="mlrパッケージチュートリアル - Quick Walkthrough編" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="mlrパッケージチュートリアル" />
+  <meta name="twitter:title" content="mlrパッケージチュートリアル - Quick Walkthrough編" />
   
   
   
@@ -235,7 +235,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlrパッケージチュートリアル</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlrパッケージチュートリアル - Quick Walkthrough編</a>
           </h1>
         </div>
 
@@ -544,33 +544,33 @@ $&gt; 13               Sonar-example          lda     0.30285714    0.30454643
 $&gt; 14               Sonar-example        rpart     0.28428571    0.28040571
 $&gt; 15               Sonar-example randomForest     0.16380952    0.16538045
 $&gt;    timetrain.test.mean
-$&gt; 1               0.0033
-$&gt; 2               0.0048
-$&gt; 3               0.0313
-$&gt; 4               0.0085
-$&gt; 5               0.0130
-$&gt; 6               0.4087
-$&gt; 7               0.0100
+$&gt; 1               0.0027
+$&gt; 2               0.0045
+$&gt; 3               0.0293
+$&gt; 4               0.0090
+$&gt; 5               0.0119
+$&gt; 6               0.4128
+$&gt; 7               0.0091
 $&gt; 8               0.0114
-$&gt; 9               0.4358
-$&gt; 10              0.0047
-$&gt; 11              0.0069
-$&gt; 12              0.3806
-$&gt; 13              0.0189
-$&gt; 14              0.0146
-$&gt; 15              0.2526</code></pre>
+$&gt; 9               0.4373
+$&gt; 10              0.0046
+$&gt; 11              0.0066
+$&gt; 12              0.3825
+$&gt; 13              0.0170
+$&gt; 14              0.0134
+$&gt; 15              0.2488</code></pre>
 <p>iris-exampleとPimaIndiansDiabetes-exampleでは線形判別分析が優れいているが、他のタスクではランダムフォレストが良い成績を出しているようだ。一方、訓練時間を見るとランダムフォレストは他の学習器よりも長い時間がかかっている。</p>
 <p>パフォーマンスの平均値から何らかの結論を言いたければ、値の変動も考慮に入れる必要がある。リサンプリングの繰り返し全体で値がどのように分布しているかも考慮できれば尚良い。</p>
 <p>10分割クロスバリデーションにより、各タスクは10回評価されていることになるが、これは以下の様にして詳細を確認できる。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">perf =<span class="st"> </span><span class="kw">getBMRPerformances</span>(bmr, <span class="dt">as.df =</span> <span class="ot">TRUE</span>)
 <span class="kw">head</span>(perf)</code></pre></div>
 <pre><code>$&gt;        task.id learner.id iter       mmce        ber timetrain
-$&gt; 1 iris-example        lda    1 0.00000000 0.00000000     0.003
-$&gt; 2 iris-example        lda    2 0.00000000 0.00000000     0.004
+$&gt; 1 iris-example        lda    1 0.00000000 0.00000000     0.004
+$&gt; 2 iris-example        lda    2 0.00000000 0.00000000     0.003
 $&gt; 3 iris-example        lda    3 0.00000000 0.00000000     0.003
-$&gt; 4 iris-example        lda    4 0.06666667 0.08333333     0.003
-$&gt; 5 iris-example        lda    5 0.00000000 0.00000000     0.004
-$&gt; 6 iris-example        lda    6 0.13333333 0.08333333     0.003</code></pre>
+$&gt; 4 iris-example        lda    4 0.06666667 0.08333333     0.002
+$&gt; 5 iris-example        lda    5 0.00000000 0.00000000     0.002
+$&gt; 6 iris-example        lda    6 0.13333333 0.08333333     0.002</code></pre>
 <p>結果を詳しく確認すると、ランダムフォレストは全てのインスタンスで分類木より優れており、線形判別分析は時間の面でほとんどどの場合も優れている事が分かる。また、線形判別分析は時々ランダムフォレストより優れた結果を出している。このサイズの試験結果ならまだ「詳しく確認する」は可能であるが、これよりももっと大きなスケールのベンチマーク試験では、このような判断はずっと難しくなる。</p>
 <p><code>mlr</code>には可視化と仮説検定の仕組みがあるので、より大きなスケールの試験に対してはそれを使おう。</p>
 </div>
