@@ -326,4 +326,102 @@ plotBMRRanksAsBarChart(bmr, pos = "dodge")
 
 多くの研究者はアルゴリズムの有意性を仮説検定によって示す必要性を感じていることだろう。ベンチマーク試験の結果の比較などに適していると思われるノンパラメトリック検定として、`mlr`はOverall Friedman testとFriedman-Nemenyi post hoc testをサポートしている。
 
-Friedman testは`stats`パッケージの`friedman.test`関数に基いており、これは学習器間に差があるかどうかを検定する。一方、Friedman-Nemenyi testは全ての学習器間の組合せについて差があるかどうかを検定する。ノンパラメトリック検定はパラメトリック検定と違い、データの分布に関する仮定を持たなくて済むという利点がある。しかしこれは、妥当な有意水準の元で優位な差を示すためには多くのデータセットが必要であるということでもある。
+Friedman testは`stats`パッケージの`friedman.test`関数に基いており、これは学習器間に差があるかどうかを検定する。一方、Friedman-Nemenyi testは全ての学習器間の組合せについて差があるかどうかを検定する。ノンパラメトリック検定はパラメトリック検定と違い、データの分布に関する仮定を持たなくて済むという利点がある。しかしこれは、妥当な有意水準の元で有意な差を示すためには多くのデータセットが必要であるということを意味していることが多い。
+
+さて、今我々が扱っている例では3つの学習器を比較している。まずは、そもそも学習器間に差があるのかどうかを検定したいのではないだろうか。Friedman testを実行してみよう。
+
+```{r}
+friedmanTestBMR(bmr)
+```
+
+今回の例はチュートリアルなので、計算時間節約のために学習器を評価するタスクは5つしかなかった点に注意してほしい。従って、有意水準として少し甘めの$\alpha=0.1$程度を見積もっても良いだろう。この場合帰無仮説は棄却されるので、今度はこの差がどの学習器の間に存在するのかを検定してみよう。
+
+```{r}
+# install.packages("PMCMRplus")
+# Friedman testで帰無仮説を棄却できないとNemenyi検定をしてくれないので、
+# p.value =で有意水準を引き上げる必要がある。
+friedmanPostHocTestBMR(bmr, p.value = 0.1)
+```
+
+決定木とランダムフォレストの間の差について帰無仮説を棄却できた。
+
+### 臨界差ダイアグラム
+
+学習器の性能に関する差を可視化する手法として、critical differences diagramが使用できる。検定手法はNemeny検定(`test = "nemenyui"`)またはBonferroni-Dunn検定(`test = "bd"`)が選択できる。
+
+プロットの際、x軸には学習器の平均順位が対応する。
+
+- `test = "nemenyui"`を選択した場合、全てのグループ間で比較が行われるため、出力では互いに有意な差が無い学習器がグループとなるような描画が行われる。グループは学習器間をバーで接続することで図示される。従って、バーで接続されていない学習器間には有意な差が存在しており、平均順位が低い方の学習器の方が(選択した有意水準のもとで)優れていると言うことができる。
+- `test = "bd"`を選択した場合は、各学習器はベースラインと比較される。すなわち、ベースラインとして選択した学習器から両方向に臨界差(*critical difference*)の範囲を示すラインが描画される。従って比較はベースラインの学習器との間でのみ可能となる。臨界差の範囲外の学習器は、ベースラインとした学習器に対して優れている(または劣っている)と考えることができる。
+
+ここで臨界差$CD$は次のように計算される値である。
+
+$CD = q_\alpha\sqrt{\frac{k(k+1)}{6N}}$
+
+$N$はタスクの数を、$k$は学習器の数を、$q_\alpha$はスチューデント化された範囲を$\sqrt{2}$で除した値である。詳しくは[Damsar (2006)](http://www.jmlr.org/papers/volume7/demsar06a/demsar06a.pdf)を参照してほしい。
+
+`createCritDifferencesData`関数は、`plotCritDifferences`でプロットを作成するために必要な全ての量を計算する。プロット関数に関する詳細は後ほどあらためて可視化のチュートリアルで触れる予定である。
+
+```{r}
+## Nemeyui test
+g = generateCritDifferencesData(bmr, p.value = 0.1, test = "nemenyi")
+plotCritDifferences(g) + coord_cartesian(xlim = c(-1, 5), ylim = c(0, 2))
+```
+
+```{r}
+## Bonferroni-Dunn test
+g = generateCritDifferencesData(bmr, p.value = 0.1, test = "bd", baseline = "randomForest")
+plotCritDifferences(g) + coord_cartesian(xlim = c(-1, 5), ylim = c(0, 2))
+```
+
+### プロットの調整
+
+プロットは`ggplot`のオブジェクトなので、これをカスタマイズすることで容易に独自のプロットを作成できる。これは既に見たところだ。一方、`getBMRPerformances`や`getBMRAggrPerformances`が返すデータフレームを使って独自のプロットを作成することもできる。以下に例を見よう。
+
+`plotBMRBoxplots`では箱ひげ図を作成したが、密度プロットで性能指標を可視化してみよう(訳注: 原文では`qplot`を使用しているが個人的にわかりにくいので`ggplot`で書き直した。また、strip textのフォントサイズ調整を省略している)。
+
+```{r}
+pref = getBMRPerformances(bmr, as.df = TRUE)
+ggplot(data = pref[pref$task.id %in% c("iris-example", "Sonar-example"), ], 
+       aes(x = mmce, colour = learner.id)) +
+  facet_grid(.~task.id) +
+  geom_density()
+```
+
+複数の指標を並列に比較したければ、`pref`を*long format*に変換する必要がある。以下に`mmce`と`timetrain`を箱ひげ図で表示する例を示そう。
+
+(訳注: 原文とは異なり、`tidyr`、`dplyr`、`ggplot`を使用している。パイプ演算子`%>%`を使えばより簡潔に書き換えることもできるだろう。)
+
+```{r}
+df = tidyr::gather(pref, key = variable, value = value, mmce:timetrain)
+df = dplyr::filter(df, variable != "ber")
+ggplot(df, aes(x = variable, y = value, color = learner.id)) +
+  geom_boxplot(position = "dodge") +
+  labs(x = "measure", y = "performance") +
+  facet_wrap(~ task.id, nrow = 2)
+
+```
+
+リサンプリング毎の学習器間のパフォーマンスの関係を調べることが有用な場合もある。ある学習器が例外的に良い成績を出している場合に他の学習器の成績が悪いという様な場合があれば、より深い洞察が得られるだろう。これはまた、学習アルゴリズムにおいてアンサンブルを構築する際にも便利な場合がある。以下では、`GGally`パッケージの`ggpairs`関数を使って、`Sonar`データセットで学習を行った場合の`mmce`の散布図行列を作成する例を見てみよう。
+
+(訳注:ここも書き換えている)
+
+```{r}
+pref = getBMRPerformances(bmr, task.id = "Sonar-example", as.df = TRUE)
+df = tidyr::gather(pref, key = variable, value = value, mmce:timetrain)
+df = dplyr::filter(df, variable == "mmce")
+df = tidyr::spread(df, key = learner.id, value = value)
+GGally::ggpairs(df, 4:6)
+```
+
+## その他のコメント
+
+- 教師あり学習については、`mlr`は`BenchmarkResult`オブジェクトを使用して学習アルゴリズムを比較するためのプロットをさらにいくつか提供している。以下のページに例がある。
+  - [ROC Analysis - mlr tutorial](https://mlr-org.github.io/mlr-tutorial/devel/html/roc_analysis/index.html)
+  - [generateThreshVsPerfData function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateThreshVsPerfData)
+  - [plotROCCurves function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotROCCurves)
+  - [plotViperCharts function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotViperCharts)
+  - [Classifier Calibration Plots - mlr tutorial](https://mlr-org.github.io/mlr-tutorial/devel/html/classifier_calibration/index.html)
+  - [generateCalibrationData function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateCalibrationData)
+- このセクションの例では「生の」学習アルゴリズムを用いたが、通常はもっと事は複雑である。少なくとも、大抵の学習アルゴリズムは調整すべきハイパーパラメータを持っている。信頼性のある性能指標の推定値を得るためには、nested resampling、すなわち、内側のループでハイパーパラメータをチューニングしつつ外側のループで性能指標を推定するといった作業が必要になる。さらに、補完やスケーリング、外れ値除去、次元削減、特徴量選択などの前処理を組み合わせたい場合もあるだろう。これらの全ての作業は`mlr`のラッパー機能を使用すると容易に実行できる。より詳しい話はチュートリアルのAdvancedパートで説明する。
+-ベンチマーク試験を行っていくと、すぐに多量の計算量が必要となるはずだ。`mlr`はこの問題に対応するため、並列計算の可能性をいくつか提供している。
