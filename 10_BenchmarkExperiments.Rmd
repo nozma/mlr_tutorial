@@ -417,11 +417,11 @@ GGally::ggpairs(df, 4:6)
 ## その他のコメント
 
 - 教師あり学習については、`mlr`は`BenchmarkResult`オブジェクトを使用して学習アルゴリズムを比較するためのプロットをさらにいくつか提供している。以下のページに例がある。
-  - [ROC Analysis - mlr tutorial](https://mlr-org.github.io/mlr-tutorial/devel/html/roc_analysis/index.html)
-  - [generateThreshVsPerfData function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateThreshVsPerfData)
-  - [plotROCCurves function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotROCCurves)
-  - [plotViperCharts function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotViperCharts)
-  - [Classifier Calibration Plots - mlr tutorial](https://mlr-org.github.io/mlr-tutorial/devel/html/classifier_calibration/index.html)
-  - [generateCalibrationData function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateCalibrationData)
+    - [ROC Analysis - mlr tutorial](https://mlr-org.github.io/mlr-tutorial/devel/html/roc_analysis/index.html)
+    - [generateThreshVsPerfData function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateThreshVsPerfData)
+    - [plotROCCurves function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotROCCurves)
+    - [plotViperCharts function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotViperCharts)
+    - [Classifier Calibration Plots - mlr tutorial](https://mlr-org.github.io/mlr-tutorial/devel/html/classifier_calibration/index.html)
+    - [generateCalibrationData function | R Documentation](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateCalibrationData)
 - このセクションの例では「生の」学習アルゴリズムを用いたが、通常はもっと事は複雑である。少なくとも、大抵の学習アルゴリズムは調整すべきハイパーパラメータを持っている。信頼性のある性能指標の推定値を得るためには、nested resampling、すなわち、内側のループでハイパーパラメータをチューニングしつつ外側のループで性能指標を推定するといった作業が必要になる。さらに、補完やスケーリング、外れ値除去、次元削減、特徴量選択などの前処理を組み合わせたい場合もあるだろう。これらの全ての作業は`mlr`のラッパー機能を使用すると容易に実行できる。より詳しい話はチュートリアルのAdvancedパートで説明する。
--ベンチマーク試験を行っていくと、すぐに多量の計算量が必要となるはずだ。`mlr`はこの問題に対応するため、並列計算の可能性をいくつか提供している。
+- ベンチマーク試験を行っていくと、すぐに多量の計算量が必要となるはずだ。`mlr`はこの問題に対応するため、並列計算の可能性をいくつか提供している。

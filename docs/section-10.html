@@ -219,6 +219,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11.2" data-path="section-11.html"><a href="section-11.html#section-11.2"><i class="fa fa-check"></i><b>11.2</b> 自作の学習器と並列化</a></li>
 <li class="chapter" data-level="11.3" data-path="section-11.html"><a href="section-11.html#section-11.3"><i class="fa fa-check"></i><b>11.3</b> 並列化の話はこれで終わりだ！</a></li>
 </ul></li>
+<li class="chapter" data-level="12" data-path="section-12.html"><a href="section-12.html"><i class="fa fa-check"></i><b>12</b> いろいろな可視化</a><ul>
+<li class="chapter" data-level="12.1" data-path="section-12.html"><a href="section-12.html#generationplotting"><i class="fa fa-check"></i><b>12.1</b> generation関数とplotting関数</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="section-12.html"><a href="section-12.html#section-12.1.1"><i class="fa fa-check"></i><b>12.1.1</b> 例</a></li>
+<li class="chapter" data-level="12.1.2" data-path="section-12.html"><a href="section-12.html#section-12.1.2"><i class="fa fa-check"></i><b>12.1.2</b> プロットのカスタマイズ</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="section-12.html"><a href="section-12.html#generationplotting"><i class="fa fa-check"></i><b>12.2</b> 利用可能なgeneration関数とplotting関数</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -357,7 +364,7 @@ $&gt; Predict: test
 $&gt; Stratification: FALSE
 $&gt; predict.type: response
 $&gt; threshold: 
-$&gt; time (mean): 0.00
+$&gt; time (mean): 0.01
 $&gt;    id truth response iter  set
 $&gt; 1 165     M        M    1 test
 $&gt; 2 118     M        M    1 test
@@ -537,33 +544,33 @@ $&gt; 13               Sonar-example          lda     0.30285714    0.30454643
 $&gt; 14               Sonar-example        rpart     0.28428571    0.28040571
 $&gt; 15               Sonar-example randomForest     0.16380952    0.16538045
 $&gt;    timetrain.test.mean
-$&gt; 1               0.0026
-$&gt; 2               0.0040
-$&gt; 3               0.0282
-$&gt; 4               0.0085
-$&gt; 5               0.0112
-$&gt; 6               0.4142
-$&gt; 7               0.0084
-$&gt; 8               0.0108
-$&gt; 9               0.4212
-$&gt; 10              0.0044
-$&gt; 11              0.0066
-$&gt; 12              0.3264
-$&gt; 13              0.0166
-$&gt; 14              0.0138
-$&gt; 15              0.2460</code></pre>
+$&gt; 1               0.0029
+$&gt; 2               0.0043
+$&gt; 3               0.0285
+$&gt; 4               0.0090
+$&gt; 5               0.0115
+$&gt; 6               0.3993
+$&gt; 7               0.0085
+$&gt; 8               0.0116
+$&gt; 9               0.4208
+$&gt; 10              0.0047
+$&gt; 11              0.0079
+$&gt; 12              0.3860
+$&gt; 13              0.0169
+$&gt; 14              0.0146
+$&gt; 15              0.2579</code></pre>
 <p>iris-exampleとPimaIndiansDiabetes-exampleでは線形判別分析が優れいているが、他のタスクではランダムフォレストが良い成績を出しているようだ。一方、訓練時間を見るとランダムフォレストは他の学習器よりも長い時間がかかっている。</p>
 <p>パフォーマンスの平均値から何らかの結論を言いたければ、値の変動も考慮に入れる必要がある。リサンプリングの繰り返し全体で値がどのように分布しているかも考慮できれば尚良い。</p>
 <p>10分割クロスバリデーションにより、各タスクは10回評価されていることになるが、これは以下の様にして詳細を確認できる。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">perf =<span class="st"> </span><span class="kw">getBMRPerformances</span>(bmr, <span class="dt">as.df =</span> <span class="ot">TRUE</span>)
 <span class="kw">head</span>(perf)</code></pre></div>
 <pre><code>$&gt;        task.id learner.id iter       mmce        ber timetrain
-$&gt; 1 iris-example        lda    1 0.00000000 0.00000000     0.002
-$&gt; 2 iris-example        lda    2 0.00000000 0.00000000     0.002
-$&gt; 3 iris-example        lda    3 0.00000000 0.00000000     0.002
+$&gt; 1 iris-example        lda    1 0.00000000 0.00000000     0.003
+$&gt; 2 iris-example        lda    2 0.00000000 0.00000000     0.003
+$&gt; 3 iris-example        lda    3 0.00000000 0.00000000     0.003
 $&gt; 4 iris-example        lda    4 0.06666667 0.08333333     0.003
 $&gt; 5 iris-example        lda    5 0.00000000 0.00000000     0.003
-$&gt; 6 iris-example        lda    6 0.13333333 0.08333333     0.003</code></pre>
+$&gt; 6 iris-example        lda    6 0.13333333 0.08333333     0.002</code></pre>
 <p>結果を詳しく確認すると、ランダムフォレストは全てのインスタンスで分類木より優れており、線形判別分析は時間の面でほとんどどの場合も優れている事が分かる。また、線形判別分析は時々ランダムフォレストより優れた結果を出している。このサイズの試験結果ならまだ「詳しく確認する」は可能であるが、これよりももっと大きなスケールのベンチマーク試験では、このような判断はずっと難しくなる。</p>
 <p><code>mlr</code>には可視化と仮説検定の仕組みがあるので、より大きなスケールの試験に対してはそれを使おう。</p>
 </div>
@@ -715,14 +722,17 @@ GGally<span class="op">::</span><span class="kw">ggpairs</span>(df, <span class=
 <div id="section-10.5" class="section level2">
 <h2><span class="header-section-number">10.5</span> その他のコメント</h2>
 <ul>
-<li>教師あり学習については、<code>mlr</code>は<code>BenchmarkResult</code>オブジェクトを使用して学習アルゴリズムを比較するためのプロットをさらにいくつか提供している。以下のページに例がある。</li>
+<li>教師あり学習については、<code>mlr</code>は<code>BenchmarkResult</code>オブジェクトを使用して学習アルゴリズムを比較するためのプロットをさらにいくつか提供している。以下のページに例がある。
+<ul>
 <li><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/roc_analysis/index.html">ROC Analysis - mlr tutorial</a></li>
 <li><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateThreshVsPerfData">generateThreshVsPerfData function | R Documentation</a></li>
 <li><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotROCCurves">plotROCCurves function | R Documentation</a></li>
 <li><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotViperCharts">plotViperCharts function | R Documentation</a></li>
 <li><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/classifier_calibration/index.html">Classifier Calibration Plots - mlr tutorial</a></li>
 <li><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateCalibrationData">generateCalibrationData function | R Documentation</a></li>
-<li>このセクションの例では「生の」学習アルゴリズムを用いたが、通常はもっと事は複雑である。少なくとも、大抵の学習アルゴリズムは調整すべきハイパーパラメータを持っている。信頼性のある性能指標の推定値を得るためには、nested resampling、すなわち、内側のループでハイパーパラメータをチューニングしつつ外側のループで性能指標を推定するといった作業が必要になる。さらに、補完やスケーリング、外れ値除去、次元削減、特徴量選択などの前処理を組み合わせたい場合もあるだろう。これらの全ての作業は<code>mlr</code>のラッパー機能を使用すると容易に実行できる。より詳しい話はチュートリアルのAdvancedパートで説明する。 -ベンチマーク試験を行っていくと、すぐに多量の計算量が必要となるはずだ。<code>mlr</code>はこの問題に対応するため、並列計算の可能性をいくつか提供している。</li>
+</ul></li>
+<li>このセクションの例では「生の」学習アルゴリズムを用いたが、通常はもっと事は複雑である。少なくとも、大抵の学習アルゴリズムは調整すべきハイパーパラメータを持っている。信頼性のある性能指標の推定値を得るためには、nested resampling、すなわち、内側のループでハイパーパラメータをチューニングしつつ外側のループで性能指標を推定するといった作業が必要になる。さらに、補完やスケーリング、外れ値除去、次元削減、特徴量選択などの前処理を組み合わせたい場合もあるだろう。これらの全ての作業は<code>mlr</code>のラッパー機能を使用すると容易に実行できる。より詳しい話はチュートリアルのAdvancedパートで説明する。</li>
+<li>ベンチマーク試験を行っていくと、すぐに多量の計算量が必要となるはずだ。<code>mlr</code>はこの問題に対応するため、並列計算の可能性をいくつか提供している。</li>
 </ul>
 
 </div>

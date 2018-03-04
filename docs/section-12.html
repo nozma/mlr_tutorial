@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="section-6.html">
-<link rel="next" href="section-8.html">
+<link rel="prev" href="section-11.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -243,176 +243,191 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="section-7" class="section level1">
-<h1><span class="header-section-number">Section 7</span> 学習器の性能を評価する</h1>
-<p><code>mlr</code>には学習機の予測性能について様々な側面から評価する方法が備えられている。性能指標を計算するためには、<code>predict</code>の返すオブジェクトと目的の性能指標を指定して<code>performance</code>関数を呼び出す。</p>
-<div id="section-7.1" class="section level2">
-<h2><span class="header-section-number">7.1</span> 利用可能な性能指標</h2>
-<p><code>mlr</code>はすべての種類の学習問題に対して多数の性能指標を提供している。分類問題に対する典型的な性能指標としては、平均誤分類率(mmce)、精度(acc)、ROC曲線などが使える。回帰問題に対しては、平均二乗偏差(mse)、平均絶対誤差(mae)などが一般に使用される。他にもクラスタリング問題では、Dunn Index(dunn)が、生存時間分析に対してはConcordance Index(cindex)が、コスト考慮型予測問題ではMisclassification Penalty(mcp)など、様々な指標が利用可能である。また、訓練にかかった時間(timetrain)、予測にかかった時間(timepredict)、その合計(timeboth)も性能指標の一つとしてアクセスできる。</p>
-<p>どのような指標が実装されているかについては、<a href="https://mlr-org.github.io/mlr-tutorial/devel/html/measures/index.html">Implemented Performance Measures - mlr tutorial</a>および<a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/measures">measures function | R Documentation</a>を確認してもらいたい。</p>
-<p>もし新たな指標を実装したり、標準的でない誤分類コストを指標に含めたいと思うのであれば、<a href="https://mlr-org.github.io/mlr-tutorial/devel/html/create_measure/index.html">Create Custom Measures - mlr tutorial</a>を見てもらいたい。</p>
-</div>
-<div id="section-7.2" class="section level2">
-<h2><span class="header-section-number">7.2</span> 指標の一覧</h2>
-<p>各指標の詳細については上述のImplemented Performance Measuresを確認してもらうとして、特定のプロパティを持つ指標や、特定のタスクに利用可能な指標を確認したければ<code>listMeasures</code>関数を使うと良い。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 多クラス問題に対する分類指標
-<span class="kw">listMeasures</span>(<span class="st">&quot;classif&quot;</span>, <span class="dt">properties =</span> <span class="st">&quot;classif.multi&quot;</span>)</code></pre></div>
-<pre><code>$&gt;  [1] &quot;kappa&quot;            &quot;multiclass.brier&quot; &quot;multiclass.aunp&quot; 
-$&gt;  [4] &quot;multiclass.aunu&quot;  &quot;qsr&quot;              &quot;ber&quot;             
-$&gt;  [7] &quot;logloss&quot;          &quot;wkappa&quot;           &quot;timeboth&quot;        
-$&gt; [10] &quot;timepredict&quot;      &quot;acc&quot;              &quot;lsr&quot;             
-$&gt; [13] &quot;featperc&quot;         &quot;multiclass.au1p&quot;  &quot;multiclass.au1u&quot; 
-$&gt; [16] &quot;ssr&quot;              &quot;timetrain&quot;        &quot;mmce&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## iris.taskに対する分類指標
-<span class="kw">listMeasures</span>(iris.task)</code></pre></div>
-<pre><code>$&gt;  [1] &quot;kappa&quot;            &quot;multiclass.brier&quot; &quot;multiclass.aunp&quot; 
-$&gt;  [4] &quot;multiclass.aunu&quot;  &quot;qsr&quot;              &quot;ber&quot;             
-$&gt;  [7] &quot;logloss&quot;          &quot;wkappa&quot;           &quot;timeboth&quot;        
-$&gt; [10] &quot;timepredict&quot;      &quot;acc&quot;              &quot;lsr&quot;             
-$&gt; [13] &quot;featperc&quot;         &quot;multiclass.au1p&quot;  &quot;multiclass.au1u&quot; 
-$&gt; [16] &quot;ssr&quot;              &quot;timetrain&quot;        &quot;mmce&quot;</code></pre>
-<p>簡便のため、それぞれの学習問題に対しては、よく使われる指標がデフォルトとして指定してある。例えば回帰では平均二乗偏差が、分類では平均誤分類率がデフォルトだ。何がデフォルトであるかは<code>getDefaultMeasure</code>関数を使うと確認できる。また、この関数のヘルプでデフォルトに使用される指標の一覧が確認できる。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## iris.taskのデフォルト指標
-<span class="kw">getDefaultMeasure</span>(iris.task)</code></pre></div>
-<pre><code>$&gt; Name: Mean misclassification error
-$&gt; Performance measure: mmce
-$&gt; Properties: classif,classif.multi,req.pred,req.truth
-$&gt; Minimize: TRUE
-$&gt; Best: 0; Worst: 1
-$&gt; Aggregated by: test.mean
-$&gt; Note: Defined as: mean(response != truth)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 回帰のデフォルト指標
-<span class="kw">getDefaultMeasure</span>(<span class="kw">makeLearner</span>(<span class="st">&quot;regr.lm&quot;</span>))</code></pre></div>
-<pre><code>$&gt; Name: Mean of squared errors
-$&gt; Performance measure: mse
-$&gt; Properties: regr,req.pred,req.truth
-$&gt; Minimize: TRUE
-$&gt; Best: 0; Worst: Inf
-$&gt; Aggregated by: test.mean
-$&gt; Note: Defined as: mean((response - truth)^2)</code></pre>
-</div>
-<div id="section-7.3" class="section level2">
-<h2><span class="header-section-number">7.3</span> 性能指標を計算する</h2>
-<p>例として、勾配ブースティングマシンを<code>BostonHousing</code>データの一部に適用し、残りのデータから標準の性能指標である平均二乗偏差を計算してみよう。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n =<span class="st"> </span><span class="kw">getTaskSize</span>(bh.task)
-lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;regr.gbm&quot;</span>, <span class="dt">n.trees =</span> <span class="dv">1000</span>)
-mod =<span class="st"> </span><span class="kw">train</span>(lrn, <span class="dt">task =</span> bh.task, <span class="dt">subset =</span> <span class="kw">seq</span>(<span class="dv">1</span>, n, <span class="dv">2</span>))
-pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">task =</span> bh.task, <span class="dt">subset =</span> <span class="kw">seq</span>(<span class="dv">2</span>, n, <span class="dv">2</span>))
-
-<span class="kw">performance</span>(pred)</code></pre></div>
-<pre><code>$&gt;      mse 
-$&gt; 42.79453</code></pre>
-<p>他の指標の例として中央値二乗誤差(medse)を求めてみよう。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">performance</span>(pred, <span class="dt">measures =</span> medse)</code></pre></div>
-<pre><code>$&gt;    medse 
-$&gt; 9.101212</code></pre>
-<p>もちろん、独自に作成した指標も含めて、複数の指標を一度に計算することもできる。その場合、求めたい指標をリストにして渡す。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">performance</span>(pred, <span class="dt">measures =</span> <span class="kw">list</span>(mse, medse, mae))</code></pre></div>
-<pre><code>$&gt;       mse     medse       mae 
-$&gt; 42.794531  9.101212  4.556043</code></pre>
-<p>上記の方法は、学習問題や性能指標の種類が異なっても基本的には同じである。</p>
-</div>
-<div id="section-7.4" class="section level2">
-<h2><span class="header-section-number">7.4</span> 指標計算に必要な情報</h2>
-<p>一部の性能指標では、計算のために予測結果だけでなく、タスクやフィット済みモデルも必要とする。</p>
-<p>一例は訓練にかかった時間(timetrain)だ。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">performance</span>(pred, <span class="dt">measures =</span> timetrain, <span class="dt">model =</span> mod)</code></pre></div>
-<pre><code>$&gt; timetrain 
-$&gt;     0.346</code></pre>
-<p>クラスター分析に関わる多くの性能指標はタスクを必要とする。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;cluster.kmeans&quot;</span>, <span class="dt">centers =</span> <span class="dv">3</span>)
-mod =<span class="st"> </span><span class="kw">train</span>(lrn, mtcars.task)
-pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">task =</span> mtcars.task)
-
-<span class="kw">performance</span>(pred, <span class="dt">measures =</span> dunn, <span class="dt">task =</span> mtcars.task)</code></pre></div>
-<pre><code>$&gt;      dunn 
-$&gt; 0.1178415</code></pre>
-<p>また、いくつかの指標は特定の種類の予測を必要とする。例えば2クラス分類におけるAUC(これはROC[receiver operating characteristic]曲線の下側の面積[Area Under Curve]である)を計算するためには、事後確率が必要である。ROC分析に関する詳細が必要であれば<a href="https://mlr-org.github.io/mlr-tutorial/devel/html/roc_analysis/index.html">ROC Analysis - mlr tutorial</a>を確認してほしい。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;classif.rpart&quot;</span>, <span class="dt">predict.type =</span> <span class="st">&quot;prob&quot;</span>)
-mod =<span class="st"> </span><span class="kw">train</span>(lrn, <span class="dt">task =</span> sonar.task)
-pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">task =</span> sonar.task)
-
-<span class="kw">performance</span>(pred, <span class="dt">measures =</span> auc)</code></pre></div>
-<pre><code>$&gt;       auc 
-$&gt; 0.9224018</code></pre>
-<p>また、分類問題に利用可能な性能指標(偽陽性率fprなど)の多くは、2クラス分類のみに利用可能であるという点に注意してもらいたい。</p>
-</div>
-<div id="section-7.5" class="section level2">
-<h2><span class="header-section-number">7.5</span> 性能指標へのアクセス</h2>
-<p><code>mlr</code>における性能指標は<code>Measure</code>クラスのオブジェクトである。オブジェクトを通じて指標のプロパティ等には直接アクセスすることができる。各スロットに関する説明は<a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/makeMeasure">makeMeasure function | R Documentation</a>を確認してもらいたい。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(mmce)</code></pre></div>
-<pre><code>$&gt; List of 10
-$&gt;  $ id        : chr &quot;mmce&quot;
-$&gt;  $ minimize  : logi TRUE
-$&gt;  $ properties: chr [1:4] &quot;classif&quot; &quot;classif.multi&quot; &quot;req.pred&quot; &quot;req.truth&quot;
-$&gt;  $ fun       :function (task, model, pred, feats, extra.args)  
-$&gt;  $ extra.args: list()
-$&gt;  $ best      : num 0
-$&gt;  $ worst     : num 1
-$&gt;  $ name      : chr &quot;Mean misclassification error&quot;
-$&gt;  $ note      : chr &quot;Defined as: mean(response != truth)&quot;
-$&gt;  $ aggr      :List of 4
-$&gt;   ..$ id        : chr &quot;test.mean&quot;
-$&gt;   ..$ name      : chr &quot;Test mean&quot;
-$&gt;   ..$ fun       :function (task, perf.test, perf.train, measure, group, pred)  
-$&gt;   ..$ properties: chr &quot;req.test&quot;
-$&gt;   ..- attr(*, &quot;class&quot;)= chr &quot;Aggregation&quot;
-$&gt;  - attr(*, &quot;class&quot;)= chr &quot;Measure&quot;</code></pre>
-</div>
-<div id="section-7.6" class="section level2">
-<h2><span class="header-section-number">7.6</span> 2クラス分類</h2>
-<div id="section-7.6.1" class="section level3">
-<h3><span class="header-section-number">7.6.1</span> 性能と閾値の関係をプロットする</h3>
-<p>2クラス分類問題においては、予測された確率からクラスラベルへの割り当てを行う際の確率の閾値を設定できるということを思い出してもらいたい。<code>generateThreshVsPrefData</code>と<code>plotThreshVsPref</code>は、学習器のパフォーマンスと閾値の関係をプロットできる便利な関数だ。</p>
-<p>パフォーマンスのプロットと閾値の自動チューニングに関して詳しい情報は<a href="https://mlr-org.github.io/mlr-tutorial/devel/html/roc_analysis/index.html">ROC Analysis - mlr tutorial</a>を確認してほしい。</p>
-<p>以下の例では、<code>Sonar</code>データセットを用い、偽陽性率(fpr)、偽陰性率(fnr)、平均誤分類率(mmce)を設定可能な範囲の閾値に対してプロットしている。</p>
+<div id="section-12" class="section level1">
+<h1><span class="header-section-number">Section 12</span> いろいろな可視化</h1>
+<div id="generationplotting" class="section level2">
+<h2><span class="header-section-number">12.1</span> generation関数とplotting関数</h2>
+<p><code>mlr</code>の可視化機能は、プロットのためのデータを生成する<strong>generation</strong>関数と、その出力を使ってプロットを作成する<strong>plotting</strong>関数から成っている。プロット関数は<code>ggplot2</code>か<code>ggvis</code>パッケージを使ってプロットを作成する(<code>ggvis</code>の方はまだ試験的段階にある)。</p>
+<p>可視化機能をこのように分けたことで、ユーザーはgeneration関数を利用して容易にプロットのカスタマイズができるようになっている。plotting関数の中で行われる唯一のデータ変換はデータの成形である。成形されたデータには、plotting関数を呼び出すことで作成される<code>ggplot</code>オブジェクトからアクセスすることもできる。</p>
+<p>それぞれの関数は次のように命名されている。</p>
+<ul>
+<li>generate関数は<code>generate</code>から始まり、次に関数の目的がtitle caseで続き、最後に<code>Data</code>が付け加えられる。すなわち、関数名は<code>generateFunctionPurposeData</code>といった具合になる。generate関数により作成されるオブジェクトは<code>FunctionPurposeData</code>クラスである。</li>
+<li>plotting関数は<code>plot</code>に関数の目的が続く形の名前となる。すなわち、<code>plotFunctionPurpose</code>といった具合だ。</li>
+<li><code>ggvis</code>用いたプロット関数名は末尾に<code>GGVIS</code>を付加する。</li>
+</ul>
+<div id="section-12.1.1" class="section level3">
+<h3><span class="header-section-number">12.1.1</span> 例</h3>
+<p>まず、<code>sonar.task</code>に対する2クラス分類問題で、分類性能を決定閾値の関数と見立ててプロットする例を示す。対応するgeneration関数は<code>generateThreshVsPerfData</code>関数であり、この関数により生成される<code>ThreshVsPerfData</code>クラスのオブジェクトは<code>$data</code>スロットにプロットするためのデータを含む。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;classif.lda&quot;</span>, <span class="dt">predict.type =</span> <span class="st">&quot;prob&quot;</span>)
 n =<span class="st"> </span><span class="kw">getTaskSize</span>(sonar.task)
 mod =<span class="st"> </span><span class="kw">train</span>(lrn, <span class="dt">task =</span> sonar.task, <span class="dt">subset =</span> <span class="kw">seq</span>(<span class="dv">1</span>, n, <span class="dt">by =</span> <span class="dv">2</span>))
 pred =<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">task =</span> sonar.task, <span class="dt">subset =</span> <span class="kw">seq</span>(<span class="dv">2</span>, n, <span class="dt">by =</span> <span class="dv">2</span>))
-
 d =<span class="st"> </span><span class="kw">generateThreshVsPerfData</span>(pred, <span class="dt">measures =</span> <span class="kw">list</span>(fpr, fnr, mmce))
-<span class="kw">plotThreshVsPerf</span>(d)</code></pre></div>
-<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-110-1.png" width="672" /></p>
-<p><code>ggvis</code>を利用した<code>plotThreshVsPerfGGVIS</code>関数は、Shinyを使ったインタラクティブなグラフを生成する。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotThreshVsPerfGGVIS</span>(d)</code></pre></div>
-</div>
-<div id="roc" class="section level3">
-<h3><span class="header-section-number">7.6.2</span> ROC</h3>
-<p>2クラス分類においては、多数の分類指標が存在するが、これは1つの表としてまとめることができる。例えばROCに関するWikipediaのページ<a href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic">Receiver operating characteristic - Wikipedia</a>を見てもらいたい(訳注:日本語版の受信者操作特性のページには無い)。</p>
-<p>これと同じようなものを<code>calculateROCMeasures</code>関数を用いると作成できる。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">calculateROCMeasures</span>(pred)</code></pre></div>
-<pre><code>$&gt;     predicted
-$&gt; true M         R                            
-$&gt;    M 0.7       0.3       tpr: 0.7  fnr: 0.3 
-$&gt;    R 0.25      0.75      fpr: 0.25 tnr: 0.75
-$&gt;      ppv: 0.76 for: 0.32 lrp: 2.79 acc: 0.72
-$&gt;      fdr: 0.24 npv: 0.68 lrm: 0.4  dor: 6.88
-$&gt; 
-$&gt; 
-$&gt; Abbreviations:
-$&gt; tpr - True positive rate (Sensitivity, Recall)
-$&gt; fpr - False positive rate (Fall-out)
-$&gt; fnr - False negative rate (Miss rate)
-$&gt; tnr - True negative rate (Specificity)
-$&gt; ppv - Positive predictive value (Precision)
-$&gt; for - False omission rate
-$&gt; lrp - Positive likelihood ratio (LR+)
-$&gt; fdr - False discovery rate
-$&gt; npv - Negative predictive value
-$&gt; acc - Accuracy
-$&gt; lrm - Negative likelihood ratio (LR-)
-$&gt; dor - Diagnostic odds ratio</code></pre>
-<p>左上の2x2行列は混同行列であり、正しく分類された観測値と誤分類された観測値の相対頻度を示している。また、その右側と下側には、混同行列から計算可能な多数の性能指標が示されている。また、デフォルトでは各項目に対する説明が追記されるが、これは<code>print</code>に<code>abbreviations = FALSE</code>を指定することで消すことも出来る。</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">calculateROCMeasures</span>(pred), <span class="dt">abbreviations =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<pre><code>$&gt;     predicted
-$&gt; true M         R                            
-$&gt;    M 0.7       0.3       tpr: 0.7  fnr: 0.3 
-$&gt;    R 0.25      0.75      fpr: 0.25 tnr: 0.75
-$&gt;      ppv: 0.76 for: 0.32 lrp: 2.79 acc: 0.72
-$&gt;      fdr: 0.24 npv: 0.68 lrm: 0.4  dor: 6.88</code></pre>
 
+<span class="kw">class</span>(d)</code></pre></div>
+<pre><code>$&gt; [1] &quot;ThreshVsPerfData&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(d<span class="op">$</span>data)</code></pre></div>
+<pre><code>$&gt;         fpr       fnr      mmce  threshold
+$&gt; 1 1.0000000 0.0000000 0.4615385 0.00000000
+$&gt; 2 0.3541667 0.1964286 0.2692308 0.01010101
+$&gt; 3 0.3333333 0.2321429 0.2788462 0.02020202
+$&gt; 4 0.3333333 0.2321429 0.2788462 0.03030303
+$&gt; 5 0.3333333 0.2321429 0.2788462 0.04040404
+$&gt; 6 0.3125000 0.2321429 0.2692308 0.05050505</code></pre>
+<p>いま作成したオブジェクトを<code>mlr</code>の組み込み関数を使ってプロットするには、<code>plotThreshVsPref</code>関数を用いる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotThreshVsPerf</span>(d)</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-224-1.png" width="672" /></p>
+<p>デフォルトでは各パネルのラベルには性能指標の名前が使用される。これは他のplotting関数でも同様である。名前は<code>Measure</code>クラスのオブジェクトの<code>$name</code>スロットに格納されている。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fpr<span class="op">$</span>name</code></pre></div>
+<pre><code>$&gt; [1] &quot;False positive rate&quot;</code></pre>
+<p><code>$name</code>の代わりに<code>$id</code>スロットの値をプロットに使うこともできる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fpr<span class="op">$</span>id</code></pre></div>
+<pre><code>$&gt; [1] &quot;fpr&quot;</code></pre>
+<p>この値を使う場合は、<code>pretty.names = FALSE</code>を指定する。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotThreshVsPerf</span>(d, <span class="dt">pretty.names =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-227-1.png" width="672" /></p>
 </div>
+<div id="section-12.1.2" class="section level3">
+<h3><span class="header-section-number">12.1.2</span> プロットのカスタマイズ</h3>
+<p>組み込みのプロットや、生成データに基いて作成した独自のプロットは簡単にカスタマイズできる。</p>
+<p>おそらく、ほとんどの場合ラベルや注釈を変更したいと思うだろう。<code>ggplot</code>オブジェクトに対してこれを行うためには、<code>ylab</code>や<code>labeller</code>などの関数を利用する。さらに、生成データや<code>ggplot</code>オブジェクトに含まれるデータを変更するという手もある。これは大抵の場合、列名や水準名の変更である。</p>
+<p>先程のプロットの軸と各パネルのラベルを変更してみよう。</p>
+<p>例えば、次のような変更を施したいとする。</p>
+<ul>
+<li>パネルの表示順序を変更し、<code>mmce</code>を最初にしたい。</li>
+<li>パネルのラベル名が長いので、例えば<code>Mean misclassification error</code>を<code>Error rate</code>にしたい。</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+plt =<span class="st"> </span><span class="kw">plotThreshVsPerf</span>(d, <span class="dt">pretty.names =</span> <span class="ot">FALSE</span>)
+
+plt<span class="op">$</span>data<span class="op">$</span>measure =<span class="st"> </span>
+<span class="st">  </span><span class="kw">factor</span>(plt<span class="op">$</span>data<span class="op">$</span>measure,
+         <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;mmce&quot;</span>, <span class="st">&quot;fpr&quot;</span>, <span class="st">&quot;fnr&quot;</span>), <span class="co"># 水準の順序の変更</span>
+         <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Error rate&quot;</span>, <span class="st">&quot;False positive rate&quot;</span>, <span class="st">&quot;False negative rate&quot;</span>)) <span class="co"># 水準名の変更</span>
+plt <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Cutoff&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># x軸ラベルの変更</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Performance&quot;</span>) <span class="co">#y軸ラベルの変更</span></code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-228-1.png" width="672" /></p>
+<p><code>labeller</code>関数は<code>facet_wrap</code>か<code>facet_grid</code>と合わせて使う必要があるが、パネルの並べ方を変更したり、軸のリミットに影響を与えたいと考えている場合には便利である。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plt =<span class="st"> </span><span class="kw">plotThreshVsPerf</span>(d, <span class="dt">pretty.names =</span> <span class="ot">FALSE</span>)
+
+measure_names =<span class="st"> </span><span class="kw">c</span>(
+  <span class="dt">fpr =</span> <span class="st">&quot;False positive rate&quot;</span>,
+  <span class="dt">fnr =</span> <span class="st">&quot;False negative rate&quot;</span>,
+  <span class="dt">mmce =</span> <span class="st">&quot;Error rate&quot;</span>
+)
+
+plt <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>measure, <span class="dt">labeller =</span> <span class="kw">labeller</span>(<span class="dt">measure =</span> measure_names), <span class="dt">ncol =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Decision threshold&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Performance&quot;</span>)</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-229-1.png" width="672" /></p>
+<p>plotting関数を使わずに、generation関数で生成したデータに基いてプロットを作成することもできる。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(d<span class="op">$</span>data, <span class="kw">aes</span>(threshold, fpr)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-230-1.png" width="672" /></p>
+<p>generation関数がプロット関数と分かれていることにより、<code>graphics</code>や<code>lattice</code>パッケージを用いたプロットを作成する場合にも対応できる。以下に<code>lattice</code>で<code>plotThreshVsPref</code>と同様のプロットを作成する例を示そう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lattice<span class="op">::</span><span class="kw">xyplot</span>(fpr <span class="op">+</span><span class="st"> </span>fnr <span class="op">+</span><span class="st"> </span>mmce <span class="op">~</span><span class="st"> </span>threshold,
+                <span class="dt">data =</span> d<span class="op">$</span>data, 
+                <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, 
+                <span class="dt">ylab =</span> <span class="st">&quot;performance&quot;</span>, 
+                <span class="dt">outer =</span> <span class="ot">TRUE</span>,
+                <span class="dt">scales =</span> <span class="kw">list</span>(<span class="dt">relation =</span> <span class="st">&quot;free&quot;</span>),
+                <span class="dt">strip =</span> lattice<span class="op">::</span><span class="kw">strip.custom</span>(
+                  <span class="dt">factor.levels =</span> <span class="kw">sapply</span>(d<span class="op">$</span>measures, <span class="cf">function</span>(x) x<span class="op">$</span>name),
+                  <span class="dt">par.strip.text =</span> <span class="kw">list</span>(<span class="fl">0.8</span>)
+                  ))</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-231-1.png" width="672" /></p>
+<p>もう一つ、<code>plotPartialDependence</code>を使ってプロットを作成したのち、<code>ggplot</code>オブジェクトからデータを取り出して<code>graphics::plot</code>による伝統的なプロットも作成する例を見てみよう。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sonar =<span class="st"> </span><span class="kw">getTaskData</span>(sonar.task)
+pd =<span class="st"> </span><span class="kw">generatePartialDependenceData</span>(mod, sonar, <span class="st">&quot;V11&quot;</span>)
+plt =<span class="st"> </span><span class="kw">plotPartialDependence</span>(pd)
+plt</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-232-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(Probability <span class="op">~</span><span class="st"> </span>Value, <span class="dt">data =</span> plt<span class="op">$</span>data, <span class="dt">type =</span> <span class="st">&quot;b&quot;</span>, <span class="dt">xlab =</span> plt<span class="op">$</span>data<span class="op">$</span>Feature[<span class="dv">1</span>])</code></pre></div>
+<p><img src="mlr_tutorial_ja_files/figure-html/unnamed-chunk-233-1.png" width="672" /></p>
+</div>
+</div>
+<div id="generationplotting" class="section level2">
+<h2><span class="header-section-number">12.2</span> 利用可能なgeneration関数とplotting関数</h2>
+<p>以下に現在利用可能なgeneration関数およびplotting関数と、その詳細を説明するチュートリアルページへのリンクの一覧を示す。</p>
+<p>なお、下記の点に注意してもらいたい。</p>
+<ul>
+<li><code>plotTuneMultiCritResult</code>などはgeneration関数が無いため、ここでは言及していない。</li>
+<li><code>plotThreshVsPref</code>及び<code>plotROCCurves</code>はいずれも<code>generateThreshVsPrefData</code>の結果を扱える。</li>
+<li><code>plotPartialDependence</code>及び<code>plotPartialDependenceGGVIS</code>は、いずれも<code>generatePartialDependenceData</code>及び<code>generateFunctionalANOVAData</code>の結果の両方を扱える。</li>
+</ul>
+<table>
+<colgroup>
+<col width="19%" />
+<col width="27%" />
+<col width="25%" />
+<col width="26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>generation関数</th>
+<th>plotting関数(ggplot2)</th>
+<th>plotting関数(ggvis)</th>
+<th>チュートリアルページ</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateThreshVsPerfData">generateThreshVsPerfData</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotThreshVsPerf">plotThreshVsPerf</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotThreshVsPerfGGVIS">plotThreshVsPerfGGVIS</a></td>
+<td><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/performance/index.html">Performance</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotROCCurves">plotROCCurves</a></td>
+<td>–</td>
+<td><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/roc_analysis/index.html">ROC Analysis</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateCritDifferencesData">generateCritDifferencesData</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotCritDifferences">plotCritDifferences</a></td>
+<td>–</td>
+<td><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/benchmark_experiments/index.html">Benchmark Experiments</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateHyperParsEffectData">generateHyperParsEffectData</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotHyperParsEffect">plotHyperParsEffect</a></td>
+<td></td>
+<td><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/tune/index.html">Tuning</a>, <a href="https://mlr-org.github.io/mlr-tutorial/devel/html/hyperpar_tuning_effects/index.html">Hyperparameter Tuning Effects</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateFilterValuesData">generateFilterValuesData</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotFilterValues">plotFilterValues</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotFilterValuesGGVIS">plotFilterValuesGGVIS</a></td>
+<td><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/feature_selection/index.html">Feature Selection</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateLearningCurveData">generateLearningCurveData</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotLearningCurve">plotLearningCurve</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotLearningCurveGGVIS">plotLearningCurveGGVIS</a></td>
+<td><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/learning_curve/index.html">Learning Curves</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generatePartialDependenceData">generatePartialDependenceData</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotPartialDependence">plotPartialDependence</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotPartialDependenceGGVIS">plotPartialDependenceGGVIS</a></td>
+<td><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/partial_dependence/index.html">Partial Dependence Plots</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateFunctionalANOVAData">generateFunctionalANOVAData</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateCalibrationData">generateCalibrationData</a></td>
+<td><a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotCalibration">plotCalibration</a></td>
+<td>–</td>
+<td><a href="https://mlr-org.github.io/mlr-tutorial/devel/html/classifier_calibration/index.html">Classifier Calibration Plots</a></td>
+</tr>
+</tbody>
+</table>
+
 </div>
 </div>
             </section>
@@ -420,8 +435,8 @@ $&gt;      fdr: 0.24 npv: 0.68 lrm: 0.4  dor: 6.88</code></pre>
           </div>
         </div>
       </div>
-<a href="section-6.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="section-8.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="section-11.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -3,13 +3,16 @@ title: "mlrパッケージチュートリアル"
 site: "bookdown::bookdown_site"
 output:
   bookdown::gitbook: default
+  pandoc_args: [
+      "--from", "markdown+autolink_bare_uris+tex_math_single_backslash-implicit_figures"
+      ]
 documentclass: book
 ---
 
 # {-}
 
-mlrのチュートリアル([mlr tutorial](https://mlr-org.github.io/mlr-tutorial/devel/html/index.html))の訳です(未完)。
+mlrのチュートリアル([mlr tutorial](https://mlr-org.github.io/mlr-tutorial/devel/html/index.html))のうち、Quick Walkthrough部分を訳したものです。一部、原文と表現やサンプルコードを変更したり省略した箇所があります。
 
-内容は開発版に基づいています。
+また、mlrのチュートリアルにはcranのバージョンに対応しているものとgithubの開発版に対応しているものの2種類がありますが、開発版に基づいて記述しています。なお、内容は2018年3月4日時点のもので、その後の変更を反映していない場合があります。詳しくは原文を確認してください。
 
 最終更新: `r Sys.Date()`

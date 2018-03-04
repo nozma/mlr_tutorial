@@ -1,0 +1,155 @@
+# いろいろな可視化
+
+```{r, include=FALSE}
+library(mlr)
+```
+
+## generation関数とplotting関数
+
+`mlr`の可視化機能は、プロットのためのデータを生成する**generation**関数と、その出力を使ってプロットを作成する**plotting**関数から成っている。プロット関数は`ggplot2`か`ggvis`パッケージを使ってプロットを作成する(`ggvis`の方はまだ試験的段階にある)。
+
+可視化機能をこのように分けたことで、ユーザーはgeneration関数を利用して容易にプロットのカスタマイズができるようになっている。plotting関数の中で行われる唯一のデータ変換はデータの成形である。成形されたデータには、plotting関数を呼び出すことで作成される`ggplot`オブジェクトからアクセスすることもできる。
+
+それぞれの関数は次のように命名されている。
+
+- generate関数は`generate`から始まり、次に関数の目的がtitle caseで続き、最後に`Data`が付け加えられる。すなわち、関数名は`generateFunctionPurposeData`といった具合になる。generate関数により作成されるオブジェクトは`FunctionPurposeData`クラスである。
+- plotting関数は`plot`に関数の目的が続く形の名前となる。すなわち、`plotFunctionPurpose`といった具合だ。
+- `ggvis`用いたプロット関数名は末尾に`GGVIS`を付加する。
+
+### 例
+
+まず、`sonar.task`に対する2クラス分類問題で、分類性能を決定閾値の関数と見立ててプロットする例を示す。対応するgeneration関数は`generateThreshVsPerfData`関数であり、この関数により生成される`ThreshVsPerfData`クラスのオブジェクトは`$data`スロットにプロットするためのデータを含む。
+
+```{r}
+lrn = makeLearner("classif.lda", predict.type = "prob")
+n = getTaskSize(sonar.task)
+mod = train(lrn, task = sonar.task, subset = seq(1, n, by = 2))
+pred = predict(mod, task = sonar.task, subset = seq(2, n, by = 2))
+d = generateThreshVsPerfData(pred, measures = list(fpr, fnr, mmce))
+
+class(d)
+
+head(d$data)
+```
+
+いま作成したオブジェクトを`mlr`の組み込み関数を使ってプロットするには、`plotThreshVsPref`関数を用いる。
+
+```{r}
+plotThreshVsPerf(d)
+```
+
+デフォルトでは各パネルのラベルには性能指標の名前が使用される。これは他のplotting関数でも同様である。名前は`Measure`クラスのオブジェクトの`$name`スロットに格納されている。
+
+```{r}
+fpr$name
+```
+
+`$name`の代わりに`$id`スロットの値をプロットに使うこともできる。
+
+```{r}
+fpr$id
+```
+
+この値を使う場合は、`pretty.names = FALSE`を指定する。
+
+```{r}
+plotThreshVsPerf(d, pretty.names = FALSE)
+```
+
+### プロットのカスタマイズ
+
+組み込みのプロットや、生成データに基いて作成した独自のプロットは簡単にカスタマイズできる。
+
+おそらく、ほとんどの場合ラベルや注釈を変更したいと思うだろう。`ggplot`オブジェクトに対してこれを行うためには、`ylab`や`labeller`などの関数を利用する。さらに、生成データや`ggplot`オブジェクトに含まれるデータを変更するという手もある。これは大抵の場合、列名や水準名の変更である。
+
+先程のプロットの軸と各パネルのラベルを変更してみよう。
+
+例えば、次のような変更を施したいとする。
+
+- パネルの表示順序を変更し、`mmce`を最初にしたい。
+- パネルのラベル名が長いので、例えば`Mean misclassification error`を`Error rate`にしたい。
+
+```{r}
+library(ggplot2)
+plt = plotThreshVsPerf(d, pretty.names = FALSE)
+
+plt$data$measure = 
+  factor(plt$data$measure,
+         levels = c("mmce", "fpr", "fnr"), # 水準の順序の変更
+         labels = c("Error rate", "False positive rate", "False negative rate")) # 水準名の変更
+plt + 
+  xlab("Cutoff") + # x軸ラベルの変更
+  ylab("Performance") #y軸ラベルの変更
+```
+
+`labeller`関数は`facet_wrap`か`facet_grid`と合わせて使う必要があるが、パネルの並べ方を変更したり、軸のリミットに影響を与えたいと考えている場合には便利である。
+
+```{r}
+plt = plotThreshVsPerf(d, pretty.names = FALSE)
+
+measure_names = c(
+  fpr = "False positive rate",
+  fnr = "False negative rate",
+  mmce = "Error rate"
+)
+
+plt + 
+  facet_wrap(~measure, labeller = labeller(measure = measure_names), ncol = 2) +
+  xlab("Decision threshold") + ylab("Performance")
+```
+
+plotting関数を使わずに、generation関数で生成したデータに基いてプロットを作成することもできる。
+
+```{r}
+ggplot(d$data, aes(threshold, fpr)) + geom_line()
+```
+
+generation関数がプロット関数と分かれていることにより、`graphics`や`lattice`パッケージを用いたプロットを作成する場合にも対応できる。以下に`lattice`で`plotThreshVsPref`と同様のプロットを作成する例を示そう。
+
+```{r}
+lattice::xyplot(fpr + fnr + mmce ~ threshold,
+                data = d$data, 
+                type = "l", 
+                ylab = "performance", 
+                outer = TRUE,
+                scales = list(relation = "free"),
+                strip = lattice::strip.custom(
+                  factor.levels = sapply(d$measures, function(x) x$name),
+                  par.strip.text = list(0.8)
+                  ))
+```
+
+もう一つ、`plotPartialDependence`を使ってプロットを作成したのち、`ggplot`オブジェクトからデータを取り出して`graphics::plot`による伝統的なプロットも作成する例を見てみよう。
+
+```{r}
+sonar = getTaskData(sonar.task)
+pd = generatePartialDependenceData(mod, sonar, "V11")
+plt = plotPartialDependence(pd)
+plt
+```
+
+```{r}
+plot(Probability ~ Value, data = plt$data, type = "b", xlab = plt$data$Feature[1])
+```
+
+## 利用可能なgeneration関数とplotting関数
+
+以下に現在利用可能なgeneration関数およびplotting関数と、その詳細を説明するチュートリアルページへのリンクの一覧を示す。
+
+なお、下記の点に注意してもらいたい。
+
+- `plotTuneMultiCritResult`などはgeneration関数が無いため、ここでは言及していない。
+- `plotThreshVsPref`及び`plotROCCurves`はいずれも`generateThreshVsPrefData`の結果を扱える。
+- `plotPartialDependence`及び`plotPartialDependenceGGVIS`は、いずれも`generatePartialDependenceData`及び`generateFunctionalANOVAData`の結果の両方を扱える。
+
+| generation関数 | plotting関数(ggplot2) | plotting関数(ggvis) | チュートリアルページ |
+|----------------|-----------------------|---------------------|----------------------|
+| [generateThreshVsPerfData](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateThreshVsPerfData) | [plotThreshVsPerf](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotThreshVsPerf) | [plotThreshVsPerfGGVIS](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotThreshVsPerfGGVIS) | [Performance](https://mlr-org.github.io/mlr-tutorial/devel/html/performance/index.html) |
+|   | [plotROCCurves](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotROCCurves) | --  | [ROC Analysis](https://mlr-org.github.io/mlr-tutorial/devel/html/roc_analysis/index.html)  |
+| [generateCritDifferencesData](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateCritDifferencesData) | [plotCritDifferences](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotCritDifferences) | -- | [Benchmark Experiments](https://mlr-org.github.io/mlr-tutorial/devel/html/benchmark_experiments/index.html) |
+| [generateHyperParsEffectData](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateHyperParsEffectData) | [plotHyperParsEffect](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotHyperParsEffect) || [Tuning](https://mlr-org.github.io/mlr-tutorial/devel/html/tune/index.html), [Hyperparameter Tuning Effects](https://mlr-org.github.io/mlr-tutorial/devel/html/hyperpar_tuning_effects/index.html)|
+| [generateFilterValuesData](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateFilterValuesData) | [plotFilterValues](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotFilterValues) | [plotFilterValuesGGVIS](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotFilterValuesGGVIS)| [Feature Selection](https://mlr-org.github.io/mlr-tutorial/devel/html/feature_selection/index.html) |
+| [generateLearningCurveData](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateLearningCurveData) | [plotLearningCurve](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotLearningCurve) | [plotLearningCurveGGVIS](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotLearningCurveGGVIS) | [Learning Curves](https://mlr-org.github.io/mlr-tutorial/devel/html/learning_curve/index.html) |
+| [generatePartialDependenceData](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generatePartialDependenceData) | [plotPartialDependence](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotPartialDependence) | [plotPartialDependenceGGVIS](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotPartialDependenceGGVIS) | [Partial Dependence Plots](https://mlr-org.github.io/mlr-tutorial/devel/html/partial_dependence/index.html) |
+| [generateFunctionalANOVAData](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateFunctionalANOVAData) ||||
+| [generateCalibrationData](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/generateCalibrationData) | [plotCalibration](https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/plotCalibration) | -- | [Classifier Calibration Plots](https://mlr-org.github.io/mlr-tutorial/devel/html/classifier_calibration/index.html) |
