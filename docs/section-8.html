@@ -299,7 +299,7 @@ $&gt; [Resample] Aggr. Result: mse.test.mean=23.7</code></pre>
 $&gt; Task: BostonHousing-example
 $&gt; Learner: regr.lm
 $&gt; Aggr perf: mse.test.mean=23.7
-$&gt; Runtime: 0.034524</code></pre>
+$&gt; Runtime: 0.041254</code></pre>
 <p>ここで<code>r</code>に格納したオブジェクトは<code>ResampleResult</code>クラスである。この中には評価結果の他に、実行時間や予測値、リサンプリング毎のフィット済みモデルなどが格納されている。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 中身をざっと確認
 <span class="kw">names</span>(r)</code></pre></div>
@@ -326,24 +326,24 @@ $&gt;       23.6676</code></pre>
 lrn =<span class="st"> </span><span class="kw">makeLearner</span>(<span class="st">&quot;classif.rpart&quot;</span>, <span class="dt">parms =</span> <span class="kw">list</span>(<span class="dt">split =</span> <span class="st">&quot;information&quot;</span>))
 r =<span class="st"> </span><span class="kw">resample</span>(lrn, sonar.task, rdesc, <span class="dt">measures =</span> <span class="kw">list</span>(mmce, fpr, fnr, timetrain))</code></pre></div>
 <pre><code>$&gt; [Resample] subsampling iter 1: mmce.test.mean=0.19,fpr.test.mean=0.263,fnr.test.mean=0.13,timetrain.test.mean=0.015
-$&gt; [Resample] subsampling iter 2: mmce.test.mean=0.286,fpr.test.mean= 0.2,fnr.test.mean=0.333,timetrain.test.mean=0.015
-$&gt; [Resample] subsampling iter 3: mmce.test.mean=0.167,fpr.test.mean=0.263,fnr.test.mean=0.087,timetrain.test.mean=0.014
-$&gt; [Resample] subsampling iter 4: mmce.test.mean=0.286,fpr.test.mean= 0.4,fnr.test.mean=0.182,timetrain.test.mean=0.016
-$&gt; [Resample] subsampling iter 5: mmce.test.mean=0.238,fpr.test.mean=0.278,fnr.test.mean=0.208,timetrain.test.mean=0.014
-$&gt; [Resample] Aggr. Result: mmce.test.mean=0.233,fpr.test.mean=0.281,fnr.test.mean=0.188,timetrain.test.mean=0.0148</code></pre>
+$&gt; [Resample] subsampling iter 2: mmce.test.mean=0.286,fpr.test.mean= 0.2,fnr.test.mean=0.333,timetrain.test.mean=0.016
+$&gt; [Resample] subsampling iter 3: mmce.test.mean=0.167,fpr.test.mean=0.263,fnr.test.mean=0.087,timetrain.test.mean=0.015
+$&gt; [Resample] subsampling iter 4: mmce.test.mean=0.286,fpr.test.mean= 0.4,fnr.test.mean=0.182,timetrain.test.mean=0.014
+$&gt; [Resample] subsampling iter 5: mmce.test.mean=0.238,fpr.test.mean=0.278,fnr.test.mean=0.208,timetrain.test.mean=0.015
+$&gt; [Resample] Aggr. Result: mmce.test.mean=0.233,fpr.test.mean=0.281,fnr.test.mean=0.188,timetrain.test.mean=0.015</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r</code></pre></div>
 <pre><code>$&gt; Resample Result
 $&gt; Task: Sonar-example
 $&gt; Learner: classif.rpart
-$&gt; Aggr perf: mmce.test.mean=0.233,fpr.test.mean=0.281,fnr.test.mean=0.188,timetrain.test.mean=0.0148
-$&gt; Runtime: 0.147245</code></pre>
+$&gt; Aggr perf: mmce.test.mean=0.233,fpr.test.mean=0.281,fnr.test.mean=0.188,timetrain.test.mean=0.015
+$&gt; Runtime: 0.145858</code></pre>
 <p>もし指標を後から追加したくなったら、<code>addRRMeasure</code>関数を使うと良い。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">addRRMeasure</span>(r, <span class="kw">list</span>(ber, timepredict))</code></pre></div>
 <pre><code>$&gt; Resample Result
 $&gt; Task: Sonar-example
 $&gt; Learner: classif.rpart
-$&gt; Aggr perf: mmce.test.mean=0.233,fpr.test.mean=0.281,fnr.test.mean=0.188,timetrain.test.mean=0.0148,ber.test.mean=0.234,timepredict.test.mean=0.0066
-$&gt; Runtime: 0.147245</code></pre>
+$&gt; Aggr perf: mmce.test.mean=0.233,fpr.test.mean=0.281,fnr.test.mean=0.188,timetrain.test.mean=0.015,ber.test.mean=0.234,timepredict.test.mean=0.0056
+$&gt; Runtime: 0.145858</code></pre>
 <p>デフォルトでは<code>resample</code>関数は進捗と途中結果を表示するが、<code>show.info=FALSE</code>で非表示にもできる。このようなメッセージを完全に制御したかったら、<a href="https://mlr-org.github.io/mlr-tutorial/devel/html/configureMlr/index.html">Configuration - mlr tutorial</a>を確認してもらいたい。</p>
 <p>上記例では学習器を明示的に作成してから<code>resample</code>に渡したが、代わりに学習器の名前を指定しても良い。その場合、学習器のパラメータは<code>...</code>引数を通じて渡すことができる。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">resample</span>(<span class="st">&quot;classif.rpart&quot;</span>, <span class="dt">parms =</span> <span class="kw">list</span>(<span class="dt">split =</span> <span class="st">&quot;information&quot;</span>), sonar.task, rdesc,
@@ -351,8 +351,8 @@ $&gt; Runtime: 0.147245</code></pre>
 <pre><code>$&gt; Resample Result
 $&gt; Task: Sonar-example
 $&gt; Learner: classif.rpart
-$&gt; Aggr perf: mmce.test.mean=0.262,fpr.test.mean=0.256,fnr.test.mean=0.273,timetrain.test.mean=0.0138
-$&gt; Runtime: 0.135808</code></pre>
+$&gt; Aggr perf: mmce.test.mean=0.262,fpr.test.mean=0.256,fnr.test.mean=0.273,timetrain.test.mean=0.0152
+$&gt; Runtime: 0.138143</code></pre>
 </div>
 <div id="section-8.3" class="section level2">
 <h2><span class="header-section-number">8.3</span> リサンプル結果へのアクセス</h2>
@@ -417,7 +417,7 @@ r</code></pre></div>
 $&gt; Task: iris-example
 $&gt; Learner: classif.lda
 $&gt; Aggr perf: mmce.test.mean=0.02
-$&gt; Runtime: 0.014116</code></pre>
+$&gt; Runtime: 0.0160549</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r<span class="op">$</span>aggr</code></pre></div>
 <pre><code>$&gt; mmce.test.mean 
 $&gt;           0.02</code></pre>
@@ -586,7 +586,7 @@ r</code></pre></div>
 $&gt; Task: iris-example
 $&gt; Learner: classif.lda
 $&gt; Aggr perf: mmce.test.mean=0.0199
-$&gt; Runtime: 0.0273471</code></pre>
+$&gt; Runtime: 0.0345778</code></pre>
 <p>階層化を生存時間分析に対して行う場合は、打ち切りの割合が制御される。</p>
 </div>
 <div id="section-8.4.2" class="section level3">
@@ -600,7 +600,7 @@ r</code></pre></div>
 $&gt; Task: BostonHousing-example
 $&gt; Learner: regr.rpart
 $&gt; Aggr perf: mse.test.mean=  23
-$&gt; Runtime: 0.0436308</code></pre>
+$&gt; Runtime: 0.045939</code></pre>
 </div>
 <div id="section-8.4.3" class="section level3">
 <h3><span class="header-section-number">8.4.3</span> ブロック化</h3>
@@ -726,7 +726,7 @@ mmce<span class="op">$</span>aggr</code></pre></div>
 mmce<span class="op">$</span>aggr<span class="op">$</span>fun</code></pre></div>
 <pre><code>$&gt; function (task, perf.test, perf.train, measure, group, pred) 
 $&gt; mean(perf.test)
-$&gt; &lt;bytecode: 0x7fd8a66a3640&gt;
+$&gt; &lt;bytecode: 0x7ffe780abd58&gt;
 $&gt; &lt;environment: namespace:mlr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## rmseの場合
 rmse<span class="op">$</span>aggr</code></pre></div>
@@ -735,7 +735,7 @@ rmse<span class="op">$</span>aggr</code></pre></div>
 rmse<span class="op">$</span>aggr<span class="op">$</span>fun</code></pre></div>
 <pre><code>$&gt; function (task, perf.test, perf.train, measure, group, pred) 
 $&gt; sqrt(mean(perf.test^2))
-$&gt; &lt;bytecode: 0x7fd8a8cecc98&gt;
+$&gt; &lt;bytecode: 0x7ffe7e83d5c8&gt;
 $&gt; &lt;environment: namespace:mlr&gt;</code></pre>
 <p><code>setAggrigation</code>関数を使うと、集約方法を変更することも出来る。利用可能な集約手法の一覧は<a href="https://www.rdocumentation.org/packages/mlr/versions/2.10/topics/aggregations">aggregations function | R Documentation</a>を確認してほしい。</p>
 <div id="-" class="section level3">
@@ -752,7 +752,7 @@ r</code></pre></div>
 $&gt; Task: BostonHousing-example
 $&gt; Learner: regr.lm
 $&gt; Aggr perf: mse.test.mean=25.7,mse.test.median=25.5,mse.test.min=18.5,mse.test.max=33.1
-$&gt; Runtime: 0.0362592</code></pre>
+$&gt; Runtime: 0.0344691</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r<span class="op">$</span>aggr</code></pre></div>
 <pre><code>$&gt;   mse.test.mean mse.test.median    mse.test.min    mse.test.max 
 $&gt;        25.69050        25.50319        18.46241        33.10591</code></pre>
@@ -810,7 +810,7 @@ $&gt; [Resample] Aggr. Result: mmce.test.mean=0.0267,ber.test.mean=0.0241</code>
 $&gt; Task: iris-example
 $&gt; Learner: classif.lda
 $&gt; Aggr perf: mmce.test.mean=0.0267,ber.test.mean=0.0241
-$&gt; Runtime: 0.0336571</code></pre>
+$&gt; Runtime: 0.0395842</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bootstrapB632plus</span>(<span class="st">&quot;regr.lm&quot;</span>, bh.task, <span class="dt">iters =</span> <span class="dv">3</span>, <span class="dt">measures =</span> <span class="kw">list</span>(mse, mae))</code></pre></div>
 <pre><code>$&gt; [Resample] OOB bootstrapping iter 1: mse.b632plus=18.6,mae.b632plus=3.06,mse.b632plus=30.8,mae.b632plus=3.42
 $&gt; [Resample] OOB bootstrapping iter 2: mse.b632plus=23.2,mae.b632plus=3.49,mse.b632plus=17.3,mae.b632plus=3.06
@@ -820,7 +820,7 @@ $&gt; [Resample] Aggr. Result: mse.b632plus=23.5,mae.b632plus=3.29</code></pre>
 $&gt; Task: BostonHousing-example
 $&gt; Learner: regr.lm
 $&gt; Aggr perf: mse.b632plus=23.5,mae.b632plus=3.29
-$&gt; Runtime: 0.0564468</code></pre>
+$&gt; Runtime: 0.0683589</code></pre>
 
 </div>
 </div>
